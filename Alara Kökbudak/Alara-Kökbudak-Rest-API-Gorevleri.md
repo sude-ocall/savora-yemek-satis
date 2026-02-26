@@ -10,7 +10,7 @@
 * **Teknik Detaylar:**
     * HTTP durum kodlarının yönetimi (201 Created, 403 Forbidden).
     * İşlem güvenliği için veritabanı Transaction yönetimi.
-
+---
 ### 2. Sipariş Durumu ve Yetkilendirme
 * **API Uç Noktası:** `PUT /orders/{orderId}`
 * **Görev:** Sipariş aşamalarının sadece yetkili satıcılar tarafından güncellenmesi.
