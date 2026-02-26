@@ -12,6 +12,7 @@
     * HTTP İstemcisi kullanımı (Retrofit/OkHttp)
     * İstek/Yanıt modeli sınıfları oluşturma
     * Hata işleme (400 Bad Request, 401 Yetkisiz)
+---
 
 ### 2. Ödeme Yöntemi Kaydetme Servisi
 * **API Uç Noktası:** `POST /payments`
