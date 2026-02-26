@@ -8,7 +8,7 @@
 * **Teknik Detaylar:**
     * Responsive (mobil uyumlu) tablo yapıları.
     * State Management (Redux/Context API) ile verinin güncel tutulması.
-
+---
 ### 2. Sipariş Durum Yönetim Arayüzü
 * **Görev:** Satıcının siparişleri "Hazırla", "Yola Çıkar" ve "Teslim Et" butonlarıyla yönetmesi.
 * **İşleticiler:**
