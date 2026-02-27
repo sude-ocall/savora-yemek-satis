@@ -29,16 +29,16 @@
 5. Adres Tanımlama
 
     
-  PI Metodu:`POST /users/{userId}/addresses`
+  *PI Metodu:`POST /users/{userId}/addresses`
+  *Açıklama: Teslimat için yeni bir ev veya iş adresi eklenmesini sağlar.
 
-  Açıklama: Teslimat için yeni bir ev veya iş adresi eklenmesini sağlar.
-
- 16. Satıcı Puanlarını Listeleme
+ 6. Satıcı Puanlarını Listeleme
 
      
   API Metodu: `GET /vendors/{vendorId}/ratings`
 
   Açıklama: Alıcının, güvenilirlik için satıcının geçmiş puanlarını görmesini sağlar.
+
 
 
 
