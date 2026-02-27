@@ -1,22 +1,62 @@
-# Web Frontend Görevleri
+Sena Maral – Web Ön Uç (Frontend) Görevleri
+Bu doküman, Talep (İstek) ve Geri Bildirim Sistemi için geliştirilecek web tabanlı yönetim ve izleme arayüzlerini tanımlar. Web arayüzü, sistemdeki genel akışın kontrol edilmesi, moderasyon işlemlerinin yürütülmesi ve raporlamaların takip edilmesinden sorumludur.
 
-## Talep Oluşturma Sayfası
+1. Sistem Genel Kontrol Paneli (Admin Dashboard)
+Görev: Sistemdeki toplam hareketliliğin (aktif talepler, yeni teklifler ve kullanıcı sayısı) üst düzey bir özetinin sunulması.
 
-Kullanıcıların yemek adı, miktar ve teslim tarihi girerek yeni talep oluşturabileceği ekran.
+İşleyiş:
 
-## Talepleri Listeleme Sayfası
+Web uygulaması açıldığında GET /stats (istatistik) verilerini çeker.
 
-Sistemde bulunan tüm yemek taleplerinin listelendiği ekran.
+Aktif olan tüm yemek talepleri ve verilen teklifler grafiksel şemalarla görselleştirilir.
 
-## Talep Detay Sayfası
+Teknik Detaylar:
 
-Seçilen talebin detaylarının görüntülendiği ekran.
+Veri Görselleştirme: Chart.js veya Recharts kütüphanesi ile günlük talep yoğunluğu grafikleri.
 
-## Talep Silme İşlemi
+State Management: Tüm sistem verilerinin güncelliğini korumak için Context API kullanımı.
 
-Kullanıcıların oluşturdukları talepleri iptal edebilmesini sağlayan işlem.
+2. Talep ve Teklif Moderasyon Ekranı
+Görev: Açılan yemek taleplerinin ve satıcıların verdiği tekliflerin listelenmesi, uygunsuz içeriklerin kontrol edilmesi.
 
-## Yorum Sayfası
+İşleyiş:
 
-Kullanıcıların satıcı hakkında yorum yapabildiği ve diğer yorumları görüntüleyebildiği ekran.
+Yönetici, tüm aktif talepleri bir tablo üzerinde görüntüler.
 
+Hatalı veya sahte olduğu düşünülen talepler için DELETE /requests/{requestId} tetiklenerek içerik yayından kaldırılır.
+
+Teknik Detaylar:
+
+Filtreleme: Taleplerin "Açık", "Beklemede" veya "Tamamlandı" durumuna göre listelenmesi.
+
+Responsive Tasarım: Tablo yapılarının tablet ve masaüstü ekranlara tam uyumlu (Flexbox/Grid) olması.
+
+3. Yorum ve Şikayet Yönetim Arayüzü
+Görev: Kullanıcıların satıcılar hakkında yaptığı yorumların ve şikayetlerin incelenerek onaylanması veya reddedilmesi.
+
+İşleyiş:
+
+GET /reviews ile gelen tüm yorumlar listelenir.
+
+Şikayet edilen veya düşük puanlı yorumlar vurgulanarak yöneticinin dikkatine sunulur.
+
+Teknik Detaylar:
+
+Kullanıcı Etkileşimi: İşlem sonuçlarını (Onaylandı/Silindi) kullanıcıya bildirmek için Toast (bildirim) mesajları.
+
+Modal Pencereler: Yorum detaylarının ve kullanıcı geçmişinin ana sayfadan ayrılmadan açılan pencerelerde gösterilmesi.
+
+4. Bölgesel Veri Analizi ve Raporlama
+Görev: Hangi bölgelerde daha fazla yemek talebi olduğunun ve en popüler yemek türlerinin raporlanması.
+
+İşleyiş:
+
+Konum bazlı veriler harita üzerinde kümelenerek (clustering) gösterilir.
+
+Yönetici, belirli tarih aralıklarını seçerek sistemin performans çıktısını alır.
+
+Teknik Detaylar:
+
+Harita Entegrasyonu: Google Maps API üzerinden yoğunluk haritası (Heatmap) oluşturulması.
+
+Filtreleme: Tarih, bölge ve yemek kategorisine göre gelişmiş istemci taraflı (client-side) arama motoru.
