@@ -1,23 +1,23 @@
  1. Üye Kaydı Oluşturma
 
 
-   *API Metodu: `POST /auth/register`
+   * API Metodu: `POST /auth/register`
 
-   *Açıklama: Yeni kullanıcıların ad, soyad ve e-posta bilgilerini alarak sisteme kayıt olmasını sağlar.
+   * Açıklama: Yeni kullanıcıların ad, soyad ve e-posta bilgilerini alarak sisteme kayıt olmasını sağlar.
 
 2. Profil Bilgilerini Görüntüleme
 
    
  * API Metodu: `GET /users/{userId}`
 
-  *Açıklama:Giriş yapmış kullanıcının kendi iletişim ve adres bilgilerini görüntülemesini sağlar.
+  * Açıklama:Giriş yapmış kullanıcının kendi iletişim ve adres bilgilerini görüntülemesini sağlar.
 
  3. Şifre Güncelleme
 
     
-  *API Metodu: `PUT /users/{userId}/password`
+  * API Metodu: `PUT /users/{userId}/password`
 
-  *Açıklama: Güvenlik amacıyla mevcut şifrenin doğrulanmasının ardından yeni şifre ile değiştirilmesini sağlar.
+  * Açıklama: Güvenlik amacıyla mevcut şifrenin doğrulanmasının ardından yeni şifre ile değiştirilmesini sağlar.
 
 4. Hesap Silme
 
@@ -29,9 +29,9 @@
 5. Adres Tanımlama
 
     
-  *PI Metodu:`POST /users/{userId}/addresses` 
+  * PI Metodu:`POST /users/{userId}/addresses` 
   
-  *Açıklama: Teslimat için yeni bir ev veya iş adresi eklenmesini sağlar.
+  * Açıklama: Teslimat için yeni bir ev veya iş adresi eklenmesini sağlar.
 
  6. Satıcı Puanlarını Listeleme
 
@@ -39,6 +39,7 @@
  * API Metodu: `GET /vendors/{vendorId}/ratings`
 
 * Açıklama: Alıcının, güvenilirlik için satıcının geçmiş puanlarını görmesini sağlar.
+
 
 
 
