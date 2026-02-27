@@ -1,9 +1,9 @@
  1. Üye Kaydı Oluşturma
 
 
->> API Metodu: `POST /auth/register`
+> API Metodu: `POST /auth/register`
 
- >> Açıklama: Yeni kullanıcıların ad, soyad ve e-posta bilgilerini alarak sisteme kayıt olmasını sağlar.
+> Açıklama: Yeni kullanıcıların ad, soyad ve e-posta bilgilerini alarak sisteme kayıt olmasını sağlar.
 
 2. Profil Bilgilerini Görüntüleme
 
@@ -39,6 +39,7 @@ Açıklama: Teslimat için yeni bir ev veya iş adresi eklenmesini sağlar.
 API Metodu: `GET /vendors/{vendorId}/ratings`
 
 Açıklama: Alıcının, güvenilirlik için satıcının geçmiş puanlarını görmesini sağlar.
+
 
 
 
