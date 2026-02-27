@@ -36,9 +36,10 @@
  6. Satıcı Puanlarını Listeleme
 
      
-  *API Metodu: `GET /vendors/{vendorId}/ratings`
+ * API Metodu: `GET /vendors/{vendorId}/ratings`
 
 * Açıklama: Alıcının, güvenilirlik için satıcının geçmiş puanlarını görmesini sağlar.
+
 
 
 
