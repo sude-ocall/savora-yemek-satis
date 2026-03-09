@@ -32,7 +32,7 @@ Projenin arka planında iletişim kuracağımız temel API yollarından bazılar
 
 ## Dokümantasyon
 Proje dokümantasyonuna aşağıdaki linklerden erişebilirsiniz:
-1. [Gereksinim Analizi](#)
+1. [Gereksinim Analizi](Gereksinimler.md)
 2. [REST API Tasarımı](#)
 3. [REST API](https://raw.githubusercontent.com/alarakokbudak/savora-yemek-satis/refs/heads/main/SavoraAPI.yaml)
 4. [Web Front-End](#)
