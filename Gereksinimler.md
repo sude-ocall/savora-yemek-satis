@@ -31,12 +31,6 @@
 23. **Yorumu Sil** (Sena Maral)
 24. **Yorumu Analiz Et (Küfür / Kötü İçerik Tespiti)** (Sena Maral)
 
-# Gereksinim Dağılımları
-
-1. [Sudegül Öçal'ın Gereksinimleri](Sudegul-Ocal/Sudegul-Ocal-Gereksinimler.md)
-2. [İrem Nur Yaslı'nın Gereksinimleri](Irem-Nur-Yasli/Irem-Nur-Yasli-Gereksinimler.md)
-3. [Alara Kökbudak'ın Gereksinimleri](Alara-Kokbudak/Alara-Kokbudak-Gereksinimler.md)
-4. [Sena Maral'ın Gereksinimleri](Sena-Maral/Sena-Maral-Gereksinimler.md)
 
 # Gereksinim Dağılımları
 
