@@ -1,0 +1,303 @@
+openapi: 3.0.3
+info:
+  title: Savora Ev Yemekleri Satış API
+  description: Ev yemekleri satış platformu için hazırlanan kapsamlı REST API tasarımı.
+  version: 1.0.0
+  contact:
+    name: Alara Kökbudak
+    email: alarakokbudak@sdu.edu.tr
+
+servers:
+  - url: http://localhost:8080
+    description: Yerel Geliştirme Sunucusu
+
+tags:
+  - name: Kullanıcı İşlemleri
+  - name: Yemek İlanları
+  - name: Sipariş ve Ödeme
+  - name: Talepler ve Yorumlar
+
+security:
+  - BearerAuth: []
+
+paths:
+  /users/register:
+    post:
+      tags: [Kullanıcı İşlemleri]
+      summary: Yeni kullanıcı kaydı oluşturur
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegister'
+      responses:
+        '201':
+          description: Kullanıcı oluşturuldu
+
+  /users/profile:
+    get:
+      tags: [Kullanıcı İşlemleri]
+      summary: Kullanıcının profil bilgilerini getirir
+      responses:
+        '200':
+          description: Profil bilgileri getirildi
+
+  /users/password:
+    put:
+      tags: [Kullanıcı İşlemleri]
+      summary: Kullanıcının şifresini günceller
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordUpdate'
+      responses:
+        '200':
+          description: Şifre güncellendi
+
+  /users/account:
+    delete:
+      tags: [Kullanıcı İşlemleri]
+      summary: Kullanıcı hesabını siler
+      responses:
+        '200':
+          description: Hesap silindi
+
+  /address:
+    post:
+      tags: [Kullanıcı İşlemleri]
+      summary: Yeni adres ekler
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddressInput'
+      responses:
+        '201':
+          description: Adres eklendi
+
+  /foods:
+    get:
+      tags: [Yemek İlanları]
+      summary: Aktif yemek menülerini listeler
+      responses:
+        '200':
+          description: Yemek listesi getirildi
+    post:
+      tags: [Yemek İlanları]
+      summary: Yeni yemek ilanı ekler
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FoodInput'
+      responses:
+        '201':
+          description: Yemek eklendi
+
+  /foods/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    put:
+      tags: [Yemek İlanları]
+      summary: Yemek porsiyon miktarını günceller
+      responses:
+        '200':
+          description: Güncellendi
+    delete:
+      tags: [Yemek İlanları]
+      summary: Yemek ilanını kaldırır
+      responses:
+        '200':
+          description: Silindi
+
+  /categories:
+    get:
+      tags: [Yemek İlanları]
+      summary: Yemek kategorilerini listeler
+      responses:
+        '200':
+          description: Kategori listesi getirildi
+
+  /orders:
+    get:
+      tags: [Sipariş ve Ödeme]
+      summary: Sipariş geçmişini listeler
+      responses:
+        '200':
+          description: Sipariş listesi getirildi
+    post:
+      tags: [Sipariş ve Ödeme]
+      summary: Sipariş oluşturur
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderInput'
+      responses:
+        '201':
+          description: Sipariş oluşturuldu
+
+  /orders/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    put:
+      tags: [Sipariş ve Ödeme]
+      summary: Sipariş durumunu günceller
+      responses:
+        '200':
+          description: Sipariş güncellendi
+    delete:
+      tags: [Sipariş ve Ödeme]
+      summary: Siparişi iptal eder
+      responses:
+        '200':
+          description: Sipariş iptal edildi
+
+  /payment:
+    post:
+      tags: [Sipariş ve Ödeme]
+      summary: Ödeme yöntemi kaydeder
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentInput'
+      responses:
+        '201':
+          description: Ödeme yöntemi kaydedildi
+
+  /requests:
+    get:
+      tags: [Talepler ve Yorumlar]
+      summary: Bölgesel talepleri listeler
+      responses:
+        '200':
+          description: Talep listesi getirildi
+    post:
+      tags: [Talepler ve Yorumlar]
+      summary: Özel yemek talebi oluşturur
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestInput'
+      responses:
+        '201':
+          description: Talep oluşturuldu
+
+  /requests/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    put:
+      tags: [Talepler ve Yorumlar]
+      summary: Talep teklifini günceller
+      responses:
+        '200':
+          description: Güncellendi
+    delete:
+      tags: [Talepler ve Yorumlar]
+      summary: Talebi geri çeker
+      responses:
+        '200':
+          description: Talep silindi
+
+  /reviews:
+    get:
+      tags: [Talepler ve Yorumlar]
+      summary: Yorumları listeler
+      responses:
+        '200':
+          description: Yorum listesi getirildi
+    post:
+      tags: [Talepler ve Yorumlar]
+      summary: Satıcıya yorum yapar
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReviewInput'
+      responses:
+        '201':
+          description: Yorum eklendi
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    UserRegister:
+      type: object
+      properties:
+        name: {type: string, example: "Sena"}
+        email: {type: string, example: "sena@email.com"}
+        password: {type: string}
+    
+    PasswordUpdate:
+      type: object
+      properties:
+        oldPassword: {type: string}
+        newPassword: {type: string}
+
+    AddressInput:
+      type: object
+      properties:
+        city: {type: string, example: "Istanbul"}
+        district: {type: string, example: "Kadikoy"}
+        address: {type: string, example: "Moda Mahallesi"}
+
+    FoodInput:
+      type: object
+      properties:
+        name: {type: string, example: "Mantı"}
+        price: {type: number, example: 120}
+        portion: {type: integer, example: 10}
+
+    OrderInput:
+      type: object
+      properties:
+        foodId: {type: integer, example: 5}
+        quantity: {type: integer, example: 2}
+
+    PaymentInput:
+      type: object
+      properties:
+        cardNumber: {type: string, example: "1234123412341234"}
+        cardHolder: {type: string, example: "Sena Yilmaz"}
+        expiry: {type: string, example: "12/28"}
+
+    RequestInput:
+      type: object
+      properties:
+        foodRequest: {type: string, example: "2 tepsi börek"}
+        date: {type: string, format: date}
+
+    ReviewInput:
+      type: object
+      properties:
+        sellerId: {type: integer}
+        rating: {type: integer, minimum: 1, maximum: 5}
+        comment: {type: string, example: "Yemek cok lezzetliydi"}
