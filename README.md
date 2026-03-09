@@ -1,4 +1,4 @@
-# savora-yemek-satis
+# SAVORA
 Evden gönlünüzce yemek satışı yapabileceğiniz, güvenilir bir platform.
 ![Savora Proje Görseli](savora-arayuz.jpg)
 ## 🍲 Proje Hakkında (Savora)
