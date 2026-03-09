@@ -4,6 +4,10 @@ Evden gönlünüzce yemek satışı yapabileceğiniz, güvenilir bir platform.
 ## 🍲 Proje Hakkında (Savora)
 Savora, evinde yemek yapan yetenekli aşçılar ile lezzetli ev yemeği özlemi çeken kullanıcıları güvenilir bir ortamda buluşturan yenilikçi bir yemek satış platformudur. Amacımız, evden gönlünüzce yemek satışı yapabileceğiniz ve sipariş verebileceğiniz dijital bir pazar yeri yaratmaktır.
 
+## Proje Bağlantıları
+* **Rest API Adresi:** https://raw.githubusercontent.com/alarakokbudak/savora-yemek-satis/refs/heads/main/SavoraAPI.yaml
+* **Web Ön Yüz Adresi:**
+
 ## 👥 Geliştirici Ekip
 Bu proje, aşağıdaki 4 kişilik geliştirici ekip tarafından tasarlanıp kodlanmaktadır:
 * Alara Kökbudak
