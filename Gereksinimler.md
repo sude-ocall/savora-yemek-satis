@@ -2,10 +2,6 @@
 
 # Tüm Gereksinimler 
 
-# Gereksinim Analizi
-
-# Tüm Gereksinimler 
-
 1. **Giriş Yap** (İrem Nur Yaslı)
 2. **Kayıt Ol** (İrem Nur Yaslı)
 3. **Çıkış Yap** (İrem Nur Yaslı)
