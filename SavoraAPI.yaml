@@ -1,74 +1,137 @@
 openapi: 3.0.3
 info:
   title: Savora Ev Yemekleri Satış API
-  description: Ev yemekleri satış platformu için hazırlanan kapsamlı REST API tasarımı.
   version: 1.0.0
+  description: >
+    Bu API, Savora ev yemekleri satış platformu için tasarlanmış bir RESTful servistir.
+    Kullanıcı ve hesap yönetimi, yemek ve menü yönetimi, sipariş ve ödeme işlemleri
+    ile talep ve geri bildirim sistemlerini içerir. API, JWT tabanlı kimlik doğrulama
+    ile korunmaktadır ve standart HTTP durum kodları ile iletişim kurar.
   contact:
     name: Alara Kökbudak
     email: alarakokbudak@sdu.edu.tr
 
 servers:
+  - url: https://api.savora.com
+    description: Üretim sunucusu (Production)
+  - url: https://staging-api.savora.com
+    description: Test sunucusu (Staging)
   - url: http://localhost:8080
-    description: Yerel Geliştirme Sunucusu
+    description: Yerel geliştirme sunucusu (Development)
 
 tags:
-  - name: Kullanıcı İşlemleri
-  - name: Yemek İlanları
-  - name: Sipariş ve Ödeme
+  - name: Kullanıcılar
+    description: İrem - Kullanıcı kaydı, profil yönetimi, şifre ve adres işlemleri
+  - name: Yemekler
+    description: Sude - Yemek ilanı ekleme, listeleme, güncelleme ve kategori yönetimi
+  - name: Siparişler
+    description: Alara - Sipariş oluşturma, takip etme, ödeme yönetimi ve iptal işlemleri
   - name: Talepler ve Yorumlar
+    description: Sena - Özel yemek talepleri, teklif yönetimi ve satıcı değerlendirmeleri
 
 security:
   - BearerAuth: []
 
 paths:
-  /users/register:
+  /api/users/register:
     post:
-      tags: [Kullanıcı İşlemleri]
-      summary: Yeni kullanıcı kaydı oluşturur
+      tags:
+        - Kullanıcılar
+      summary: Üye Kaydı Oluşturma
+      operationId: registerUser
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserRegister'
+              $ref: '#/components/schemas/UserInput'
       responses:
-        '201':
-          description: Kullanıcı oluşturuldu
+        "201":
+          description: Kullanıcı başarıyla oluşturuldu
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        "400":
+          description: Geçersiz istek verisi
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
-  /users/profile:
+  /api/users/profile:
     get:
-      tags: [Kullanıcı İşlemleri]
-      summary: Kullanıcının profil bilgilerini getirir
+      tags:
+        - Kullanıcılar
+      summary: Profil Bilgilerini Görüntüleme
+      operationId: getUserProfile
       responses:
-        '200':
-          description: Profil bilgileri getirildi
+        "200":
+          description: Profil bilgileri başarıyla getirildi
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        "401":
+          description: Kimlik doğrulama başarısız
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
-  /users/password:
+  /api/users/password:
     put:
-      tags: [Kullanıcı İşlemleri]
-      summary: Kullanıcının şifresini günceller
+      tags:
+        - Kullanıcılar
+      summary: Şifre Güncelleme
+      operationId: updatePassword
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PasswordUpdate'
+              type: object
+              properties:
+                oldPassword: { type: string }
+                newPassword: { type: string }
       responses:
-        '200':
-          description: Şifre güncellendi
+        "200":
+          description: Şifre başarıyla güncellendi
+        "400":
+          description: Geçersiz istek verisi
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "401":
+          description: Kimlik doğrulama başarısız
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
-  /users/account:
+  /api/users/account:
     delete:
-      tags: [Kullanıcı İşlemleri]
-      summary: Kullanıcı hesabını siler
+      tags:
+        - Kullanıcılar
+      summary: Hesap Silme
+      operationId: deleteAccount
       responses:
-        '200':
-          description: Hesap silindi
+        "204":
+          description: Hesap başarıyla silindi
+        "401":
+          description: Kimlik doğrulama başarısız
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
-  /address:
+  /api/users/address:
     post:
-      tags: [Kullanıcı İşlemleri]
-      summary: Yeni adres ekler
+      tags:
+        - Kullanıcılar
+      summary: Adres Tanımlama
+      operationId: addAddress
       requestBody:
         required: true
         content:
@@ -76,19 +139,65 @@ paths:
             schema:
               $ref: '#/components/schemas/AddressInput'
       responses:
-        '201':
-          description: Adres eklendi
+        "201":
+          description: Adres başarıyla eklendi
+        "400":
+          description: Geçersiz adres verisi
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
-  /foods:
+  /api/sellers/{sellerId}/ratings:
+    parameters:
+      - name: sellerId
+        in: path
+        required: true
+        description: Satıcının benzersiz kimlik numarası
+        schema:
+          type: string
+        example: "usr789"
     get:
-      tags: [Yemek İlanları]
-      summary: Aktif yemek menülerini listeler
+      tags:
+        - Kullanıcılar
+      summary: Satıcı Puanlarını Listeleme
+      operationId: getSellerRatings
       responses:
-        '200':
-          description: Yemek listesi getirildi
+        "200":
+          description: Satıcı puanları başarıyla getirildi
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Review'
+        "404":
+          description: Satıcı bulunamadı
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/foods:
+    get:
+      tags:
+        - Yemekler
+      summary: Aktif Menü Listeleme
+      operationId: listActiveFoods
+      responses:
+        "200":
+          description: Aktif yemekler başarıyla listelendi
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Food'
     post:
-      tags: [Yemek İlanları]
-      summary: Yeni yemek ilanı ekler
+      tags:
+        - Yemekler
+      summary: Yemek İlanı Ekleme
+      operationId: addFood
       requestBody:
         required: true
         content:
@@ -96,47 +205,114 @@ paths:
             schema:
               $ref: '#/components/schemas/FoodInput'
       responses:
-        '201':
-          description: Yemek eklendi
+        "201":
+          description: Yemek ilanı başarıyla eklendi
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Food'
+        "400":
+          description: Geçersiz istek verisi
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "403":
+          description: Satıcı yetkisi gerekiyor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
-  /foods/{id}:
+  /api/foods/{foodId}:
     parameters:
-      - name: id
+      - name: foodId
         in: path
         required: true
+        description: Yemeğin benzersiz kimlik numarası
         schema:
-          type: integer
+          type: string
+        example: "fd123"
     put:
-      tags: [Yemek İlanları]
-      summary: Yemek porsiyon miktarını günceller
+      tags:
+        - Yemekler
+      summary: Porsiyon Adedi Güncelleme
+      operationId: updateFoodPortion
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                portion: { type: integer, example: 5 }
       responses:
-        '200':
-          description: Güncellendi
+        "200":
+          description: Porsiyon başarıyla güncellendi
+        "404":
+          description: Yemek bulunamadı
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
     delete:
-      tags: [Yemek İlanları]
-      summary: Yemek ilanını kaldırır
+      tags:
+        - Yemekler
+      summary: Yemek İlanı Kaldırma
+      operationId: deleteFood
       responses:
-        '200':
-          description: Silindi
+        "204":
+          description: Yemek başarıyla kaldırıldı
+        "403":
+          description: Bu işlem için yetkiniz bulunmuyor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
-  /categories:
+  /api/categories:
     get:
-      tags: [Yemek İlanları]
-      summary: Yemek kategorilerini listeler
+      tags:
+        - Yemekler
+      summary: Yemek Kategorilerini Listeleme
+      operationId: listCategories
       responses:
-        '200':
-          description: Kategori listesi getirildi
+        "200":
+          description: Kategoriler başarıyla listelendi
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  example: "Zeytinyağlılar"
 
-  /orders:
+  /api/orders:
     get:
-      tags: [Sipariş ve Ödeme]
-      summary: Sipariş geçmişini listeler
+      tags:
+        - Siparişler
+      summary: Sipariş Geçmişini Görüntüleme
+      operationId: listOrders
       responses:
-        '200':
-          description: Sipariş listesi getirildi
+        "200":
+          description: Siparişler başarıyla listelendi
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+        "401":
+          description: Kimlik doğrulama başarısız
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
     post:
-      tags: [Sipariş ve Ödeme]
-      summary: Sipariş oluşturur
+      tags:
+        - Siparişler
+      summary: Sipariş Oluşturma
+      operationId: createOrder
       requestBody:
         required: true
         content:
@@ -144,33 +320,85 @@ paths:
             schema:
               $ref: '#/components/schemas/OrderInput'
       responses:
-        '201':
-          description: Sipariş oluşturuldu
+        "201":
+          description: Sipariş başarıyla oluşturuldu
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        "400":
+          description: Yetersiz porsiyon veya geçersiz istek
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
-  /orders/{id}:
+  /api/orders/{orderId}:
     parameters:
-      - name: id
+      - name: orderId
         in: path
         required: true
+        description: Siparişin benzersiz kimlik numarası
         schema:
-          type: integer
+          type: string
+        example: "ord987"
+    get:
+      tags:
+        - Siparişler
+      summary: Aktif Sipariş Detayı
+      operationId: getOrder
+      responses:
+        "200":
+          description: Sipariş detayı getirildi
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        "404":
+          description: Sipariş bulunamadı
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
     put:
-      tags: [Sipariş ve Ödeme]
-      summary: Sipariş durumunu günceller
+      tags:
+        - Siparişler
+      summary: Sipariş Durumu Güncelleme
+      operationId: updateOrderStatus
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "Hazırlanıyor"
       responses:
-        '200':
-          description: Sipariş güncellendi
+        "200":
+          description: Durum güncellendi
     delete:
-      tags: [Sipariş ve Ödeme]
-      summary: Siparişi iptal eder
+      tags:
+        - Siparişler
+      summary: Sipariş İptal Etme
+      operationId: cancelOrder
       responses:
-        '200':
+        "204":
           description: Sipariş iptal edildi
+        "400":
+          description: Hazırlanmaya başlanmış sipariş iptal edilemez
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
-  /payment:
+  /api/payment:
     post:
-      tags: [Sipariş ve Ödeme]
-      summary: Ödeme yöntemi kaydeder
+      tags:
+        - Siparişler
+      summary: Ödeme Yöntemi Kaydetme
+      operationId: savePayment
       requestBody:
         required: true
         content:
@@ -178,19 +406,35 @@ paths:
             schema:
               $ref: '#/components/schemas/PaymentInput'
       responses:
-        '201':
+        "201":
           description: Ödeme yöntemi kaydedildi
+        "400":
+          description: Geçersiz kart bilgisi
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
-  /requests:
+  /api/requests:
     get:
-      tags: [Talepler ve Yorumlar]
-      summary: Bölgesel talepleri listeler
+      tags:
+        - Talepler ve Yorumlar
+      summary: Bölgesel Talepleri Listeleme
+      operationId: listRequests
       responses:
-        '200':
-          description: Talep listesi getirildi
+        "200":
+          description: Talepler listelendi
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Request'
     post:
-      tags: [Talepler ve Yorumlar]
-      summary: Özel yemek talebi oluşturur
+      tags:
+        - Talepler ve Yorumlar
+      summary: Özel Yemek Talebi Açma
+      operationId: createRequest
       requestBody:
         required: true
         content:
@@ -198,39 +442,61 @@ paths:
             schema:
               $ref: '#/components/schemas/RequestInput'
       responses:
-        '201':
+        "201":
           description: Talep oluşturuldu
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Request'
 
-  /requests/{id}:
+  /api/requests/{requestId}:
     parameters:
-      - name: id
+      - name: requestId
         in: path
         required: true
+        description: Talebin benzersiz kimlik numarası
         schema:
-          type: integer
+          type: string
+        example: "req321"
     put:
-      tags: [Talepler ve Yorumlar]
-      summary: Talep teklifini günceller
+      tags:
+        - Talepler ve Yorumlar
+      summary: Talep Teklifi Güncelleme
+      operationId: updateRequestOffer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                offerPrice:
+                  type: number
+                  example: 250.50
       responses:
-        '200':
-          description: Güncellendi
+        "200":
+          description: Teklif güncellendi
     delete:
-      tags: [Talepler ve Yorumlar]
-      summary: Talebi geri çeker
+      tags:
+        - Talepler ve Yorumlar
+      summary: Talebi Geri Çekme
+      operationId: withdrawRequest
       responses:
-        '200':
-          description: Talep silindi
+        "204":
+          description: Talep başarıyla geri çekildi (silindi)
+        "404":
+          description: Talep bulunamadı
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
-  /reviews:
-    get:
-      tags: [Talepler ve Yorumlar]
-      summary: Yorumları listeler
-      responses:
-        '200':
-          description: Yorum listesi getirildi
+  /api/reviews:
     post:
-      tags: [Talepler ve Yorumlar]
-      summary: Satıcıya yorum yapar
+      tags:
+        - Talepler ve Yorumlar
+      summary: Satıcıya Yorum Yapma
+      operationId: addReview
       requestBody:
         required: true
         content:
@@ -238,66 +504,181 @@ paths:
             schema:
               $ref: '#/components/schemas/ReviewInput'
       responses:
-        '201':
-          description: Yorum eklendi
+        "201":
+          description: Yorum başarıyla oluşturuldu
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+        "400":
+          description: Geçersiz istek verisi
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
 components:
   securitySchemes:
     BearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
+      type: apiKey
+      in: header
+      name: Authorization
+      description: 'JWT tabanlı kimlik doğrulama. İstek başlığına "Authorization: Bearer <token>" eklenmeli.'
 
   schemas:
-    UserRegister:
+    Error:
+      type: object
+      description: Hata durumlarında döndürülen standart hata yanıtı
+      properties:
+        message:
+          type: string
+          description: Hatayı açıklayan mesaj
+          example: "Aradığınız kaynak bulunamadı."
+      required:
+        - message
+
+    User:
       type: object
       properties:
-        name: {type: string, example: "Sena"}
-        email: {type: string, example: "sena@email.com"}
-        password: {type: string}
-    
-    PasswordUpdate:
+        _id: { type: string, example: "usr123" }
+        name: { type: string, example: "Sena" }
+        surname: { type: string, example: "Yılmaz" }
+        email: { type: string, example: "sena@savora.com" }
+      required:
+        - _id
+        - name
+        - email
+
+    UserInput:
       type: object
       properties:
-        oldPassword: {type: string}
-        newPassword: {type: string}
+        name: { type: string, example: "Sena" }
+        surname: { type: string, example: "Yılmaz" }
+        email: { type: string, example: "sena@savora.com" }
+        password: { type: string, example: "SecretPass123!" }
+      required:
+        - name
+        - email
+        - password
 
     AddressInput:
       type: object
       properties:
-        city: {type: string, example: "Istanbul"}
-        district: {type: string, example: "Kadikoy"}
-        address: {type: string, example: "Moda Mahallesi"}
+        city: { type: string, example: "Isparta" }
+        district: { type: string, example: "Merkez" }
+        address: { type: string, example: "Çünür Mahallesi, 123. Sokak" }
+      required:
+        - city
+        - district
+        - address
+
+    Food:
+      type: object
+      properties:
+        _id: { type: string, example: "fd123" }
+        sellerId: { type: string, example: "usr789" }
+        name: { type: string, example: "Zeytinyağlı Sarma" }
+        price: { type: number, example: 150 }
+        portion: { type: integer, example: 10 }
+        category: { type: string, example: "Zeytinyağlılar" }
+      required:
+        - _id
+        - name
+        - price
+        - portion
 
     FoodInput:
       type: object
       properties:
-        name: {type: string, example: "Mantı"}
-        price: {type: number, example: 120}
-        portion: {type: integer, example: 10}
+        name: { type: string, example: "Zeytinyağlı Sarma" }
+        price: { type: number, example: 150 }
+        portion: { type: integer, example: 10 }
+        category: { type: string, example: "Zeytinyağlılar" }
+      required:
+        - name
+        - price
+        - portion
+
+    Order:
+      type: object
+      properties:
+        _id: { type: string, example: "ord987" }
+        foodId: { type: string, example: "fd123" }
+        buyerId: { type: string, example: "usr123" }
+        quantity: { type: integer, example: 2 }
+        totalPrice: { type: number, example: 300 }
+        status: { type: string, example: "Hazırlanıyor" }
+      required:
+        - _id
+        - foodId
+        - quantity
+        - status
 
     OrderInput:
       type: object
       properties:
-        foodId: {type: integer, example: 5}
-        quantity: {type: integer, example: 2}
+        foodId: { type: string, example: "fd123" }
+        quantity: { type: integer, example: 2 }
+      required:
+        - foodId
+        - quantity
 
     PaymentInput:
       type: object
       properties:
-        cardNumber: {type: string, example: "1234123412341234"}
-        cardHolder: {type: string, example: "Sena Yilmaz"}
-        expiry: {type: string, example: "12/28"}
+        cardNumber: { type: string, example: "1234123412341234" }
+        cardHolder: { type: string, example: "Alara Kökbudak" }
+        expiry: { type: string, example: "12/28" }
+      required:
+        - cardNumber
+        - cardHolder
+        - expiry
+
+    Request:
+      type: object
+      properties:
+        _id: { type: string, example: "req321" }
+        buyerId: { type: string, example: "usr123" }
+        foodRequest: { type: string, example: "Yarın için 2 tepsi su böreği" }
+        date: { type: string, format: date, example: "2026-03-15" }
+        offers:
+          type: array
+          items:
+            type: object
+            properties:
+              sellerId: { type: string }
+              offerPrice: { type: number }
+      required:
+        - _id
+        - foodRequest
 
     RequestInput:
       type: object
       properties:
-        foodRequest: {type: string, example: "2 tepsi börek"}
-        date: {type: string, format: date}
+        foodRequest: { type: string, example: "Yarın için 2 tepsi su böreği" }
+        date: { type: string, format: date, example: "2026-03-15" }
+      required:
+        - foodRequest
+        - date
+
+    Review:
+      type: object
+      properties:
+        _id: { type: string, example: "rev555" }
+        sellerId: { type: string, example: "usr789" }
+        author: { type: string, example: "Alara" }
+        rating: { type: integer, minimum: 1, maximum: 5, example: 5 }
+        comment: { type: string, example: "Çok hızlı ve sıcacıktı!" }
+      required:
+        - _id
+        - rating
 
     ReviewInput:
       type: object
       properties:
-        sellerId: {type: integer}
-        rating: {type: integer, minimum: 1, maximum: 5}
-        comment: {type: string, example: "Yemek cok lezzetliydi"}
+        sellerId: { type: string, example: "usr789" }
+        rating: { type: integer, minimum: 1, maximum: 5, example: 5 }
+        comment: { type: string, example: "Çok hızlı ve sıcacıktı!" }
+      required:
+        - sellerId
+        - rating
