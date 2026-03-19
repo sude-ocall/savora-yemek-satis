@@ -1,3 +1,4 @@
+// Doğrudan canlı API adresi (localhost kullanılmaz)
 const API_URL = 'https://savora-yemek-satis-alaras-projects-44e3d712.vercel.app/api';
 
 // Toast Notification System
