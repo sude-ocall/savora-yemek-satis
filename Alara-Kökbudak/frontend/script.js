@@ -43,9 +43,11 @@ document.getElementById('createOrderBtn').addEventListener('click', async () => 
         } else {
             const errData = await response.json().catch(() => ({}));
             const errMsg = errData.message || errData.error || response.statusText || 'Bilinmeyen hata';
+            console.error('POST /orders Failed. Status:', response.status, 'Error:', errMsg);
             alert(`Sipariş oluşturulamadı:\n${errMsg}`);
         }
     } catch (error) {
+        console.error('Fetch System Error:', error);
         alert(`Ağ/Bağlantı hatası:\n${error.message}`);
     } finally {
         btn.textContent = 'Sipariş Oluştur';
@@ -62,6 +64,7 @@ const fetchAllOrders = async () => {
         if (!response.ok) {
             const errData = await response.json().catch(() => ({}));
             const errMsg = errData.message || errData.error || response.statusText || 'Bilinmeyen hata';
+            console.error('GET /orders Failed. Status:', response.status, 'Error:', errMsg);
             throw new Error(errMsg);
         }
         const data = await response.json();
@@ -91,6 +94,7 @@ const fetchActiveOrders = async () => {
         if(!response.ok) {
             const errData = await response.json().catch(() => ({}));
             const errMsg = errData.message || errData.error || response.statusText || 'Bilinmeyen hata';
+            console.error('GET /orders/active Failed. Status:', response.status, 'Error:', errMsg);
             throw new Error(errMsg);
         }
         const data = await response.json();
@@ -177,9 +181,11 @@ const updateOrderStatus = async (id, status) => {
         } else {
             const errData = await response.json().catch(() => ({}));
             const errMsg = errData.message || errData.error || response.statusText || 'Bilinmeyen hata';
+            console.error(`PUT /orders/${id}/status Failed. Status:`, response.status, 'Error:', errMsg);
             alert(`Durum güncellenemedi:\n${errMsg}`);
         }
     } catch (e) {
+        console.error('Fetch System Error:', e);
         alert(`Bağlantı hatası (Durum Güncelleme):\n${e.message}`);
     }
 };
@@ -196,9 +202,11 @@ const cancelOrder = async (id) => {
         } else {
             const errData = await response.json().catch(() => ({}));
             const errMsg = errData.message || errData.error || response.statusText || 'Bilinmeyen hata';
+            console.error(`DELETE /orders/${id} Failed. Status:`, response.status, 'Error:', errMsg);
             alert(`Sipariş iptal edilemedi:\n${errMsg}`);
         }
     } catch (e) {
+        console.error('Fetch System Error:', e);
         alert(`Bağlantı hatası (Sipariş İptali):\n${e.message}`);
     }
 };
@@ -235,9 +243,11 @@ document.getElementById('savePaymentBtn').addEventListener('click', async () => 
         } else {
             const errData = await response.json().catch(() => ({}));
             const errMsg = errData.message || errData.error || response.statusText || 'Bilinmeyen hata';
+            console.error('POST /payments Failed. Status:', response.status, 'Error:', errMsg);
             alert(`Ödeme kaydedilemedi:\n${errMsg}`);
         }
     } catch (error) {
+        console.error('Fetch System Error:', error);
         alert(`Bağlantı hatası (Ödeme):\n${error.message}`);
     } finally {
         btn.textContent = 'Kartı Kaydet';
