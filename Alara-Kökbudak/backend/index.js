@@ -1,14 +1,9 @@
 const express = require('express');
-const cors = require('cors');
 
 const app = express();
 
 // Middleware
-app.use(cors({
-    origin: '*', // Tüm adreslere (frontend Vercel dâhil) izin ver
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization']
-}));
+app.use(require('cors')({ origin: true, credentials: true }));
 app.use(express.json());
 
 // In-memory veri deposu
