@@ -25,6 +25,7 @@ document.getElementById('createOrderBtn').addEventListener('click', async () => 
     btn.disabled = true;
 
     try {
+        console.log('İstek atılan URL:', API_URL);
         const response = await fetch(`${API_URL}/orders`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -60,6 +61,7 @@ const fetchAllOrders = async () => {
     const btn = document.getElementById('refreshAllOrdersBtn');
     btn.textContent = 'Yükleniyor...';
     try {
+        console.log('İstek atılan URL:', API_URL);
         const response = await fetch(`${API_URL}/orders`);
         if (!response.ok) {
             const errData = await response.json().catch(() => ({}));
@@ -90,6 +92,7 @@ const fetchActiveOrders = async () => {
     const OriginalText = btn.textContent;
     btn.textContent = 'Yenileniyor...';
     try {
+        console.log('İstek atılan URL:', API_URL);
         const response = await fetch(`${API_URL}/orders/active`);
         if(!response.ok) {
             const errData = await response.json().catch(() => ({}));
@@ -169,6 +172,7 @@ const renderOrders = (orders, container, isActiveView) => {
 // 4. PUT: Sipariş Durumu Güncelleme
 const updateOrderStatus = async (id, status) => {
     try {
+        console.log('İstek atılan URL:', API_URL);
         const response = await fetch(`${API_URL}/orders/${id}/status`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
@@ -194,6 +198,7 @@ const updateOrderStatus = async (id, status) => {
 const cancelOrder = async (id) => {
     if(!confirm(`Sipariş #${id} iptal edilecek! Emin misiniz?`)) return;
     try {
+        console.log('İstek atılan URL:', API_URL);
         const response = await fetch(`${API_URL}/orders/${id}`, { method: 'DELETE' });
         if (response.ok) {
             showToast(`Sipariş iptali başarılı.`);
@@ -228,6 +233,7 @@ document.getElementById('savePaymentBtn').addEventListener('click', async () => 
     btn.disabled = true;
 
     try {
+        console.log('İstek atılan URL:', API_URL);
         const response = await fetch(`${API_URL}/payments`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
