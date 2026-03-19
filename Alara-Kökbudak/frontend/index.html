@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Savora Yemek Satış - Sipariş Platformu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <header class="glass-header">
+            <h1>🍔 Savora Sipariş & Ödeme</h1>
+            <p>Modern ve temiz kullanıcı arayüzü.</p>
+        </header>
+        
+        <main class="dashboard">
+            <!-- Order Creation -->
+            <section class="glass-card new-order-section">
+                <h2>Sipariş Oluştur</h2>
+                <div class="form-group">
+                    <label>Müşteri Adı</label>
+                    <input type="text" id="customerName" placeholder="Adınızı girin..." />
+                </div>
+                <div class="form-group">
+                    <label>Sipariş Tutarı (₺)</label>
+                    <input type="number" id="orderTotal" placeholder="Örn: 150" />
+                </div>
+                <button id="createOrderBtn" class="primary-btn">Sipariş Oluştur</button>
+            </section>
+            
+            <!-- Payment Method Form -->
+            <section class="glass-card payment-section">
+                <h2>Ödeme Yöntemi Ekle</h2>
+                <div class="form-group">
+                    <label>Kart Sahibinin Adı</label>
+                    <input type="text" id="cardHolder" placeholder="Ad Soyad" />
+                </div>
+                <div class="form-group">
+                    <label>Kart Numarası</label>
+                    <input type="text" id="cardNumber" placeholder="1111222233334444" maxlength="16" />
+                </div>
+                <div class="form-group">
+                    <label>Son Kullanma Tarihi</label>
+                    <input type="text" id="expiryDate" placeholder="MM/YY" maxlength="5" />
+                </div>
+                <div class="form-group">
+                    <label>CVV</label>
+                    <input type="text" id="cvv" placeholder="123" maxlength="3" />
+                </div>
+                <button id="savePaymentBtn" class="primary-btn">Kartı Kaydet</button>
+            </section>
+            
+            <!-- Active Orders -->
+            <section class="glass-card active-orders-section">
+                <h2>Aktif Siparişler</h2>
+                <button id="refreshActiveOrdersBtn" class="secondary-btn">Yenile</button>
+                <div id="activeOrdersList" class="order-list"></div>
+            </section>
+            
+            <!-- Order History -->
+            <section class="glass-card order-history-section">
+                <h2>Tüm Sipariş Geçmişi</h2>
+                <button id="refreshAllOrdersBtn" class="secondary-btn">Geçmişi Getir</button>
+                <div id="allOrdersList" class="order-list"></div>
+            </section>
+        </main>
+        
+        <div id="toastNotification" class="toast hidden">İşlem başarılı!</div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
