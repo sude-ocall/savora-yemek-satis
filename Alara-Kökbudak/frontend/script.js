@@ -29,9 +29,9 @@ document.getElementById('createOrderBtn').addEventListener('click', async () => 
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                items: [{ name: 'Savora Özel Menü', price: Number(orderTotal) }],
-                totalAmount: Number(orderTotal),
-                customerInfo: { name: customerName }
+                kullaniciId: 1, // Örnek hardcoded veri
+                yemekler: [{ ad: 'Savora Menü', miktar: 1 }],
+                toplamTutar: Number(orderTotal)
             })
         });
         
@@ -41,10 +41,12 @@ document.getElementById('createOrderBtn').addEventListener('click', async () => 
             document.getElementById('orderTotal').value = '';
             fetchActiveOrders();
         } else {
-            showToast('Müşteri siparişi oluşturulamadı.', true);
+            const errData = await response.json().catch(() => ({}));
+            const errMsg = errData.message || errData.error || response.statusText || 'Bilinmeyen hata';
+            alert(`Sipariş oluşturulamadı:\n${errMsg}`);
         }
     } catch (error) {
-        showToast('Sunucuya bağlanılamadı.', true);
+        alert(`Ağ/Bağlantı hatası:\n${error.message}`);
     } finally {
         btn.textContent = 'Sipariş Oluştur';
         btn.disabled = false;
@@ -57,16 +59,21 @@ const fetchAllOrders = async () => {
     btn.textContent = 'Yükleniyor...';
     try {
         const response = await fetch(`${API_URL}/orders`);
+        if (!response.ok) {
+            const errData = await response.json().catch(() => ({}));
+            const errMsg = errData.message || errData.error || response.statusText || 'Bilinmeyen hata';
+            throw new Error(errMsg);
+        }
         const data = await response.json();
         const listConfig = document.getElementById('allOrdersList');
-        if (data.orders) {
-            renderOrders(data.orders, listConfig, false);
+        if (data.orders || data.length >= 0) {
+            renderOrders(data.orders || data, listConfig, false);
             showToast('Sipariş geçmişi yüklendi.');
         } else {
-            showToast('Sipariş verisi gelmedi.', true);
+            alert('Sunucudan geçersiz veri formatı döndü.');
         }
     } catch (error) {
-        showToast('Geçmiş alınırken hata oluştu.', true);
+        alert(`Sipariş geçmişi alınamadı:\n${error.message}`);
     } finally {
         btn.textContent = 'Geçmişi Getir';
     }
@@ -81,13 +88,17 @@ const fetchActiveOrders = async () => {
     btn.textContent = 'Yenileniyor...';
     try {
         const response = await fetch(`${API_URL}/orders/active`);
-        if(!response.ok) throw new Error();
+        if(!response.ok) {
+            const errData = await response.json().catch(() => ({}));
+            const errMsg = errData.message || errData.error || response.statusText || 'Bilinmeyen hata';
+            throw new Error(errMsg);
+        }
         const data = await response.json();
         const listConfig = document.getElementById('activeOrdersList');
-        renderOrders(data.activeOrders || [], listConfig, true);
+        renderOrders(data.activeOrders || data || [], listConfig, true);
         showToast('Aktif siparişler başarılı.');
     } catch (error) {
-        showToast('Aktif siparişler alınamadı.', true);
+        alert(`Aktif siparişler alınamadı:\n${error.message}`);
     } finally {
         btn.textContent = OriginalText;
     }
@@ -108,10 +119,10 @@ const renderOrders = (orders, container, isActiveView) => {
         const div = document.createElement('div');
         div.className = 'order-item';
         div.innerHTML = `
-            <p><strong>Sipariş #${o.id}</strong> - ${o.customerInfo?.name || 'Müşteri'}</p>
-            <p>Tutar: ${o.totalAmount} ₺</p>
-            <p>Durum: <strong>${o.status}</strong></p>
-            <p>Tarih: ${new Date(o.createdAt).toLocaleString('tr-TR')}</p>
+            <p><strong>Sipariş #${o.id || o._id || '?'}</strong> - Kullanıcı: ${o.kullaniciId || o.customerInfo?.name || 'Müşteri'}</p>
+            <p>Tutar: ${o.toplamTutar || o.totalAmount} ₺</p>
+            <p>Durum: <strong>${o.status || o.durum || 'Bilinmiyor'}</strong></p>
+            <p>Tarih: ${new Date(o.createdAt || o.tarih || Date.now()).toLocaleString('tr-TR')}</p>
         `;
 
         if (isActiveView) {
@@ -164,11 +175,12 @@ const updateOrderStatus = async (id, status) => {
             fetchActiveOrders();
             fetchAllOrders(); // Geçmişi de hemen güncelleyelim.
         } else {
-            const err = await response.json();
-            showToast(err.error || 'Statü güncellenemedi.', true);
+            const errData = await response.json().catch(() => ({}));
+            const errMsg = errData.message || errData.error || response.statusText || 'Bilinmeyen hata';
+            alert(`Durum güncellenemedi:\n${errMsg}`);
         }
     } catch (e) {
-        showToast('Sunucu bağlantı hatası.', true);
+        alert(`Bağlantı hatası (Durum Güncelleme):\n${e.message}`);
     }
 };
 
@@ -182,11 +194,12 @@ const cancelOrder = async (id) => {
             fetchActiveOrders();
             fetchAllOrders();
         } else {
-            const err = await response.json();
-            showToast(err.error || 'İptal tamamlanamadı.', true);
+            const errData = await response.json().catch(() => ({}));
+            const errMsg = errData.message || errData.error || response.statusText || 'Bilinmeyen hata';
+            alert(`Sipariş iptal edilemedi:\n${errMsg}`);
         }
     } catch (e) {
-        showToast('Sunucu bağlantı hatası.', true);
+        alert(`Bağlantı hatası (Sipariş İptali):\n${e.message}`);
     }
 };
 
@@ -210,7 +223,7 @@ document.getElementById('savePaymentBtn').addEventListener('click', async () => 
         const response = await fetch(`${API_URL}/payments`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ cardHolderName, cardNumber, expiryDate, cvv })
+            body: JSON.stringify({ kartSahibi: cardHolderName, kartNumarasi: cardNumber })
         });
         
         if (response.ok) {
@@ -220,10 +233,12 @@ document.getElementById('savePaymentBtn').addEventListener('click', async () => 
             document.getElementById('expiryDate').value = '';
             document.getElementById('cvv').value = '';
         } else {
-            showToast('Ödeme kaydedilemedi.', true);
+            const errData = await response.json().catch(() => ({}));
+            const errMsg = errData.message || errData.error || response.statusText || 'Bilinmeyen hata';
+            alert(`Ödeme kaydedilemedi:\n${errMsg}`);
         }
     } catch (error) {
-        showToast('Sunucuya ulaşılamıyor.', true);
+        alert(`Bağlantı hatası (Ödeme):\n${error.message}`);
     } finally {
         btn.textContent = 'Kartı Kaydet';
         btn.disabled = false;
