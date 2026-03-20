@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Savora - Güvenli Ödeme</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <a href="index.html" class="logo">Savora<span>.</span></a>
+        </div>
+    </header>
+
+    <main class="payment-container">
+        <!-- Sol: Form ve Kart Görseli -->
+        <section class="payment-left">
+            <a href="index.html" class="back-link">← Menüye Dön</a>
+            <h2 class="section-title">Ödeme Bilgileri</h2>
+
+            <!-- Kredi Kartı Görseli -->
+            <div class="credit-card-visual">
+                <div class="cc-chip"></div>
+                <div class="cc-number" id="ccVisualNumber">**** **** **** ****</div>
+                <div class="cc-details">
+                    <div>
+                        <div class="cc-label">Kart Sahibi</div>
+                        <div id="ccVisualName">AD SOYAD</div>
+                    </div>
+                    <div>
+                        <div class="cc-label">Son Kullanma</div>
+                        <div id="ccVisualExpiry">AA/YY</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kart Formu -->
+            <form id="paymentForm">
+                <div class="form-group">
+                    <label for="cardName">Kart Üzerindeki İsim</label>
+                    <input type="text" id="cardName" class="form-control" placeholder="Örn: Alara Kökbudak" required>
+                </div>
+                <div class="form-group">
+                    <label for="cardNumber">Kart Numarası</label>
+                    <input type="text" id="cardNumber" class="form-control" placeholder="0000 0000 0000 0000" maxlength="19" required>
+                </div>
+                <div class="row-2">
+                    <div class="form-group">
+                        <label for="cardExpiry">Son Kullanma (AA/YY)</label>
+                        <input type="text" id="cardExpiry" class="form-control" placeholder="12/26" maxlength="5" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="cardCvv">CVV</label>
+                        <input type="text" id="cardCvv" class="form-control" placeholder="123" maxlength="3" required>
+                    </div>
+                </div>
+            </form>
+        </section>
+
+        <!-- Sağ: Sipariş Özeti -->
+        <aside class="payment-right">
+            <h2 class="section-title">Sipariş Özeti</h2>
+            <div class="order-summary-box">
+                <div id="summaryItems">
+                    <!-- Dinamik olarak doldurulacak -->
+                </div>
+                <div class="cart-summary" style="margin-top: 1.5rem;">
+                    <div class="summary-row">
+                        <span>Toplam Ödenecek:</span>
+                        <span id="summaryTotal" style="color: var(--primary); font-size: 1.4rem;">0 ₺</span>
+                    </div>
+                </div>
+            </div>
+            <button class="btn btn-primary" id="completePaymentBtn" style="font-size: 1.1rem; padding: 1rem;">Ödemeyi Tamamla</button>
+            <p style="text-align: center; color: var(--text-light); font-size: 0.85rem; margin-top: 1rem;">
+                🔒 SSL şifreleme ile %100 güvenli ödeme.
+            </p>
+        </aside>
+    </main>
+
+    <!-- Toast Bildirim -->
+    <div id="toastNotification" class="hidden">Mesaj</div>
+
+    <script src="script.js"></script>
+</body>
+</html>

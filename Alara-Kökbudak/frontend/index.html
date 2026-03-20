@@ -3,71 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Savora Yemek Satış - Sipariş Platformu</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>Savora Yemek Sipariş - Lezzet Kapında</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="app-container">
-        <header class="glass-header">
-            <h1>🍔 Savora Sipariş & Ödeme</h1>
-            <p>Modern ve temiz kullanıcı arayüzü.</p>
-        </header>
-        
-        <main class="dashboard">
-            <!-- Order Creation -->
-            <section class="glass-card new-order-section">
-                <h2>Sipariş Oluştur</h2>
-                <div class="form-group">
-                    <label>Müşteri Adı</label>
-                    <input type="text" id="customerName" placeholder="Adınızı girin..." />
+    <header>
+        <div class="header-container">
+            <a href="index.html" class="logo">Savora<span>.</span></a>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <!-- Sol: Menü Alanı -->
+        <section class="menu-section">
+            <h2 class="section-title">Günün Menüsü</h2>
+            <div class="menu-grid" id="menuGrid">
+                <!-- Yemek Kartı 1 -->
+                <div class="food-card">
+                    <img src="assets/burger.png" alt="Savora Gurme Burger" class="food-img">
+                    <div class="food-info">
+                        <h3 class="food-title">Savora Gurme Burger</h3>
+                        <p class="food-desc">Ateş ızgarasında pişmiş dana köfte, karamelize soğan, cheddar peyniri ve taptaze yeşilliklerle hazırlanmış efsane burger.</p>
+                        <div class="food-footer">
+                            <span class="food-price">220 ₺</span>
+                            <button class="btn btn-secondary btn-sm add-to-cart-btn" data-id="1" data-name="Savora Gurme Burger" data-price="220">Sepete Ekle</button>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label>Sipariş Tutarı (₺)</label>
-                    <input type="number" id="orderTotal" placeholder="Örn: 150" />
+
+                <!-- Yemek Kartı 2 -->
+                <div class="food-card">
+                    <img src="assets/pizza.png" alt="İtalyan Margherita" class="food-img">
+                    <div class="food-info">
+                        <h3 class="food-title">İtalyan Margherita</h3>
+                        <p class="food-desc">Orijinal İtalyan tarifiyle odun ateşinde pişirilmiş, taze fesleğen ve mozzarella peyniri uyumu.</p>
+                        <div class="food-footer">
+                            <span class="food-price">180 ₺</span>
+                            <button class="btn btn-secondary btn-sm add-to-cart-btn" data-id="2" data-name="İtalyan Margherita" data-price="180">Sepete Ekle</button>
+                        </div>
+                    </div>
                 </div>
-                <button id="createOrderBtn" class="primary-btn">Sipariş Oluştur</button>
-            </section>
+
+                <!-- Yemek Kartı 3 -->
+                <div class="food-card">
+                    <img src="assets/pasta.png" alt="Fettuccine Alfredo" class="food-img">
+                    <div class="food-info">
+                        <h3 class="food-title">Kremalı Fettuccine Alfredo</h3>
+                        <p class="food-desc">Özel krema sosu, parmesan peyniri parçaları ve taze maydanoz süslemesiyle enfes bir İtalyan klasiği.</p>
+                        <div class="food-footer">
+                            <span class="food-price">150 ₺</span>
+                            <button class="btn btn-secondary btn-sm add-to-cart-btn" data-id="3" data-name="Kremalı Fettuccine Alfredo" data-price="150">Sepete Ekle</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sağ: Sepet Alanı -->
+        <aside class="cart-section">
+            <h2 class="section-title">Sepetiniz</h2>
             
-            <!-- Payment Method Form -->
-            <section class="glass-card payment-section">
-                <h2>Ödeme Yöntemi Ekle</h2>
-                <div class="form-group">
-                    <label>Kart Sahibinin Adı</label>
-                    <input type="text" id="cardHolder" placeholder="Ad Soyad" />
+            <div class="cart-items" id="cartItems">
+                <div class="empty-cart-msg">Sepetiniz şu an boş. Hemen lezzetli bir şeyler seçin!</div>
+                <!-- JS ile buraya dinamik eklenecek -->
+            </div>
+
+            <div class="cart-summary">
+                <div class="summary-row">
+                    <span>Toplam:</span>
+                    <span id="cartTotalPrice">0 ₺</span>
                 </div>
-                <div class="form-group">
-                    <label>Kart Numarası</label>
-                    <input type="text" id="cardNumber" placeholder="1111222233334444" maxlength="16" />
+                <!-- İsim girişi sepette alınıyor -->
+                <div class="form-group" style="margin-bottom: 1rem;">
+                    <input type="text" id="customerNameInput" class="form-control" placeholder="Adınız Soyadınız" required>
                 </div>
-                <div class="form-group">
-                    <label>Son Kullanma Tarihi</label>
-                    <input type="text" id="expiryDate" placeholder="MM/YY" maxlength="5" />
-                </div>
-                <div class="form-group">
-                    <label>CVV</label>
-                    <input type="text" id="cvv" placeholder="123" maxlength="3" />
-                </div>
-                <button id="savePaymentBtn" class="primary-btn">Kartı Kaydet</button>
-            </section>
-            
-            <!-- Active Orders -->
-            <section class="glass-card active-orders-section">
-                <h2>Aktif Siparişler</h2>
-                <button id="refreshActiveOrdersBtn" class="secondary-btn">Yenile</button>
-                <div id="activeOrdersList" class="order-list"></div>
-            </section>
-            
-            <!-- Order History -->
-            <section class="glass-card order-history-section">
-                <h2>Tüm Sipariş Geçmişi</h2>
-                <button id="refreshAllOrdersBtn" class="secondary-btn">Geçmişi Getir</button>
-                <div id="allOrdersList" class="order-list"></div>
-            </section>
-        </main>
-        
-        <div id="toastNotification" class="toast hidden">İşlem başarılı!</div>
-    </div>
+                <button class="btn btn-primary" id="checkoutBtn" disabled>Ödemeye Geç</button>
+            </div>
+        </aside>
+    </main>
+
+    <!-- Toast Bildirim -->
+    <div id="toastNotification" class="hidden">Mesaj</div>
+
+    <!-- Scriptleri ekle -->
     <script src="script.js"></script>
 </body>
 </html>
