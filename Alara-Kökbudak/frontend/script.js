@@ -3,7 +3,6 @@ const API_URL = 'https://savora-yemek-satis-alaras-projects-44e3d712.vercel.app/
 
 // Sepet durumu localStorage üzerinden taşınıyor
 let cart = JSON.parse(localStorage.getItem('savoraCart')) || [];
-let customerName = localStorage.getItem('savoraCustomerName') || '';
 
 // Toast Bildirim Sistemi
 const showToast = (message, isError = false) => {
@@ -23,17 +22,6 @@ if (document.getElementById('menuGrid')) {
     const cartItemsContainer = document.getElementById('cartItems');
     const cartTotalPriceEl = document.getElementById('cartTotalPrice');
     const checkoutBtn = document.getElementById('checkoutBtn');
-    const customerNameInput = document.getElementById('customerNameInput');
-
-    // Müşteri adı değişirse kaydet
-    if(customerNameInput) {
-        customerNameInput.value = customerName;
-        customerNameInput.addEventListener('input', (e) => {
-            customerName = e.target.value;
-            localStorage.setItem('savoraCustomerName', customerName);
-            updateCartUI();
-        });
-    }
 
     const updateCartUI = () => {
         cartItemsContainer.innerHTML = '';
@@ -68,8 +56,8 @@ if (document.getElementById('menuGrid')) {
 
         cartTotalPriceEl.textContent = formatPrice(total);
         
-        // Sepette ürün varsa ve isim girilmişse buton aktif
-        checkoutBtn.disabled = !(cart.length > 0 && customerName.trim() !== '');
+        // Sepette ürün varsa buton aktif
+        checkoutBtn.disabled = cart.length === 0;
         
         // localStorage'a kaydet
         localStorage.setItem('savoraCart', JSON.stringify(cart));
@@ -105,8 +93,8 @@ if (document.getElementById('menuGrid')) {
 
     // Ödemeye Geç Butonu
     checkoutBtn.addEventListener('click', () => {
-        if (!customerName.trim() || cart.length === 0) {
-            showToast('Lütfen sepeti doldurun ve adınızı yazın.', true);
+        if (cart.length === 0) {
+            showToast('Lütfen sepeti doldurun.', true);
             return;
         }
         window.location.href = 'payment.html';
@@ -124,8 +112,8 @@ if (document.getElementById('paymentForm')) {
     const summaryTotalEl = document.getElementById('summaryTotal');
     const completePaymentBtn = document.getElementById('completePaymentBtn');
 
-    // Eğer sepet boşsa veya isim yoksa başa dön
-    if (cart.length === 0 || !customerName) {
+    // Eğer sepet boşsa başa dön
+    if (cart.length === 0) {
         window.location.href = 'index.html';
     }
 
@@ -223,7 +211,7 @@ if (document.getElementById('paymentForm')) {
                 body: JSON.stringify({
                     items: cart,
                     totalAmount: totalAmount,
-                    customerInfo: { name: customerName }
+                    kullaniciId: 'demo_user_123'
                 })
             });
 
@@ -234,7 +222,6 @@ if (document.getElementById('paymentForm')) {
 
             // Başarılı Senaryo
             localStorage.removeItem('savoraCart'); // Sepeti temizle
-            localStorage.removeItem('savoraCustomerName'); // Opsiyonel
             
             showToast('Siparişiniz yola çıktı! 🎉');
             
