@@ -168,8 +168,14 @@ if (document.getElementById('paymentForm')) {
         ccVisualExpiry.textContent = val || 'AA/YY';
     });
 
+    // Formun default gönderimini engelle
+    document.getElementById('paymentForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+    });
+
     // "Ödemeyi Tamamla" Akışı
-    completePaymentBtn.addEventListener('click', async () => {
+    completePaymentBtn.addEventListener('click', async (event) => {
+        event.preventDefault();
         const cvv = document.getElementById('cardCvv').value;
         const cNum = cardNumberInput.value.replace(/\s+/g, '');
         const cName = cardNameInput.value;
@@ -186,7 +192,7 @@ if (document.getElementById('paymentForm')) {
         try {
             // ADIM 1: Ödemeyi Kaydet (/api/payments)
             console.log('1. API İsteği: Ödeme alınıyor...');
-            const paymentRes = await fetch(`${API_URL}/payments`, {
+            const paymentRes = await fetch('https://savora-yemek-satis-alaras-projects-44e3d712.vercel.app/api/payments', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -205,7 +211,7 @@ if (document.getElementById('paymentForm')) {
             console.log('Ödeme başarılı. Sipariş oluşturuluyor...');
 
             // ADIM 2: Siparişi Oluştur (/api/orders)
-            const orderRes = await fetch(`${API_URL}/orders`, {
+            const orderRes = await fetch('https://savora-yemek-satis-alaras-projects-44e3d712.vercel.app/api/orders', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
