@@ -176,6 +176,12 @@ if (document.getElementById('paymentForm')) {
     // "Ödemeyi Tamamla" Akışı
     completePaymentBtn.addEventListener('click', async (event) => {
         event.preventDefault();
+
+        if (!cart || cart.length === 0) {
+            alert('Hata: Sepet verisi bulunamadı!');
+            return;
+        }
+
         const cvv = document.getElementById('cardCvv').value;
         const cNum = cardNumberInput.value.replace(/\s+/g, '');
         const cName = cardNameInput.value;
@@ -194,7 +200,10 @@ if (document.getElementById('paymentForm')) {
             console.log('1. API İsteği: Ödeme alınıyor...');
             const paymentRes = await fetch('https://savora-yemek-satis-alaras-projects-44e3d712.vercel.app/api/payments', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
                 body: JSON.stringify({
                     cardHolderName: cName,
                     cardNumber: cNum,
@@ -213,7 +222,10 @@ if (document.getElementById('paymentForm')) {
             // ADIM 2: Siparişi Oluştur (/api/orders)
             const orderRes = await fetch('https://savora-yemek-satis-alaras-projects-44e3d712.vercel.app/api/orders', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
                 body: JSON.stringify({
                     items: cart,
                     totalAmount: totalAmount,
@@ -238,7 +250,8 @@ if (document.getElementById('paymentForm')) {
             }, 1000);
 
         } catch (err) {
-            console.error('Akış Hatası:', err);
+            alert("BAĞLANTI HATASI: " + err.message);
+            console.error("Tam Hata:", err);
             showToast(`Hata: ${err.message}`, true);
             completePaymentBtn.textContent = 'Tekrar Dene';
             completePaymentBtn.disabled = false;
