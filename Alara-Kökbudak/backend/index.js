@@ -2,13 +2,8 @@ const express = require('express');
 const cors = require('cors');
 
 const app = express();
-
-// Middleware
-app.use(cors({
-    origin: '*', // Tüm adreslere (frontend Vercel dâhil) izin ver
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization']
-}));
+// KESİNLİKLE DİĞER TÜM İŞLEMLERDEN ÖNCE CORS ÇAĞIRILMALIDIR!
+app.use(cors());
 app.use(express.json());
 
 // In-memory veri deposu

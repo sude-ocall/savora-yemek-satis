@@ -1,234 +1,260 @@
-// Doğrudan canlı API adresi (localhost kullanılmaz)
+// --- GLOBAL / SHARED AYARLAR ---
 const API_URL = 'https://savora-yemek-satis-alaras-projects-44e3d712.vercel.app/api';
 
-// Toast Notification System
+// Sepet durumu localStorage üzerinden taşınıyor
+let cart = JSON.parse(localStorage.getItem('savoraCart')) || [];
+
+// Toast Bildirim Sistemi
 const showToast = (message, isError = false) => {
     const toast = document.getElementById('toastNotification');
+    if(!toast) return;
     toast.textContent = message;
     toast.style.background = isError ? 'var(--danger)' : 'var(--success)';
     toast.classList.remove('hidden');
     setTimeout(() => { toast.classList.add('hidden'); }, 3000);
 };
 
-// 1. POST /orders: Sipariş Oluşturma
-document.getElementById('createOrderBtn').addEventListener('click', async () => {
-    const customerName = document.getElementById('customerName').value;
-    const orderTotal = document.getElementById('orderTotal').value;
+const formatPrice = (price) => `${price} ₺`;
 
-    if (!customerName || !orderTotal) {
-        showToast('Lütfen müşteri adı ve tutar bilgisini doldurun.', true);
-        return;
-    }
-
-    const btn = document.getElementById('createOrderBtn');
-    btn.textContent = 'Oluşturuluyor...';
-    btn.disabled = true;
-
-    try {
-        const response = await fetch(`${API_URL}/orders`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                items: [{ name: 'Savora Özel Menü', price: Number(orderTotal) }],
-                totalAmount: Number(orderTotal),
-                customerInfo: { name: customerName }
-            })
-        });
-        
-        if (response.ok) {
-            showToast('Sipariş başarıyla oluşturuldu!');
-            document.getElementById('customerName').value = '';
-            document.getElementById('orderTotal').value = '';
-            fetchActiveOrders();
-        } else {
-            showToast('Müşteri siparişi oluşturulamadı.', true);
-        }
-    } catch (error) {
-        showToast('Sunucuya bağlanılamadı.', true);
-    } finally {
-        btn.textContent = 'Sipariş Oluştur';
-        btn.disabled = false;
-    }
-});
-
-// 2. GET /orders: Tüm Sipariş Geçmişi
-const fetchAllOrders = async () => {
-    const btn = document.getElementById('refreshAllOrdersBtn');
-    btn.textContent = 'Yükleniyor...';
-    try {
-        const response = await fetch(`${API_URL}/orders`);
-        const data = await response.json();
-        const listConfig = document.getElementById('allOrdersList');
-        if (data.orders) {
-            renderOrders(data.orders, listConfig, false);
-            showToast('Sipariş geçmişi yüklendi.');
-        } else {
-            showToast('Sipariş verisi gelmedi.', true);
-        }
-    } catch (error) {
-        showToast('Geçmiş alınırken hata oluştu.', true);
-    } finally {
-        btn.textContent = 'Geçmişi Getir';
-    }
-};
-
-document.getElementById('refreshAllOrdersBtn').addEventListener('click', fetchAllOrders);
-
-// 3. GET /orders/active: Aktif Sipariş Detayı
-const fetchActiveOrders = async () => {
-    const btn = document.getElementById('refreshActiveOrdersBtn');
-    const OriginalText = btn.textContent;
-    btn.textContent = 'Yenileniyor...';
-    try {
-        const response = await fetch(`${API_URL}/orders/active`);
-        if(!response.ok) throw new Error();
-        const data = await response.json();
-        const listConfig = document.getElementById('activeOrdersList');
-        renderOrders(data.activeOrders || [], listConfig, true);
-        showToast('Aktif siparişler başarılı.');
-    } catch (error) {
-        showToast('Aktif siparişler alınamadı.', true);
-    } finally {
-        btn.textContent = OriginalText;
-    }
-};
-
-document.getElementById('refreshActiveOrdersBtn').addEventListener('click', fetchActiveOrders);
-
-// Orders renderer helper
-const renderOrders = (orders, container, isActiveView) => {
-    container.innerHTML = '';
-    if (orders.length === 0) {
-        container.innerHTML = '<p>Liste boş. Hiç sipariş bulunamadı.</p>';
-        return;
-    }
+// --- INDEX.HTML: MENÜ VE SEPET MANTIĞI ---
+if (document.getElementById('menuGrid')) {
     
-    // Most recent first
-    [...orders].reverse().forEach(o => {
-        const div = document.createElement('div');
-        div.className = 'order-item';
-        div.innerHTML = `
-            <p><strong>Sipariş #${o.id}</strong> - ${o.customerInfo?.name || 'Müşteri'}</p>
-            <p>Tutar: ${o.totalAmount} ₺</p>
-            <p>Durum: <strong>${o.status}</strong></p>
-            <p>Tarih: ${new Date(o.createdAt).toLocaleString('tr-TR')}</p>
-        `;
+    const cartItemsContainer = document.getElementById('cartItems');
+    const cartTotalPriceEl = document.getElementById('cartTotalPrice');
+    const checkoutBtn = document.getElementById('checkoutBtn');
 
-        if (isActiveView) {
-            const actionsDiv = document.createElement('div');
-            actionsDiv.className = 'order-actions';
-            
-            // PUT /orders/1/status
-            const select = document.createElement('select');
-            select.innerHTML = `
-                <option value="Hazırlanmıyor" ${o.status === 'Hazırlanmıyor' ? 'selected' : ''}>Hazırlanmıyor</option>
-                <option value="Hazırlanıyor" ${o.status === 'Hazırlanıyor' ? 'selected' : ''}>Hazırlanıyor</option>
-                <option value="Tamamlandı" ${o.status === 'Tamamlandı' ? 'selected' : ''}>Tamamlandı</option>
+    const updateCartUI = () => {
+        cartItemsContainer.innerHTML = '';
+        let total = 0;
+
+        if (cart.length === 0) {
+            cartItemsContainer.innerHTML = '<div class="empty-cart-msg">Sepetiniz şu an boş. Hemen lezzetli bir şeyler seçin!</div>';
+            cartTotalPriceEl.textContent = formatPrice(0);
+            checkoutBtn.disabled = true;
+            return;
+        }
+
+        cart.forEach((item, index) => {
+            const itemTotal = item.price * item.quantity;
+            total += itemTotal;
+
+            const itemDiv = document.createElement('div');
+            itemDiv.className = 'cart-item';
+            itemDiv.innerHTML = `
+                <div class="cart-item-info">
+                    <div class="cart-item-title">${item.name}</div>
+                    <div class="cart-item-price">${item.quantity} x ${formatPrice(item.price)}</div>
+                </div>
+                <div class="cart-item-controls">
+                    <button class="qty-btn" onclick="updateQty(${index}, -1)">-</button>
+                    <span>${item.quantity}</span>
+                    <button class="qty-btn" onclick="updateQty(${index}, 1)">+</button>
+                </div>
             `;
-            
-            const updateBtn = document.createElement('button');
-            updateBtn.className = 'action-btn';
-            updateBtn.textContent = 'Güncelle';
-            updateBtn.onclick = () => updateOrderStatus(o.id, select.value);
+            cartItemsContainer.appendChild(itemDiv);
+        });
 
-            // DELETE /orders/1
-            const cancelBtn = document.createElement('button');
-            cancelBtn.className = 'action-btn danger-btn';
-            cancelBtn.style.marginTop = '0';
-            cancelBtn.textContent = 'İptal Et';
-            cancelBtn.onclick = () => cancelOrder(o.id);
-            if(o.status !== 'Hazırlanmıyor') cancelBtn.style.display = 'none';
+        cartTotalPriceEl.textContent = formatPrice(total);
+        
+        // Sepette ürün varsa buton aktif
+        checkoutBtn.disabled = cart.length === 0;
+        
+        // localStorage'a kaydet
+        localStorage.setItem('savoraCart', JSON.stringify(cart));
+    };
 
-            actionsDiv.appendChild(select);
-            actionsDiv.appendChild(updateBtn);
-            if (o.status === 'Hazırlanmıyor') {
-                actionsDiv.appendChild(cancelBtn);
+    // Global fonksiyonlar eklendi
+    window.updateQty = (index, change) => {
+        cart[index].quantity += change;
+        if (cart[index].quantity <= 0) {
+            cart.splice(index, 1);
+        }
+        updateCartUI();
+    };
+
+    // 'Sepete Ekle' Butonları
+    document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const id = e.target.getAttribute('data-id');
+            const name = e.target.getAttribute('data-name');
+            const price = parseFloat(e.target.getAttribute('data-price'));
+
+            const existing = cart.find(i => i.id === id);
+            if (existing) {
+                existing.quantity += 1;
+            } else {
+                cart.push({ id, name, price, quantity: 1 });
             }
-            div.appendChild(actionsDiv);
-        }
-        
-        container.appendChild(div);
+            
+            showToast(`${name} sepete eklendi.`);
+            updateCartUI();
+        });
     });
-};
 
-// 4. PUT: Sipariş Durumu Güncelleme
-const updateOrderStatus = async (id, status) => {
-    try {
-        const response = await fetch(`${API_URL}/orders/${id}/status`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ status })
-        });
-        if (response.ok) {
-            showToast(`Durum "${status}" yapıldı.`);
-            fetchActiveOrders();
-            fetchAllOrders(); // Geçmişi de hemen güncelleyelim.
-        } else {
-            const err = await response.json();
-            showToast(err.error || 'Statü güncellenemedi.', true);
+    // Ödemeye Geç Butonu
+    checkoutBtn.addEventListener('click', () => {
+        if (cart.length === 0) {
+            showToast('Lütfen sepeti doldurun.', true);
+            return;
         }
-    } catch (e) {
-        showToast('Sunucu bağlantı hatası.', true);
-    }
-};
+        window.location.href = 'payment.html';
+    });
 
-// 5. DELETE: Sipariş İptal Etme
-const cancelOrder = async (id) => {
-    if(!confirm(`Sipariş #${id} iptal edilecek! Emin misiniz?`)) return;
-    try {
-        const response = await fetch(`${API_URL}/orders/${id}`, { method: 'DELETE' });
-        if (response.ok) {
-            showToast(`Sipariş iptali başarılı.`);
-            fetchActiveOrders();
-            fetchAllOrders();
-        } else {
-            const err = await response.json();
-            showToast(err.error || 'İptal tamamlanamadı.', true);
+    // İlk yüklemede sepeti çiz
+    updateCartUI();
+}
+
+
+// --- PAYMENT.HTML: ÖDEME VE API MANTIĞI ---
+if (document.getElementById('paymentForm')) {
+    
+    const summaryItemsBlock = document.getElementById('summaryItems');
+    const summaryTotalEl = document.getElementById('summaryTotal');
+    const completePaymentBtn = document.getElementById('completePaymentBtn');
+
+    // Eğer sepet boşsa başa dön
+    if (cart.length === 0) {
+        window.location.href = 'index.html';
+    }
+
+    // Sipariş Özeti Çizimi
+    let totalAmount = 0;
+    summaryItemsBlock.innerHTML = '';
+    cart.forEach(item => {
+        totalAmount += item.price * item.quantity;
+        const div = document.createElement('div');
+        div.style.display = 'flex';
+        div.style.justifyContent = 'space-between';
+        div.style.marginBottom = '0.5rem';
+        div.innerHTML = `
+            <span>${item.quantity}x ${item.name}</span>
+            <span style="font-weight: 500;">${formatPrice(item.price * item.quantity)}</span>
+        `;
+        summaryItemsBlock.appendChild(div);
+    });
+    summaryTotalEl.textContent = formatPrice(totalAmount);
+
+    // Kredi Kartı Görsel Dinamizmi
+    const cardNameInput = document.getElementById('cardName');
+    const cardNumberInput = document.getElementById('cardNumber');
+    const cardExpiryInput = document.getElementById('cardExpiry');
+    
+    // Görsel Elementler
+    const ccVisualName = document.getElementById('ccVisualName');
+    const ccVisualNumber = document.getElementById('ccVisualNumber');
+    const ccVisualExpiry = document.getElementById('ccVisualExpiry');
+
+    cardNameInput.addEventListener('input', (e) => {
+        ccVisualName.textContent = e.target.value.toUpperCase() || 'AD SOYAD';
+    });
+
+    cardNumberInput.addEventListener('input', (e) => {
+        let val = e.target.value.replace(/\D/g, '');
+        let formattedStr = '';
+        for (let i = 0; i < val.length; i++) {
+            if (i > 0 && i % 4 === 0) formattedStr += ' ';
+            formattedStr += val[i];
         }
-    } catch (e) {
-        showToast('Sunucu bağlantı hatası.', true);
-    }
-};
+        e.target.value = formattedStr;
+        ccVisualNumber.textContent = formattedStr || '**** **** **** ****';
+    });
 
-// 6. POST: Ödeme Yöntemi Kaydetme
-document.getElementById('savePaymentBtn').addEventListener('click', async () => {
-    const cardHolderName = document.getElementById('cardHolder').value;
-    const cardNumber = document.getElementById('cardNumber').value;
-    const expiryDate = document.getElementById('expiryDate').value;
-    const cvv = document.getElementById('cvv').value;
-
-    if (!cardNumber || cardNumber.length < 16) {
-        showToast('Lütfen geçerli bir 16 haneli kart numarası girin.', true);
-        return;
-    }
-
-    const btn = document.getElementById('savePaymentBtn');
-    btn.textContent = 'Kaydediliyor...';
-    btn.disabled = true;
-
-    try {
-        const response = await fetch(`${API_URL}/payments`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ cardHolderName, cardNumber, expiryDate, cvv })
-        });
-        
-        if (response.ok) {
-            showToast('Ödeme yöntemi başarıyla kaydedildi!');
-            document.getElementById('cardHolder').value = '';
-            document.getElementById('cardNumber').value = '';
-            document.getElementById('expiryDate').value = '';
-            document.getElementById('cvv').value = '';
-        } else {
-            showToast('Ödeme kaydedilemedi.', true);
+    cardExpiryInput.addEventListener('input', (e) => {
+        let val = e.target.value.replace(/\D/g, '');
+        if (val.length > 2) {
+            val = val.substring(0,2) + '/' + val.substring(2,4);
         }
-    } catch (error) {
-        showToast('Sunucuya ulaşılamıyor.', true);
-    } finally {
-        btn.textContent = 'Kartı Kaydet';
-        btn.disabled = false;
-    }
-});
+        e.target.value = val;
+        ccVisualExpiry.textContent = val || 'AA/YY';
+    });
 
-// Initial startup load
-document.addEventListener('DOMContentLoaded', fetchActiveOrders);
+    // Formun default gönderimini engelle
+    document.getElementById('paymentForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+    });
+
+    // "Ödemeyi Tamamla" Akışı
+    completePaymentBtn.addEventListener('click', async (event) => {
+        event.preventDefault();
+
+        if (!cart || cart.length === 0) {
+            alert('Hata: Sepet verisi bulunamadı!');
+            return;
+        }
+
+        const cvv = document.getElementById('cardCvv').value;
+        const cNum = cardNumberInput.value.replace(/\s+/g, '');
+        const cName = cardNameInput.value;
+        const cExp = cardExpiryInput.value;
+
+        if (!cName || cNum.length < 16 || cExp.length < 5 || cvv.length < 3) {
+            showToast('Lütfen kart verilerini eksiksiz girin.', true);
+            return;
+        }
+
+        completePaymentBtn.textContent = 'İşleniyor...';
+        completePaymentBtn.disabled = true;
+
+        try {
+            // ADIM 1: Ödemeyi Kaydet (/api/payments)
+            console.log('1. API İsteği: Ödeme alınıyor...');
+            const paymentRes = await fetch('https://savora-yemek-satis-alaras-projects-44e3d712.vercel.app/api/payments', {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    cardHolderName: cName,
+                    cardNumber: cNum,
+                    expiryDate: cExp,
+                    cvv: cvv
+                })
+            });
+
+            if (!paymentRes.ok) {
+                const pErr = await paymentRes.json();
+                throw new Error(pErr.error || 'Ödeme reddedildi.');
+            }
+
+            console.log('Ödeme başarılı. Sipariş oluşturuluyor...');
+
+            // ADIM 2: Siparişi Oluştur (/api/orders)
+            const orderRes = await fetch('https://savora-yemek-satis-alaras-projects-44e3d712.vercel.app/api/orders', {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    items: cart,
+                    totalAmount: totalAmount,
+                    kullaniciId: 'demo_user_123'
+                })
+            });
+
+            if (!orderRes.ok) {
+                const oErr = await orderRes.json();
+                throw new Error(oErr.error || 'Siparişiniz kaydedilemedi.');
+            }
+
+            // Başarılı Senaryo
+            localStorage.removeItem('savoraCart'); // Sepeti temizle
+            
+            showToast('Siparişiniz yola çıktı! 🎉');
+            
+            // 3 saniye sonra menüye dön
+            setTimeout(() => {
+                alert('Ödemeniz alındı, yemeğiniz yakında kapınızda! Afiyet olsun.');
+                window.location.href = 'index.html';
+            }, 1000);
+
+        } catch (err) {
+            alert("BAĞLANTI HATASI: " + err.message);
+            console.error("Tam Hata:", err);
+            showToast(`Hata: ${err.message}`, true);
+            completePaymentBtn.textContent = 'Tekrar Dene';
+            completePaymentBtn.disabled = false;
+        }
+    });
+}
