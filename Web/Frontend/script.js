@@ -1,6 +1,6 @@
 const BASE_URL = 'http://localhost:3000/api';
 
-// --- GÖREV 1: TALEP AÇMA ---
+
 async function talepGonder() {
     const veri = {
         kullaniciAdi: document.getElementById('isim').value,
@@ -16,7 +16,8 @@ async function talepGonder() {
     alert(sonuc.mesaj);
 }
 
-// --- GÖREV 3: YORUM YAPMA ---
+
+
 async function yorumYap() {
     const veri = {
         kullaniciAdi: document.getElementById('yorumIsim').value,
@@ -32,14 +33,13 @@ async function yorumYap() {
     alert(sonuc.mesaj);
 }
 
-// --- GÖREV 4: YORUMLARI LİSTELEME ---
+
 async function yorumlariListele() {
     const cevap = await fetch(`${BASE_URL}/yorumlar`);
     const sonuc = await cevap.json();
     document.getElementById('yorumListesi').innerText = JSON.stringify(sonuc, null, 2);
 }
 
-// --- GÖREV 5: GÜNCELLEME ---
 async function talepGuncelle() {
     const id = document.getElementById('guncelleId').value;
     const veri = { ozelNot: document.getElementById('yeniNot').value };
@@ -52,7 +52,7 @@ async function talepGuncelle() {
     alert(sonuc.mesaj);
 }
 
-// --- GÖREV 6: FİLTRELEME ---
+
 async function taleplerimFiltrele() {
     const isim = document.getElementById('filtreIsim').value;
     const cevap = await fetch(`${BASE_URL}/taleplerim/${isim}`);
@@ -60,7 +60,6 @@ async function taleplerimFiltrele() {
     document.getElementById('filtreSonuc').innerText = JSON.stringify(sonuc, null, 2);
 }
 
-// --- GÖREV 2: İPTAL ETME ---
 async function talepIptal() {
     const id = document.getElementById('iptalId').value;
     const cevap = await fetch(`${BASE_URL}/talep-iptal/${id}`, { method: 'DELETE' });
