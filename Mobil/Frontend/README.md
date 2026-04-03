@@ -44,9 +44,9 @@ Bu doküman, Savora iOS/Android mobil uygulamasında üstlendiğim 6 görevin ye
 
 ## Mobil Arayüz (UI) Ekran Tasarımları
 
-![Mobil Özel Talep Ekrani](mobil-ozel-talep.png)
-![Haritalı Bölgesel Talepler](mobil-bolgesel-talepler-harita.png)
-![Teklif Güncelleme Bottom Sheet](mobil-teklif-guncelleme.png)
-![Talebi Kaydırarak Geri Çekme](mobil-swipe-to-delete.png)
-![Mobil Satıcı Puanlama](mobil-yorum-yapma.png)
-![Mobil Satıcı Profili Yorumlar](mobil-profil-yorumlari.png)
+![Mobil Özel Talep Ekrani](https://placehold.co/400x800/f87171/ffffff?text=Mobil+Ozel+Talep+Ekrani)
+![Haritalı Bölgesel Talepler](https://placehold.co/400x800/f87171/ffffff?text=Haritali+Bolgesel+Talepler)
+![Teklif Güncelleme Bottom Sheet](https://placehold.co/400x800/f87171/ffffff?text=Teklif+Guncelleme+Bottom+Sheet)
+![Talebi Kaydırarak Geri Çekme](https://placehold.co/400x800/f87171/ffffff?text=Swipe+to+Delete)
+![Mobil Satıcı Puanlama](https://placehold.co/400x800/f87171/ffffff?text=Mobil+Yorum+Yapma)
+![Mobil Satıcı Profili Yorumlar](https://placehold.co/400x800/f87171/ffffff?text=Mobil+Satici+Profili)

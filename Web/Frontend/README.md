@@ -45,14 +45,14 @@ Bu doküman, Savora web uygulamasında üstlendiğim 6 görevin kullanıcı aray
 ## Arayüz (UI) Ekran Tasarımları
 *Not: İlgili arayüz ekranlarının tasarımları aşağıda verilmiştir.*
 
-![Özel Talep Açma Ekranı](ozel-talep-ekrani.png)
+![Özel Talep Açma Ekranı](https://placehold.co/800x400/e2e8f0/1e293b?text=Ozel+Talep+Acma+Ekrani)
 
-![Bölgesel Talepler Listesi Arayüzü](bolgesel-talepler-listesi.png)
+![Bölgesel Talepler Listesi Arayüzü](https://placehold.co/800x400/e2e8f0/1e293b?text=Bolgesel+Talepler+Listesi)
 
-![Teklif Güncelleme Modalı](teklif-guncelleme.png)
+![Teklif Güncelleme Modalı](https://placehold.co/800x400/e2e8f0/1e293b?text=Teklif+Guncelleme+Modali)
 
-![Talebi Geri Çekme Onayı](talep-geri-cekme-alert.png)
+![Talebi Geri Çekme Onayı](https://placehold.co/800x400/e2e8f0/1e293b?text=Talebi+Geri+Cekme+Onayi)
 
-![Satıcı Puanlama ve Yorum Yapma](yorum-yapma-formu.png)
+![Satıcı Puanlama ve Yorum Yapma](https://placehold.co/800x400/e2e8f0/1e293b?text=Satici+Puanlama+ve+Yorum+Yapma)
 
-![Satıcı Profili ve Şikayet Listesi](satici-yorumlari-sayfasi.png)
+![Satıcı Profili ve Şikayet Listesi](https://placehold.co/800x400/e2e8f0/1e293b?text=Satici+Profili+ve+Sikayet+Listesi)
