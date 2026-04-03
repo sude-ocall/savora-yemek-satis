@@ -40,13 +40,3 @@ Bu doküman, Savora iOS/Android mobil uygulamasında üstlendiğim 6 görevin ye
 *   **Arayüz (UI) Bileşenleri:** Satıcının Savora uygulamasındaki profil sayfasına girildiğinde bir *Top Tab Navigator* (Örn: Menüler | Yorumlar) bulunur. Yorumlar sekmesine geçildiğinde müşteri resimleri yuvarlak *Avatar* bileşenleriyle, yıldızlar ve yorumlar listelenir.
 *   **API Entegrasyonu:** Sayfa açılır açılmaz `GET https://api.mobil.savora.com/v1/sellers/{seller_id}/reviews?page=1` isteği yollanır. Kullanıcı aşağı doğru listeyi kaydırdıkça "Pagination" (Sayfalama) tekniğiyle sayfa numarası arttırılarak API'ye yeni istekler atılır ve bellek yorulmaz.
 
----
-
-## Mobil Arayüz (UI) Ekran Tasarımları
-
-![Mobil Özel Talep Ekrani](https://placehold.co/400x800/f87171/ffffff?text=Mobil+Ozel+Talep+Ekrani)
-![Haritalı Bölgesel Talepler](https://placehold.co/400x800/f87171/ffffff?text=Haritali+Bolgesel+Talepler)
-![Teklif Güncelleme Bottom Sheet](https://placehold.co/400x800/f87171/ffffff?text=Teklif+Guncelleme+Bottom+Sheet)
-![Talebi Kaydırarak Geri Çekme](https://placehold.co/400x800/f87171/ffffff?text=Swipe+to+Delete)
-![Mobil Satıcı Puanlama](https://placehold.co/400x800/f87171/ffffff?text=Mobil+Yorum+Yapma)
-![Mobil Satıcı Profili Yorumlar](https://placehold.co/400x800/f87171/ffffff?text=Mobil+Satici+Profili)

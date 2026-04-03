@@ -40,13 +40,4 @@ Bu doküman, Savora Windows/macOS masaüstü uygulamasında üstlendiğim 6 gör
 *   **Arayüz (UI) Bileşenleri:** Geniş masaüstü alanı sayesinde satıcılar, sol kısımda genel özet ve pasta grafiklerin (Örn: %80 beş yıldız), sağ tarafta ise yatay şekilde sıralanmış uzun yorum listelerinin bulunduğu *Split Pane (İkiye Bölünmüş Panel)* düzenine sahip bir "Değerlendirmeler" sayfası kullanır.
 *   **API Entegrasyonu:** İlgili menüye (Örn: Ağaç görünümü/Tree View menüsüne) geçildiğinde istemci `GET https://api.desktop.savora.com/v1/sellers/{seller_id}/reviews?sort=newest` çağrısını gerçekleştirir ve gelen array veri modelini *MVVM (Model-View-ViewModel)* ya da benzeri bir yaklaşımla arayüze Data-Bind eder (bağlar).
 
----
 
-## Masaüstü Arayüz (UI) Ekran Tasarımları
-
-![Masaüstü Özel Talep Form Penceresi](desktop-talep-formu.png)
-![Masaüstü Talepler Veri Izgarası (DataGrid)](desktop-talepler-grid.png)
-![Masaüstü Sağ Tık Bağlam Menüsü ile Güncelleme](desktop-context-teklif-guncelle.png)
-![Masaüstü Talebi Silme (Klavye Del Tuşu)](desktop-talep-silme-mesajı.png)
-![Masaüstü Bildirim Panelinden Yorum Yapma](desktop-system-tray-yorum.png)
-![Masaüstü İkiye Bölünmüş Yorum Listeleme Profili](desktop-split-pane-yorumlari.png)
