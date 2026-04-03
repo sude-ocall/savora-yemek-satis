@@ -1,0 +1,54 @@
+.footer-section {
+  background-color: var(--green-dark);
+  color: #ffffff;
+  padding: 1.5rem 0; /* Boşlukları biraz daralttık */
+  margin-top: auto;
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 5%;
+  text-align: center;
+}
+
+.footer-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem; /* Satırlar arası mesafeyi optimize ettik */
+  align-items: center;
+}
+
+.footer-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.95rem;
+  opacity: 0.9;
+}
+
+.footer-logo {
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.footer-bottom {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.footer-dev strong {
+  color: #ffffff;
+  font-weight: 500;
+}
+
+/* Mobil görünüm için ufak ayar */
+@media (max-width: 480px) {
+  .footer-top {
+    flex-direction: column;
+    gap: 4px;
+  }
+  .footer-divider {
+    display: none;
+  }
+}

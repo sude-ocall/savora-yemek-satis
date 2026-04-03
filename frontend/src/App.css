@@ -1,0 +1,85 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap');
+
+/* ROOT */
+:root {
+  --green:#3A8A4A;
+  --green-dark:#276336;
+  --green-light:#E8F5EA;
+  --yellow:#F5A623;
+  --yellow-dark:#D4891A;
+  --yellow-light:#FFF8EC;
+  --bg:#F8F7F3;
+  --surface:#FFFFFF;
+  --border:#EBEBEB;
+  --text:#2C302E;
+  --muted:#6B7280;
+  --shadow-sm:0 2px 8px rgba(0,0,0,0.05);
+  --shadow-md:0 8px 24px rgba(44,48,46,0.10);
+  --r-sm:8px;
+  --r-md:16px;
+  --r-lg:24px;
+  --r-pill:9999px;
+}
+
+/* RESET */
+*,*::before,*::after {
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+body {
+  font-family:'Outfit',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.6;
+}
+
+/* BUTTON SYSTEM (GLOBAL) */
+.btn {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:0.6rem 1.4rem;
+  font-weight:600;
+  border:none;
+  border-radius:var(--r-pill);
+  cursor:pointer;
+  transition:0.2s;
+}
+
+.btn-yellow {
+  background:var(--yellow);
+  color:#fff;
+}
+
+.btn-green {
+  background:var(--green);
+  color:#fff;
+}
+
+.btn-outline {
+  background:transparent;
+  border:1px solid var(--border);
+}
+
+.btn-red {
+  background:#E53E3E;
+  color:#fff;
+}
+
+.btn-full { width:100%; }
+
+/* FORM (GLOBAL) */
+.form-control {
+  width:100%;
+  padding:0.8rem;
+  border:1px solid var(--border);
+  border-radius:var(--r-md);
+}
+
+/* ANIMATION */
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(10px); }
+  to { opacity:1; transform:none; }
+}
