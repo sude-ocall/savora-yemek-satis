@@ -282,3 +282,53 @@
 @keyframes fadeOut {
   to { opacity: 0; visibility: hidden; }
 }
+
+/* Kategori Konteynırı */
+.category-scroll-container {
+  overflow-x: auto;
+  white-space: nowrap;
+  padding-bottom: 10px;
+  scrollbar-width: none; /* Firefox için */
+}
+
+.category-scroll-container::-webkit-scrollbar {
+  display: none; /* Chrome/Safari için */
+}
+
+/* Kategori Butonları */
+.category-pill {
+  padding: 8px 20px;
+  border-radius: 50px;
+  border: 1px solid #eee;
+  background-color: #fff;
+  color: #555;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.category-pill:hover {
+  background-color: #f8f9fa;
+  border-color: #ddd;
+}
+
+.category-pill.active {
+  background-color: #ff4757; /* Uygulamanın ana rengine göre değiştirin */
+  color: white;
+  border-color: #ff4757;
+  box-shadow: 0 4px 10px rgba(255, 71, 87, 0.2);
+}
+
+/* Menü geçiş animasyonu (Opsiyonel) */
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
