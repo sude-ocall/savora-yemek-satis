@@ -13,173 +13,197 @@ const ProfilePage = () => {
     });
 
     const [addresses, setAddresses] = useState([
-        { id: 1, title: "Ev Adresi", detail: "İstanbul, Kadıköy, Caferağa Mah. Moda Cad. No: 34 (Mavi kapılı bina)" },
-        { id: 2, title: "İş Adresi", detail: "İstanbul, Beşiktaş, Vişnezade Mah. Süleyman Seba Cad. No: 40 (B blok Kat:4)" }
+        { id: 1, title: "Ev Adresi", detail: "İstanbul, Kadıköy, Caferağa Mah. Moda Cad. No: 34" },
+        { id: 2, title: "İş Adresi", detail: "İstanbul, Beşiktaş, Vişnezade Mah. Süleyman Seba Cad. No: 40" },
+        { id: 3, title: "Yazlık", detail: "Muğla, Bodrum, Yalıkavak Mah. Günbatımı Sok. No: 12" }
     ]);
 
-    // --- Modal State'leri ---
+    const [orders] = useState([
+        { id: "#SV9821", date: "12 Mart 2026", total: "450.00 TL", status: "Tamamlandı", items: "Vegan Burger, Lime Soda" },
+        { id: "#SV9745", date: "05 Mart 2026", total: "210.00 TL", status: "Yolda", items: "Kinoa Salatası" },
+        { id: "#SV9612", date: "01 Mart 2026", total: "185.00 TL", status: "Tamamlandı", items: "Avokado Toast" }
+    ]);
+
+    const [cards, setCards] = useState([
+        { id: 1, brand: "Visa", lastFour: "4242", expiry: "12/28" }
+    ]);
+
+    // --- Modal & Form State'leri ---
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [showAddressModal, setShowAddressModal] = useState(false);
-    const [addressToDelete, setAddressToDelete] = useState(null);
+    const [showCardModal, setShowCardModal] = useState(false);
+    
+    // Şifre State
+    const [passwords, setPasswords] = useState({ current: "", new: "", confirm: "" });
+    
+    // Yeni Kart State
+    const [newCard, setNewCard] = useState({ holder: "", number: "", expiry: "", cvc: "" });
 
-    // --- Düzenleme State'leri ---
+    // --- Profil Düzenleme ---
     const [isEditing, setIsEditing] = useState(false);
     const [tempUserInfo, setTempUserInfo] = useState({ ...userInfo });
-    
-    // Yeni Adres için detaylı state
-    const [newAddress, setNewAddress] = useState({ 
-        title: "", 
-        city: "", 
-        district: "", 
-        neighborhood: "", 
-        street: "", 
-        no: "", 
-        description: "" 
-    });
-
-    // --- Profil Düzenleme Fonksiyonları ---
-    const handleEditClick = () => {
-        setTempUserInfo({ ...userInfo });
-        setIsEditing(true);
-    };
-
-    const handleSaveProfile = () => {
-        setUserInfo({ ...tempUserInfo });
-        setIsEditing(false);
-    };
-
-    const handleCancelEdit = () => {
-        setIsEditing(false);
-    };
 
     const handleUpdatePassword = (e) => {
         e.preventDefault();
-        alert("Şifreniz başarıyla değiştirildi!");
-    };
-
-    const handleDeleteAccount = () => {
-        setShowDeleteModal(false);
-        alert("Hesabınız kalıcı olarak silindi.");
-        navigate("/");
-    };
-
-    const handleAddAddress = (e) => {
-        e.preventDefault();
-        if (newAddress.title && newAddress.city && newAddress.district) {
-            // Girilen tüm alanları tek bir string (detail) haline getiriyoruz
-            const fullDetail = `${newAddress.city}, ${newAddress.district}, ${newAddress.neighborhood} Mah. ${newAddress.street} Sok. No: ${newAddress.no} (${newAddress.description})`;
-            
-            setAddresses([...addresses, { 
-                id: Date.now(), 
-                title: newAddress.title, 
-                detail: fullDetail 
-            }]);
-            
-            // State'i temizle
-            setNewAddress({ title: "", city: "", district: "", neighborhood: "", street: "", no: "", description: "" });
-            setShowAddressModal(false);
+        if (passwords.new !== passwords.confirm) {
+            alert("Yeni şifreler eşleşmiyor!");
+            return;
         }
+        alert("Şifreniz başarıyla güncellendi!");
+        setPasswords({ current: "", new: "", confirm: "" });
     };
 
-    const confirmDeleteAddress = (id) => {
-        setAddressToDelete(id);
-    };
-
-    const handleAddressDelete = () => {
-        setAddresses(addresses.filter(addr => addr.id !== addressToDelete));
-        setAddressToDelete(null);
+    const handleAddCard = (e) => {
+        e.preventDefault();
+        const lastFour = newCard.number.slice(-4);
+        setCards([...cards, { id: Date.now(), brand: "Mastercard", lastFour, expiry: newCard.expiry }]);
+        setShowCardModal(false);
+        setNewCard({ holder: "", number: "", expiry: "", cvc: "" });
     };
 
     return (
-        <div className="profile-page-container container min-vh-100">
-            <div className="profile-grid row">
-                <div className="col-md-4 col-lg-3 mb-4 mb-md-0">
-                    <div className="profile-sidebar shadow-sm">
-                        <div className="user-brief">
-                            <div className="avatar-circle">IY</div>
-                            <h3>{userInfo.fullName}</h3>
-                            <p>{userInfo.email}</p>
+        <div className="profile-page-container container py-5 min-vh-100">
+            <div className="row">
+                {/* SOL SİDEBAR */}
+                <div className="col-md-4 col-lg-3">
+                    <div className="profile-sidebar shadow-sm bg-white rounded-4 p-4 mb-4">
+                        <div className="text-center mb-4">
+                            <div className="avatar-circle bg-success text-white mx-auto mb-2 d-flex align-items-center justify-content-center fw-bold" style={{width:60, height:60, borderRadius:'50%', fontSize:20}}>IY</div>
+                            <h5 className="mb-0">{userInfo.fullName}</h5>
+                            <small className="text-muted">{userInfo.email}</small>
                         </div>
-                        <div className="sidebar-menu">
-                            <button className={activeTab === "profile" ? "active" : ""} onClick={() => {setActiveTab("profile"); setIsEditing(false)}}>👤 Profil</button>
-                            <button className={activeTab === "addresses" ? "active" : ""} onClick={() => setActiveTab("addresses")}>📍 Adresler</button>
-                            <button className={activeTab === "password" ? "active" : ""} onClick={() => setActiveTab("password")}>🔑 Güvenlik</button>
+                        <div className="d-flex flex-column gap-1 sidebar-menu">
+                            <button className={`btn text-start ${activeTab === "profile" ? "btn-light text-success fw-bold" : ""}`} onClick={() => setActiveTab("profile")}>👤 Profil</button>
+                            <button className={`btn text-start ${activeTab === "orders" ? "btn-light text-success fw-bold" : ""}`} onClick={() => setActiveTab("orders")}>📦 Siparişlerim</button>
+                            <button className={`btn text-start ${activeTab === "addresses" ? "btn-light text-success fw-bold" : ""}`} onClick={() => setActiveTab("addresses")}>📍 Adreslerim</button>
+                            <button className={`btn text-start ${activeTab === "payments" ? "btn-light text-success fw-bold" : ""}`} onClick={() => setActiveTab("payments")}>💳 Ödemeler</button>
+                            <button className={`btn text-start ${activeTab === "password" ? "btn-light text-success fw-bold" : ""}`} onClick={() => setActiveTab("password")}>🔑 Güvenlik</button>
                             <hr />
-                            <button className="delete-acc-btn text-danger" onClick={() => setShowDeleteModal(true)}>🗑️ Hesabı Sil</button>
+                            <button className="btn text-start text-danger" onClick={() => setShowDeleteModal(true)}>🗑️ Hesabı Sil</button>
                         </div>
                     </div>
                 </div>
 
+                {/* SAĞ İÇERİK */}
                 <div className="col-md-8 col-lg-9">
-                    <div className="profile-content-card shadow-sm">
+                    <div className="profile-content-card shadow-sm bg-white rounded-4 p-4">
+                        
+                        {/* PROFİL */}
                         {activeTab === "profile" && (
-                            <div className="tab-content fade-in">
+                            <div className="fade-in">
                                 <div className="d-flex justify-content-between align-items-center mb-4">
-                                    <h2 className="m-0">Profil Bilgileri</h2>
+                                    <h4 className="m-0">Profil Bilgileri</h4>
                                     {!isEditing ? (
-                                        <button className="btn-edit-profile" onClick={handleEditClick}>Değiştir</button>
+                                        <button className="btn btn-outline-dark btn-sm" onClick={() => setIsEditing(true)}>Düzenle</button>
                                     ) : (
                                         <div className="d-flex gap-2">
-                                            <button className="btn-save-profile" onClick={handleSaveProfile}>Kaydet</button>
-                                            <button className="profile-btn-cancel" onClick={handleCancelEdit}>İptal</button>
+                                            <button className="btn btn-success btn-sm" onClick={() => {setUserInfo(tempUserInfo); setIsEditing(false)}}>Kaydet</button>
+                                            <button className="btn btn-light btn-sm" onClick={() => setIsEditing(false)}>İptal</button>
                                         </div>
                                     )}
                                 </div>
-                                <form>
-                                    <div className="input-group">
-                                        <label>Ad Soyad</label>
-                                        <input type="text" value={isEditing ? tempUserInfo.fullName : userInfo.fullName} onChange={(e) => setTempUserInfo({...tempUserInfo, fullName: e.target.value})} disabled={!isEditing} required />
+                                <div className="row g-3">
+                                    <div className="col-12">
+                                        <label className="small fw-bold">Ad Soyad</label>
+                                        <input type="text" className="form-control" value={isEditing ? tempUserInfo.fullName : userInfo.fullName} onChange={(e)=>setTempUserInfo({...tempUserInfo, fullName: e.target.value})} disabled={!isEditing} />
                                     </div>
-                                    <div className="input-group">
-                                        <label>E-posta</label>
-                                        <input type="email" value={userInfo.email} disabled />
-                                        <small className="text-muted">E-posta adresi değiştirilemez.</small>
+                                    <div className="col-12">
+                                        <label className="small fw-bold">E-posta</label>
+                                        <input type="text" className="form-control bg-light" value={userInfo.email} disabled />
                                     </div>
-                                    <div className="input-group">
-                                        <label>Telefon</label>
-                                        <input type="text" value={isEditing ? tempUserInfo.phone : userInfo.phone} onChange={(e) => setTempUserInfo({...tempUserInfo, phone: e.target.value})} disabled={!isEditing} />
+                                    <div className="col-12">
+                                        <label className="small fw-bold">Telefon</label>
+                                        <input type="text" className="form-control" value={isEditing ? tempUserInfo.phone : userInfo.phone} onChange={(e)=>setTempUserInfo({...tempUserInfo, phone: e.target.value})} disabled={!isEditing} />
                                     </div>
-                                </form>
+                                </div>
                             </div>
                         )}
 
-                        {activeTab === "addresses" && (
-                            <div className="tab-content fade-in">
-                                <div className="d-flex justify-content-between align-items-center mb-4">
-                                    <h2 className="m-0">Adreslerim</h2>
-                                    <button className="btn-hero-yellow" onClick={() => setShowAddressModal(true)}>+ Yeni Ekle</button>
-                                </div>
-                                <div className="address-list">
-                                    {addresses.map(addr => (
-                                        <div key={addr.id} className="address-item shadow-sm">
-                                            <div>
-                                                <strong>{addr.title}</strong>
-                                                <p className="m-0 mt-1">{addr.detail}</p>
+                        {/* SİPARİŞ GEÇMİŞİ (SCROLLABLE) */}
+                        {activeTab === "orders" && (
+                            <div className="fade-in">
+                                <h4 className="mb-4">Sipariş Geçmişi</h4>
+                                <div className="scrollable-content">
+                                    {orders.map(o => (
+                                        <div key={o.id} className="border rounded-3 p-3 mb-3">
+                                            <div className="d-flex justify-content-between mb-2">
+                                                <span className="fw-bold">{o.id}</span>
+                                                <span className="badge bg-light text-dark">{o.status}</span>
                                             </div>
-                                            <button className="btn-delete-small text-danger" onClick={() => confirmDeleteAddress(addr.id)}>Sil</button>
+                                            <div className="d-flex justify-content-between small text-muted">
+                                                <span>{o.items}</span>
+                                                <span className="fw-bold text-dark">{o.total}</span>
+                                            </div>
+                                            <div className="mt-2 small text-muted">{o.date}</div>
                                         </div>
                                     ))}
                                 </div>
                             </div>
                         )}
 
+                        {/* ADRESLER (SCROLLABLE) */}
+                        {activeTab === "addresses" && (
+                            <div className="fade-in">
+                                <div className="d-flex justify-content-between align-items-center mb-4">
+                                    <h4 className="m-0">Adreslerim</h4>
+                                    <button className="btn btn-warning btn-sm" onClick={() => setShowAddressModal(true)}>+ Yeni Ekle</button>
+                                </div>
+                                <div className="scrollable-content">
+                                    {addresses.map(a => (
+                                        <div key={a.id} className="border rounded-3 p-3 mb-3 d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <div className="fw-bold">{a.title}</div>
+                                                <div className="small text-muted">{a.detail}</div>
+                                            </div>
+                                            <button className="btn btn-link text-danger btn-sm text-decoration-none" onClick={() => setAddresses(addresses.filter(x => x.id !== a.id))}>Sil</button>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {/* ÖDEME YÖNTEMLERİ (SCROLLABLE) */}
+                        {activeTab === "payments" && (
+                            <div className="fade-in">
+                                <h4 className="mb-4">Ödeme Yöntemleri</h4>
+                                <div className="scrollable-content">
+                                    {cards.map(c => (
+                                        <div key={c.id} className="payment-card-item">
+                                            <div className="d-flex align-items-center gap-3">
+                                                <span style={{fontSize:24}}>💳</span>
+                                                <div>
+                                                    <div className="card-masked-no">**** **** **** {c.lastFour}</div>
+                                                    <small className="text-muted">{c.brand} | {c.expiry}</small>
+                                                </div>
+                                            </div>
+                                            <button className="btn btn-sm text-danger" onClick={() => setCards(cards.filter(x => x.id !== c.id))}>Kaldır</button>
+                                        </div>
+                                    ))}
+                                    <button className="btn-add-card-dash mt-2" onClick={() => setShowCardModal(true)}>
+                                        + Yeni Kart Ekle
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* ŞİFRE DEĞİŞTİRME (2 KEZ İSTEME) */}
                         {activeTab === "password" && (
-                            <div className="tab-content fade-in">
-                                <h2 className="mb-4">Şifre Değiştir</h2>
+                            <div className="fade-in">
+                                <h4 className="mb-4">Şifre Değiştir</h4>
                                 <form onSubmit={handleUpdatePassword}>
-                                    <div className="input-group">
-                                        <label>Mevcut Şifre</label>
-                                        <input type="password" required />
+                                    <div className="mb-3">
+                                        <label className="small fw-bold">Mevcut Şifre</label>
+                                        <input type="password" required className="form-control" value={passwords.current} onChange={(e)=>setPasswords({...passwords, current: e.target.value})} />
                                     </div>
-                                    <div className="input-group">
-                                        <label>Yeni Şifre</label>
-                                        <input type="password" required />
+                                    <div className="mb-3">
+                                        <label className="small fw-bold">Yeni Şifre</label>
+                                        <input type="password" required className="form-control" value={passwords.new} onChange={(e)=>setPasswords({...passwords, new: e.target.value})} />
                                     </div>
-                                    <div className="input-group">
-                                        <label>Yeni Şifre (Tekrar)</label>
-                                        <input type="password" required />
+                                    <div className="mb-3">
+                                        <label className="small fw-bold">Yeni Şifre (Tekrar)</label>
+                                        <input type="password" required className="form-control" value={passwords.confirm} onChange={(e)=>setPasswords({...passwords, confirm: e.target.value})} />
                                     </div>
-                                    <button type="submit" className="btn-hero-yellow mt-3 w-100">Şifreyi Güncelle</button>
+                                    <button type="submit" className="btn btn-warning w-100 mt-2 fw-bold">Güncelle</button>
                                 </form>
                             </div>
                         )}
@@ -187,97 +211,49 @@ const ProfilePage = () => {
                 </div>
             </div>
 
-            {/* Modallar */}
-            {showDeleteModal && (
-                <div className="modal-overlay" onClick={() => setShowDeleteModal(false)}>
-                    <div className="modal-container delete-modal fade-in shadow-lg" onClick={(e) => e.stopPropagation()}>
-                        <button className="close-btn" onClick={() => setShowDeleteModal(false)}>&times;</button>
-                        <div className="modal-header d-flex flex-column text-center">
-                            <div className="modal-logo">🌿 Sav<span>ora</span></div>
-                            <h2 className="mt-3">Hesabınızı Silin</h2>
-                            <p className="text-danger fw-bold">DİKKAT: Bu işlem kalıcıdır ve geri alınamaz!</p>
+            {/* YENİ KART MODALI */}
+            {showCardModal && (
+                <div className="modal-overlay d-flex align-items-center justify-content-center" style={{position:'fixed', top:0, left:0, width:'100%', height:'100%', backgroundColor:'rgba(0,0,0,0.6)', zIndex:1050}}>
+                    <div className="bg-white p-4 rounded-4 shadow-lg fade-in" style={{width:'100%', maxWidth:400}}>
+                        <div className="d-flex justify-content-between align-items-center mb-4">
+                            <h5 className="m-0">Yeni Kart Ekle</h5>
+                            <button className="btn-close" onClick={() => setShowCardModal(false)}></button>
                         </div>
-                        <div className="modal-body text-center mt-3">
-                            <p>Tüm sipariş geçmişiniz ve profil bilgileriniz silinecektir.</p>
-                        </div>
-                        <div className="modal-footer d-flex flex-column gap-2 mt-4">
-                            <button className="btn-modal-delete-confirm" onClick={handleDeleteAccount}>🗑️ Evet, Hesabı Sil</button>
-                            <button className="btn-hero-outline" onClick={() => setShowDeleteModal(false)}>İptal</button>
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            {addressToDelete && (
-                <div className="modal-overlay" onClick={() => setAddressToDelete(null)}>
-                    <div className="modal-container text-center fade-in" onClick={(e) => e.stopPropagation()}>
-                        <h3 className="mb-3">Adresi Sil</h3>
-                        <p>Bu adresi silmek istediğinize emin misiniz?</p>
-                        <div className="d-flex gap-2 mt-4">
-                            <button className="btn-hero-yellow w-100" onClick={handleAddressDelete}>Sil</button>
-                            <button className="profile-add-btn-cencel w-100" onClick={() => setAddressToDelete(null)}>Vazgeç</button>
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            {showAddressModal && (
-                <div className="modal-overlay" onClick={() => setShowAddressModal(false)}>
-                    <div className="modal-container address-modal fade-in shadow-lg" onClick={(e) => e.stopPropagation()}>
-                        <button className="close-btn" onClick={() => setShowAddressModal(false)}>&times;</button>
-                        <div className="modal-header d-flex flex-column text-center">
-                            <div className="modal-logo">🌿 Sav<span>ora</span></div>
-                            <h2 className="mt-2">Yeni Adres Ekle</h2>
-                            <p>Siparişleriniz için yeni bir konum belirleyin.</p>
-                        </div>
-                        <form onSubmit={handleAddAddress} className="mt-4">
-                            <div className="input-group">
-                                <label>Adres Başlığı</label>
-                                <input type="text" value={newAddress.title} onChange={(e) => setNewAddress({...newAddress, title: e.target.value})} placeholder="Ev, İş vb." required />
+                        <form onSubmit={handleAddCard}>
+                            <div className="mb-3">
+                                <label className="small fw-bold">Kart Üzerindeki İsim</label>
+                                <input type="text" className="form-control" required placeholder="İREM YAŞLI" value={newCard.holder} onChange={(e)=>setNewCard({...newCard, holder: e.target.value.toUpperCase()})} />
                             </div>
-                            
+                            <div className="mb-3">
+                                <label className="small fw-bold">Kart Numarası</label>
+                                <input type="text" className="form-control" required placeholder="0000 0000 0000 0000" maxLength="16" value={newCard.number} onChange={(e)=>setNewCard({...newCard, number: e.target.value})} />
+                            </div>
                             <div className="row">
-                                <div className="col-6">
-                                    <div className="input-group">
-                                        <label>İl</label>
-                                        <input type="text" value={newAddress.city} onChange={(e) => setNewAddress({...newAddress, city: e.target.value})} placeholder="Örn: İstanbul" required />
-                                    </div>
+                                <div className="col-6 mb-3">
+                                    <label className="small fw-bold">S.K.T (AA/YY)</label>
+                                    <input type="text" className="form-control" required placeholder="12/28" value={newCard.expiry} onChange={(e)=>setNewCard({...newCard, expiry: e.target.value})} />
                                 </div>
-                                <div className="col-6">
-                                    <div className="input-group">
-                                        <label>İlçe</label>
-                                        <input type="text" value={newAddress.district} onChange={(e) => setNewAddress({...newAddress, district: e.target.value})} placeholder="Örn: Kadıköy" required />
-                                    </div>
+                                <div className="col-6 mb-3">
+                                    <label className="small fw-bold">CVC</label>
+                                    <input type="text" className="form-control" required placeholder="***" maxLength="3" value={newCard.cvc} onChange={(e)=>setNewCard({...newCard, cvc: e.target.value})} />
                                 </div>
                             </div>
-
-                            <div className="row">
-                                <div className="col-8">
-                                    <div className="input-group">
-                                        <label>Mahalle</label>
-                                        <input type="text" value={newAddress.neighborhood} onChange={(e) => setNewAddress({...newAddress, neighborhood: e.target.value})} placeholder="Örn: Caferağa" required />
-                                    </div>
-                                </div>
-                                <div className="col-4">
-                                    <div className="input-group">
-                                        <label>No</label>
-                                        <input type="text" value={newAddress.no} onChange={(e) => setNewAddress({...newAddress, no: e.target.value})} placeholder="34/1" required />
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="input-group">
-                                <label>Sokak / Cadde</label>
-                                <input type="text" value={newAddress.street} onChange={(e) => setNewAddress({...newAddress, street: e.target.value})} placeholder="Örn: Moda Caddesi" required />
-                            </div>
-
-                            <div className="input-group">
-                                <label>Adres Tarifi (Opsiyonel)</label>
-                                <textarea className="modern-textarea" style={{height: '80px'}} value={newAddress.description} onChange={(e) => setNewAddress({...newAddress, description: e.target.value})} placeholder="Bina rengi, dükkan üstü vb. tarifler..." />
-                            </div>
-
-                            <button type="submit" className="btn-hero-yellow w-100 mt-3">Adresi Kaydet</button>
+                            <button type="submit" className="btn btn-warning w-100 fw-bold py-2">Kaydet</button>
                         </form>
+                    </div>
+                </div>
+            )}
+
+            {/* HESAP SİLME MODALI */}
+            {showDeleteModal && (
+                <div className="modal-overlay d-flex align-items-center justify-content-center" style={{position:'fixed', top:0, left:0, width:'100%', height:'100%', backgroundColor:'rgba(0,0,0,0.6)', zIndex:1050}}>
+                    <div className="bg-white p-4 rounded-4 text-center shadow" style={{maxWidth:350}}>
+                        <h5 className="text-danger">Hesabını Sil?</h5>
+                        <p className="small text-muted">Bu işlem tüm verilerini kalıcı olarak silecektir.</p>
+                        <div className="d-grid gap-2">
+                            <button className="btn btn-danger" onClick={() => navigate("/")}>Evet, Sil</button>
+                            <button className="btn btn-light" onClick={() => setShowDeleteModal(false)}>Vazgeç</button>
+                        </div>
                     </div>
                 </div>
             )}

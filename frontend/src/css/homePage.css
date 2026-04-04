@@ -1,7 +1,6 @@
 /* Sayfa Düzeni */
 .home-page-container {
   padding-top: 100px;
-  /* Navbar fixed olduğu için üstten boşluk */
   padding-bottom: 50px;
   min-height: 80vh;
 }
@@ -12,24 +11,19 @@
   gap: 25px;
 }
 
-/* Kart Tasarımı */
+/* Kart */
 .menu-card {
   background: var(--surface);
   border-radius: var(--r-md);
   overflow: hidden;
   box-shadow: var(--shadow-sm);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: 0.3s;
   border: 1px solid var(--border);
 }
 
 .menu-card:hover {
   transform: translateY(-5px);
   box-shadow: var(--shadow-md);
-}
-
-.card-image {
-  min-width: 2rem;
-  min-height: 2rem;
 }
 
 .card-image img {
@@ -44,18 +38,8 @@
 
 .card-info h3 {
   font-size: 1.25rem;
-  margin-bottom: 0.5rem;
-  color: var(--text);
+  margin: 5px 0 10px;
   font-weight: 700;
-}
-
-.card-info p {
-  font-size: 0.9rem;
-  color: var(--muted);
-  height: 3.6rem;
-  /* İki satırla sınırla */
-  overflow: hidden;
-  margin-bottom: 1.5rem;
 }
 
 .card-footer {
@@ -72,21 +56,19 @@
 
 .btn-add-cart {
   background: #FF5C00;
-  /* Görseldeki o canlı turuncu */
   color: white;
   border: none;
   padding: 8px 20px;
   border-radius: 10px;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s;
 }
 
 .btn-add-cart:hover {
   background: #e65200;
 }
 
-/* Sepet Paneli (Sidebar) */
+/* Sepet */
 .cart-sidebar {
   background: var(--surface);
   padding: 2rem;
@@ -97,25 +79,11 @@
   box-shadow: var(--shadow-sm);
 }
 
-.cart-sidebar h3 {
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
-}
-
-.empty-cart-msg {
-  color: var(--muted);
-  font-style: italic;
-  font-size: 0.9rem;
-  text-align: center;
-  padding: 2rem 0;
-}
-
 .cart-item-row {
   display: flex;
   justify-content: space-between;
   padding: 10px 0;
   border-bottom: 1px dashed var(--border);
-  font-size: 0.95rem;
 }
 
 .btn-checkout {
@@ -126,21 +94,15 @@
   padding: 12px;
   border-radius: 12px;
   font-weight: 700;
-  cursor: pointer;
-  transition: opacity 0.2s;
 }
 
 .btn-checkout:disabled {
   background: #ccc;
-  cursor: not-allowed;
 }
 
-/* --- Yeni Eklenen Stiller --- */
-
-/* Arama Çubuğu */
+/* Arama */
 .search-wrapper {
   position: relative;
-  margin-bottom: 10px;
 }
 
 .search-input {
@@ -149,9 +111,6 @@
   border-radius: 15px;
   border: 1px solid var(--border);
   background: var(--surface);
-  box-shadow: var(--shadow-sm);
-  outline: none;
-  transition: border-color 0.3s;
 }
 
 .search-input:focus {
@@ -163,14 +122,12 @@
   left: 15px;
   top: 50%;
   transform: translateY(-50%);
-  font-size: 1.2rem;
 }
 
-/* Satıcı Bilgisi */
+/* Satıcı */
 .seller-info {
   display: flex;
   justify-content: space-between;
-  align-items: center;
   margin-bottom: 8px;
 }
 
@@ -178,7 +135,6 @@
   font-size: 0.85rem;
   font-weight: 600;
   color: #FF5C00;
-  /* Marka turuncusu */
   text-transform: uppercase;
 }
 
@@ -186,14 +142,143 @@
   background: #fff9f0;
   padding: 2px 8px;
   border-radius: 6px;
-  font-size: 0.85rem;
   font-weight: 700;
-  color: #ffa000;
-  border: 1px solid #ffe0b2;
 }
 
-/* Kart Başlığı Düzeltme (Satıcı ismi geldiği için margin azaldı) */
-.card-info h3 {
-  margin-top: 5px;
-  margin-bottom: 10px;
+/* Aktif Sipariş */
+.active-orders-banner {
+  background: white;
+  border-radius: 16px;
+  padding: 1.5rem;
+  border: 1px solid #edf2f7;
+}
+
+.order-vertical-scroll {
+  max-height: 200px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 5px;
+}
+
+.mini-order-card.vertical {
+  width: 100%;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  padding: 12px 15px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.mini-order-card.vertical:hover {
+  border-color: #ff9f1c;
+  background: #fff;
+  transform: translateX(4px);
+}
+
+.order-number {
+  font-weight: 700;
+}
+
+.status-pill {
+  font-size: 0.7rem;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-weight: 700;
+}
+
+.status-new {
+  background: #ebf8ff;
+  color: #3182ce;
+}
+
+.status-pro {
+  background: #fffaf0;
+  color: #dd6b20;
+}
+
+/* Modal */
+.custom-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.overlay-top {
+  z-index: 1100;
+}
+
+.custom-modal-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 450px;
+}
+
+.modal-header-styled {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.restaurant-info-box {
+  background: #fff8f0;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px dashed #ff9f1c;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  cursor: pointer;
+}
+
+/* Pulse */
+.pulse-indicator {
+  width: 10px;
+  height: 10px;
+  background: #48bb78;
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(0.95); }
+  70% { transform: scale(1); }
+  100% { transform: scale(0.95); }
+}
+
+/* Toast */
+.toast-notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: #28a745;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 50px;
+  z-index: 9999;
+  animation: slideIn 0.3s ease-out, fadeOut 0.5s ease-in 2.5s forwards;
+}
+
+.toast-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+@keyframes slideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes fadeOut {
+  to { opacity: 0; visibility: hidden; }
 }

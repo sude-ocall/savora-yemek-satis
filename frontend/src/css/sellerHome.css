@@ -259,3 +259,425 @@
     font-size: 0.8rem;
     font-weight: 600;
 }
+
+/* Sipariş Listesi Satır Tasarımı */
+.order-item-mini {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid #f0f0f0;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.order-item-mini:hover {
+    background: #f9f9f9;
+}
+
+.order-status-tag {
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 6px;
+}
+
+/* Durum Renkleri */
+[data-status="Yeni Sipariş"] {
+    background: #e3f2fd;
+    color: #1976d2;
+}
+
+[data-status="Hazırlanıyor"] {
+    background: #fff3e0;
+    color: #f57c00;
+}
+
+[data-status="Yola Çıktı"] {
+    background: #f3e5f5;
+    color: #7b1fa2;
+}
+
+[data-status="Teslim Edildi"] {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+[data-status="İptal Edildi"] {
+    background: #ffebee;
+    color: #d32f2f;
+}
+
+/* Detay Modalı Özel */
+.detail-modal {
+    max-width: 500px;
+}
+
+.detail-body {
+    padding: 25px;
+}
+
+.detail-section {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.detail-section h4 {
+    border-bottom: 1px solid #eee;
+    padding-bottom: 8px;
+    margin-bottom: 10px;
+    color: #1b4332;
+}
+
+.total-price {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-top: 15px;
+    color: #2d6a4f;
+}
+
+/* Aksiyon Butonları */
+.detail-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 30px;
+}
+
+.btn-action {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.3s;
+}
+
+.btn-action.approve {
+    background: #2d6a4f;
+    color: white;
+}
+
+.btn-action.cancel {
+    background: #d32f2f;
+    color: white;
+}
+
+.btn-action.shipping {
+    background: #7b1fa2;
+    color: white;
+}
+
+.btn-action.delivered {
+    background: #ffb800;
+    color: white;
+}
+
+.btn-detail-view {
+    padding: 5px 12px;
+    border: 1px solid #ddd;
+    background: white;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.success-text {
+    color: #2e7d32;
+    font-weight: 600;
+    width: 100%;
+    text-align: center;
+}
+
+/* Arşiv Bölümü */
+.history-section {
+    margin-top: 50px;
+    background: white;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.history-filters {
+    display: flex;
+    gap: 10px;
+}
+
+.history-filters button {
+    padding: 8px 16px;
+    border: 1px solid #eee;
+    background: #fcfcfc;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.3s;
+}
+
+.history-filters button.active {
+    background: #2d6a4f;
+    color: white;
+    border-color: #2d6a4f;
+}
+
+/* Arşiv Tablosu */
+.history-table-container {
+    margin-top: 20px;
+    overflow-x: auto;
+}
+
+.history-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.history-table th {
+    padding: 15px;
+    color: #888;
+    font-weight: 600;
+    font-size: 0.9rem;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.history-table td {
+    padding: 15px;
+    border-bottom: 1px solid #f9f9f9;
+    font-size: 0.9rem;
+}
+
+.history-table tr:hover {
+    background-color: #fafafa;
+}
+
+/* Aktif Siparişler Mini Liste */
+.order-list-mini {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.order-item-mini {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 20px;
+    background: #fcfcfc;
+    border-radius: 10px;
+    border: 1px solid #f0f0f0;
+    cursor: pointer;
+}
+
+/* Ana konteyner düzeni */
+.order-item-mini {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px; /* İç boşluğu artırdık */
+  background: #ffffff;
+  border: 1px solid #f0f0f0;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  transition: all 0.2s ease;
+}
+
+.order-item-mini:hover {
+  transform: translateX(5px); /* Hafif bir kayma efekti */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  border-color: #e0e0e0;
+}
+
+/* Sol taraf: ID ve İsim */
+.order-main-info {
+  display: flex;
+  align-items: center;
+  gap: 15px; /* ID ve İsim arasına net boşluk */
+}
+
+.order-id-tag {
+  font-weight: 700;
+  color: #2d6a4f;
+  font-family: 'Courier New', Courier, monospace; /* ID olduğu belli olsun */
+  background: #f0f7f4;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.order-cust-name {
+  font-weight: 600;
+  color: #333;
+  font-size: 1rem;
+}
+
+/* Sağ taraf: Durum ve Fiyat */
+.order-meta-info {
+  display: flex;
+  align-items: center;
+  gap: 20px; /* Durum rozeti ve fiyat arasına boşluk */
+}
+
+.order-price-text {
+  font-weight: 700;
+  color: #1b4332;
+  font-size: 1.05rem;
+  min-width: 60px; /* Fiyatların hizalı durması için */
+  text-align: right;
+}
+
+/* Durum rozetlerinde fontu biraz daha netleştirelim */
+.status-badge {
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 8px;
+  white-space: nowrap; /* Metnin kırılmasını engeller */
+}
+
+/* Detay Modalı Genel */
+.detail-modal {
+    max-width: 550px !important; /* Biraz genişlettik */
+    border-radius: 24px !important; /* Daha yumuşak köşeler */
+}
+
+.order-id-highlight {
+    font-weight: 800;
+    color: #2d6a4f;
+    margin-left: 5px;
+}
+
+.detail-body {
+    padding: 30px 40px !important; /* İç boşluğu artırdık */
+}
+
+/* Bölüm Başlıkları ve İkonlar */
+.section-title-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 10px;
+}
+
+.section-icon {
+    font-size: 1.2rem;
+    opacity: 0.7;
+}
+
+.section-title-bar h4 {
+    margin: 0;
+    color: #1b4332;
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+/* Bilgi Satırları (Label - Data Ayrımı) */
+.info-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    text-align: left;
+}
+
+.info-row {
+    display: flex;
+    font-size: 0.95rem;
+}
+
+.info-label {
+    width: 100px; /* Sabit genişlik hizalama sağlar */
+    color: #888; /* Soluk gri */
+    font-weight: 500;
+}
+
+.info-data {
+    color: #222; /* Koyu siyah */
+    font-weight: 600;
+    flex: 1;
+}
+
+.address-data {
+    line-height: 1.4;
+}
+
+/* Gelişmiş Ürün Listesi */
+.items-list-enhanced {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    text-align: left;
+}
+
+.items-list-enhanced li {
+    padding: 12px 0;
+    border-bottom: 1px solid #f5f5f5;
+    color: #444;
+    font-weight: 500;
+    display: flex;
+    justify-content: space-between;
+}
+
+.items-list-enhanced li:last-child {
+    border-bottom: none;
+}
+
+/* Toplam Tutar ve Footer */
+.detail-footer {
+    margin-top: 35px;
+    border-top: 1px solid #eee;
+    padding-top: 25px;
+}
+
+.total-price-enhanced {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.total-label {
+    font-size: 1rem;
+    color: #666;
+    font-weight: 600;
+}
+
+.total-value {
+    font-size: 1.8rem; /* Daha vurgulu */
+    font-weight: 800;
+    color: #2d6a4f; /* Savora Yeşili */
+}
+
+/* Gelişmiş Aksiyon Butonları */
+.detail-actions-enhanced {
+    display: flex;
+    gap: 15px;
+}
+
+.btn-action-enhanced {
+    flex: 1;
+    padding: 16px; /* Daha kalın butonlar */
+    border: none;
+    border-radius: 14px; /* Buton köşeleri */
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-action-enhanced:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.btn-action-enhanced.approve {
+    background: #2d6a4f;
+    color: white;
+}
+
+.btn-action-enhanced.cancel {
+    background: #fff1f0; /* Soluk kırmızı arka plan */
+    color: #d32f2f;
+}
+
+.btn-action-enhanced.cancel:hover {
+    background: #ffebe9;
+}

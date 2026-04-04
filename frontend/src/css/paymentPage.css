@@ -111,3 +111,37 @@
         transform: rotate(360deg);
     }
 }
+
+.card-selection-area {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 12px;
+    border: 1px solid #eee;
+}
+
+.modern-select {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    background-color: white;
+    font-size: 14px;
+    margin-top: 5px;
+    cursor: pointer;
+}
+
+.save-card-check {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #555;
+    user-select: none;
+}
+
+.save-card-check input {
+    width: 18px;
+    height: 18px;
+    accent-color: #2d6a4f; /* Savora Yeşili */
+}

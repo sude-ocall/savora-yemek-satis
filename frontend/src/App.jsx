@@ -25,7 +25,7 @@ import './css/sellerHome.css'
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(true);
-  const [userRole, setUserRole] = useState("seller"); // "user" veya "seller"
+  const [userRole, setUserRole] = useState("user"); // "user" veya "seller"
 
   return (
       <div className="app-wrapper">
