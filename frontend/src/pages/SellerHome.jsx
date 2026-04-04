@@ -10,7 +10,6 @@ const SellerHome = () => {
   const [offerPrice, setOfferPrice] = useState("");
   const [notification, setNotification] = useState(null); // Toast bildirimi için
   const [customerRequests, setCustomerRequests] = useState([
-    { id: "REQ-101", customer: "Ali Mutlu", details: "2 adet acılı lahmacun ve bol yeşillik istiyorum.", location: "Muratpaşa", time: "5 dk önce" },
     { id: "REQ-102", customer: "Merve Yılmaz", details: "Vejetaryen pizza, mısır olmasın lütfen.", location: "Konyaaltı", time: "12 dk önce" },
     { id: "REQ-103", customer: "Selin Ak", details: "Sıcak sufle ve yanında dondurma.", location: "Lara", time: "20 dk önce" },
     { id: "REQ-104", customer: "Burak Tan", details: "Büyük boy karışık ızgara tabağı.", location: "Döşemealtı", time: "25 dk önce" }
