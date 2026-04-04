@@ -1,0 +1,113 @@
+.payment-page-container {
+    padding-top: 120px;
+    display: flex;
+    justify-content: center;
+    min-height: 80vh;
+}
+
+.payment-card {
+    background: var(--surface);
+    padding: 2.5rem;
+    border-radius: var(--r-lg);
+    box-shadow: var(--shadow-md);
+    width: 100%;
+    max-width: 550px;
+    border: 1px solid var(--border);
+}
+
+.payment-tabs {
+    display: flex;
+    gap: 10px;
+    background: #f3f4f6;
+    padding: 5px;
+    border-radius: 12px;
+}
+
+.payment-tab {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--muted);
+    border-radius: 8px;
+    transition: 0.3s;
+}
+
+.payment-tab.active {
+    background: white;
+    color: var(--green);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.card-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.full {
+    grid-column: span 2;
+}
+
+/* Başarı Ekranı */
+.payment-success-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 80vh;
+}
+
+.success-card {
+    text-align: center;
+    background: white;
+    padding: 3rem;
+    border-radius: var(--r-lg);
+    box-shadow: var(--shadow-md);
+    max-width: 400px;
+    animation: fadeUp 0.5s ease;
+}
+
+.success-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+
+/* Yükleniyor Modalı (Overlay) */
+.processing-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+
+.loader-box {
+    text-align: center;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid #f3f4f6;
+    border-top: 5px solid var(--green);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 15px;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
