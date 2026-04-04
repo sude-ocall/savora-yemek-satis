@@ -11,6 +11,7 @@ const SellerShow = () => {
     { id: 1, user: "Ahmet", text: "Harika burgerler!", rating: 5 },
   ]);
   const [newComment, setNewComment] = useState("");
+  const [userRating, setUserRating] = useState(5);
   
   const sellerInfo = { name: "Burger Dünyası", rating: 4.8, description: "En iyi gurme burgerler." };
   const sellerMenu = [
@@ -28,8 +29,17 @@ const SellerShow = () => {
 
   const submitComment = () => {
     if(!newComment) return;
-    setComments([...comments, { id: Date.now(), user: "Siz", text: newComment, rating: 5 }]);
+    setComments([
+      { 
+        id: Date.now(), 
+        user: "Siz", 
+        text: newComment, 
+        rating: userRating 
+      }, 
+      ...comments 
+    ]);
     setNewComment("");
+    setUserRating(5);
   };
 
   const totalAmount = cart.reduce((acc, curr) => acc + curr.price, 0);
@@ -38,45 +48,66 @@ const SellerShow = () => {
     <div className="seller-show-container container py-5">
       <button className="btn btn-link mb-3 text-dark text-decoration-none fw-bold" onClick={handleGoBack}>← Geri Dön</button>
       
-      <div className="seller-header p-4 bg-dark text-white rounded-4 mb-5">
+      <div className="seller-header p-4 bg-dark text-white rounded-4 mb-5 shadow">
         <h1>{sellerInfo.name}</h1>
         <p className="lead">{sellerInfo.description}</p>
-        <span className="badge bg-warning text-dark">⭐ {sellerInfo.rating}</span>
+        <span className="badge bg-warning text-dark fs-6">⭐ {sellerInfo.rating}</span>
       </div>
 
-      <div className="row">
+      <div className="row g-4">
         <div className="col-md-8">
           <h3 className="mb-4 fw-bold">Menü</h3>
-          <div className="list-group shadow-sm rounded-4 overflow-hidden">
+          <div className="list-group shadow-sm rounded-4 overflow-hidden border-0">
             {sellerMenu.map(item => (
-              <div key={item.id} className="list-group-item d-flex justify-content-between align-items-center p-3 border-0 border-bottom">
+              <div key={item.id} className="list-group-item d-flex justify-content-between align-items-center p-4 border-0 border-bottom">
                 <div>
                   <h5 className="mb-1 fw-bold">{item.name}</h5>
-                  <span className="fw-bold text-success">{item.price} ₺</span>
+                  <span className="fw-bold text-success fs-5">{item.price} ₺</span>
                 </div>
-                <button className="btn btn-danger rounded-pill px-4" onClick={() => addToCart(item)}>Sepete Ekle</button>
+                <button className="btn btn-danger rounded-pill px-4 fw-bold shadow-sm" onClick={() => addToCart(item)}>Sepete Ekle</button>
               </div>
             ))}
           </div>
 
           <div className="comments-section mt-5">
             <h3 className="fw-bold mb-4">Yorumlar</h3>
-            <div className="mb-4 bg-light p-3 rounded-4">
+            <div className="mb-4 bg-white p-4 rounded-4 shadow-sm border">
+              <label className="form-label fw-bold text-secondary mb-1">Puanınız:</label>
+              
+              <div className="star-rating">
+                {[5, 4, 3, 2, 1].map((num) => (
+                  <React.Fragment key={num}>
+                    <input 
+                      type="radio" 
+                      id={`star-${num}`} 
+                      name="rating" 
+                      value={num} 
+                      checked={userRating === num}
+                      onChange={() => setUserRating(num)}
+                    />
+                    <label htmlFor={`star-${num}`}>★</label>
+                  </React.Fragment>
+                ))}
+              </div>
+
               <textarea 
-                className="form-control mb-2 border-0 shadow-none" 
+                className="form-control comment-input-area mb-3 shadow-none" 
                 rows="3"
-                placeholder="Yorumunuzu yazın..." 
+                placeholder="Deneyiminizi paylaşın..." 
                 value={newComment}
                 onChange={(e) => setNewComment(e.target.value)}
               />
-              <button className="btn btn-primary rounded-pill px-4" onClick={submitComment}>Yorum Yap</button>
+              <button className="btn btn-primary rounded-pill px-4 fw-bold" onClick={submitComment}>Yorum Yap</button>
             </div>
+
             <div className="comment-list">
               {comments.map(c => (
-                <div key={c.id} className="comment-card p-3 mb-2 bg-white border rounded-3 shadow-sm">
-                  <div className="d-flex justify-content-between align-items-center mb-1">
-                    <strong className="text-primary">{c.user}</strong>
-                    <span className="text-warning">{"⭐".repeat(c.rating)}</span>
+                <div key={c.id} className="comment-card p-3 mb-3 bg-white border-0 shadow-sm rounded-4 px-4">
+                  <div className="d-flex justify-content-between align-items-center mb-2">
+                    <strong className="text-dark">{c.user}</strong>
+                    <span className="text-warning">
+                        {"★".repeat(c.rating)}{"☆".repeat(5 - c.rating)}
+                    </span>
                   </div>
                   <p className="mb-0 text-muted">{c.text}</p>
                 </div>
@@ -86,34 +117,37 @@ const SellerShow = () => {
         </div>
 
         <div className="col-md-4">
-          <div className="cart-sidebar shadow-sm">
+          <div className="cart-sidebar shadow border-0 rounded-4">
             <h3 className="fw-bold">Sepetiniz</h3>
-            <hr />
+            <hr className="my-3 opacity-10" />
             {cart.length === 0 ? (
-              <p className="text-muted text-center py-4">Sepetiniz henüz boş.</p>
+              <div className="text-center py-5">
+                <i className="bi bi-cart-x text-muted fs-1 d-block mb-2"></i>
+                <p className="text-muted">Sepetiniz henüz boş.</p>
+              </div>
             ) : (
               <div className="cart-items">
                 {cart.map((item, index) => (
-                  <div key={index} className="cart-item-row d-flex justify-content-between mb-2">
+                  <div key={index} className="cart-item-row d-flex justify-content-between mb-2 p-2 bg-light rounded-3">
                     <span>{item.name}</span>
-                    <strong>{item.price} ₺</strong>
+                    <strong className="text-primary">{item.price} ₺</strong>
                   </div>
                 ))}
               </div>
             )}
             
             <div className="cart-total mt-4">
-              <div className="d-flex justify-content-between fw-bold fs-5 mb-3">
+              <div className="d-flex justify-content-between fw-bold fs-5 mb-3 px-2">
                 <span>Toplam:</span>
-                <span>{totalAmount} ₺</span>
+                <span className="text-danger">{totalAmount} ₺</span>
               </div>
               
               <button 
-                className={`btn-checkout w-100 ${cart.length > 0 ? 'active' : ''}`}
+                className={`btn-checkout w-100 py-3 shadow-sm ${cart.length > 0 ? 'active' : ''}`}
                 disabled={cart.length === 0}
                 onClick={handleGoBack}
               >
-                {cart.length > 0 ? 'Sepeti Onayla ve Dön' : 'Ödemeye Geç'}
+                {cart.length > 0 ? 'Sepeti Onayla ve Dön' : 'Ödeme Yap'}
               </button>
             </div>
           </div>

@@ -28,7 +28,7 @@ import './css/sellerShow.css'
 function App() {
   // Not: isLoggedIn ve userRole gerçek senaryoda bir AuthContext'ten gelmelidir.
   const [isLoggedIn, setIsLoggedIn] = useState(true);
-  const [userRole, setUserRole] = useState("seller"); // "user" veya "seller"
+  const [userRole, setUserRole] = useState("user"); // "user" veya "seller"
 
   return (
       <div className="app-wrapper">
