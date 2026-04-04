@@ -1,19 +1,22 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import burgerImg from "../assets/burger.png";
 import pizzaImg from "../assets/pizza.png";
 import pastaImg from "../assets/pasta.png";
 
+const CATEGORIES = ["Tümü", "Burger", "Pizza", "Tatlı", "İçecek", "Yan Ürün"];
+
 const HomePage = () => {
   const navigate = useNavigate();
-  const [searchTerm, setSearchTerm] = useState("");
-  const [cart, setCart] = useState([]);
-  
-  // MODAL VE SİPARİŞ STATE'LERİ
-  const [selectedOrder, setSelectedOrder] = useState(null); 
-  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const location = useLocation();
 
-  // BİLDİRİM (TOAST) STATE'İ
+  const [cart, setCart] = useState(location.state?.updatedCart || []);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("Tümü");
+  const [showOnlyRestaurants, setShowOnlyRestaurants] = useState(false);
+  
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [notification, setNotification] = useState(null);
 
   const [activeOrders, setActiveOrders] = useState([
@@ -32,38 +35,29 @@ const HomePage = () => {
       items: [{ name: "İtalyan Margherita", price: 180 }],
       total: 180,
       date: "Bugün, 13:45"
-    },
-    {
-        id: "ORD-999",
-        status: "Yolda",
-        restaurant: "Pasta House",
-        items: [{ name: "Kremalı Fettuccine", price: 195 }],
-        total: 195,
-        date: "Bugün, 13:30"
-      }
+    }
   ]);
 
   const menuItems = [
-    { id: 1, name: "Savora Gurme Burger", seller: "Burger Dünyası", rating: 4.8, description: "Ateş ızgarasında pişmiş dana köfte, karamelize soğan.", price: 220, image: burgerImg },
-    { id: 2, name: "İtalyan Margherita", seller: "Pizza Locale", rating: 4.5, description: "Orijinal İtalyan tarifiyle odun ateşinde pişirilmiş.", price: 180, image: pizzaImg },
-    { id: 3, name: "Kremalı Fettuccine Alfredo", seller: "Pasta House", rating: 4.9, description: "Özel krema sosu, parmesan peyniri parçaları.", price: 195, image: pastaImg }
+    { id: 1, name: "Savora Gurme Burger", category: "Burger", seller: "Burger Dünyası", sellerId: 101, rating: 4.8, price: 220, image: burgerImg },
+    { id: 2, name: "İtalyan Margherita", category: "Pizza", seller: "Pizza Locale", sellerId: 102, rating: 4.5, price: 180, image: pizzaImg },
+    { id: 3, name: "Kremalı Fettuccine Alfredo", category: "Yan Ürün", seller: "Pasta House", sellerId: 103, rating: 4.9, price: 195, image: pastaImg }
   ];
 
-  // Sepete ekleme fonksiyonu (Bildirim tetikleyicili)
+  const restaurants = [
+    { id: 101, name: "Burger Dünyası", rating: 4.8, category: "Burger", image: "🏪" },
+    { id: 102, name: "Pizza Locale", rating: 4.5, category: "Pizza", image: "🏪" },
+    { id: 103, name: "Pasta House", rating: 4.9, category: "İtalyan", image: "🏪" }
+  ];
+
   const addToCart = (item) => {
     setCart([...cart, item]);
     setNotification(`${item.name} sepete eklendi!`);
   };
 
-  // Bildirimi 3 saniye sonra otomatik kapatma
-  useEffect(() => {
-    if (notification) {
-      const timer = setTimeout(() => {
-        setNotification(null);
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [notification]);
+  const goToSeller = (sellerId) => {
+    navigate(`/seller-show/${sellerId}`, { state: { currentCart: cart } });
+  };
 
   const confirmCancel = () => {
     setActiveOrders(activeOrders.filter(o => o.id !== selectedOrder.id));
@@ -72,27 +66,30 @@ const HomePage = () => {
     setNotification("Sipariş iptal edildi.");
   };
 
-  const filteredItems = menuItems.filter((item) =>
-    item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.seller.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  useEffect(() => {
+    if (notification) {
+      const timer = setTimeout(() => setNotification(null), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [notification]);
+
+  const filteredItems = menuItems.filter((item) => {
+    const matchesSearch = item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                          item.seller.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = selectedCategory === "Tümü" || item.category === selectedCategory;
+    return matchesSearch && matchesCategory;
+  });
 
   const totalAmount = cart.reduce((acc, curr) => acc + curr.price, 0);
 
   return (
     <div className="home-page-container container py-4">
-      
-      {/* 0. DİNAMİK BİLDİRİM (TOAST) */}
       {notification && (
         <div className="toast-notification">
-          <div className="toast-content">
-            <span className="toast-icon">✅</span>
-            {notification}
-          </div>
+          <div className="toast-content">✅ {notification}</div>
         </div>
       )}
 
-      {/* 1. AKTİF SİPARİŞLER */}
       {activeOrders.length > 0 && (
         <div className="row mb-4">
           <div className="col-12">
@@ -101,18 +98,12 @@ const HomePage = () => {
                 <div className="pulse-indicator me-2"></div>
                 <h5 className="m-0 fw-bold">Aktif Siparişleriniz</h5>
               </div>
-              
               <div className="order-vertical-scroll">
                 {activeOrders.map((order) => (
                   <div key={order.id} className="mini-order-card vertical mb-2" onClick={() => setSelectedOrder(order)}>
                     <div className="d-flex justify-content-between align-items-center">
-                      <div className="d-flex flex-column">
-                        <span className="order-number">#{order.id}</span>
-                        <small className="text-muted">{order.restaurant}</small>
-                      </div>
-                      <span className={`status-pill ${order.status === 'Yeni Sipariş' ? 'status-new' : 'status-pro'}`}>
-                        {order.status}
-                      </span>
+                      <div><span className="order-number">#{order.id}</span><br/><small>{order.restaurant}</small></div>
+                      <span className={`status-pill ${order.status === 'Yeni Sipariş' ? 'status-new' : 'status-pro'}`}>{order.status}</span>
                     </div>
                   </div>
                 ))}
@@ -122,10 +113,9 @@ const HomePage = () => {
         </div>
       )}
 
-      {/* 2. ARAMA ÇUBUĞU */}
-      <div className="row mb-4">
-        <div className="col-md-8">
-          <div className="search-wrapper">
+      <div className="row mb-4 align-items-center">
+        <div className="col-md-7">
+          <div className="search-wrapper mb-3">
             <input
               type="text"
               className="search-input"
@@ -135,93 +125,120 @@ const HomePage = () => {
             />
             <span className="search-icon">🔍</span>
           </div>
+          {!showOnlyRestaurants && (
+            <div className="category-scroll-container d-flex gap-2">
+              {CATEGORIES.map((cat) => (
+                <button
+                  key={cat}
+                  className={`category-pill ${selectedCategory === cat ? "active" : ""}`}
+                  onClick={() => setSelectedCategory(cat)}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+        <div className="col-md-5 text-md-end">
+          <button 
+            className={`btn ${showOnlyRestaurants ? 'btn-primary' : 'btn-outline-primary'} rounded-pill px-4 shadow-sm`}
+            onClick={() => setShowOnlyRestaurants(!showOnlyRestaurants)}
+          >
+            {showOnlyRestaurants ? "🍔 Menüye Dön" : "🏪 Sadece Restoranları Listele"}
+          </button>
         </div>
       </div>
 
       <div className="row mb-5">
-        {/* SOL: MENÜ */}
-        <div className="col-md-8">
-          <h2 className="section-title mb-4">Günün Menüsü</h2>
-          <div className="menu-grid">
-            {filteredItems.map((item) => (
-              <div key={item.id} className="menu-card">
-                <div className="card-image"><img src={item.image} alt={item.name} /></div>
-                <div className="card-info">
-                  <div className="seller-info">
-                    <span className="seller-name">{item.seller}</span>
-                    <span className="seller-rating">⭐ {item.rating}</span>
-                  </div>
-                  <h3>{item.name}</h3>
-                  <div className="card-footer">
-                    <span className="price">{item.price} ₺</span>
-                    <button className="btn-add-cart" onClick={() => addToCart(item)}>Ekle</button>
+        <div className={showOnlyRestaurants ? "col-12" : "col-md-8"}>
+          <h2 className="section-title mb-4">
+            {showOnlyRestaurants ? "Popüler Restoranlar" : (selectedCategory === "Tümü" ? "Günün Menüsü" : selectedCategory)}
+          </h2>
+
+          {showOnlyRestaurants ? (
+            <div className="row">
+              {restaurants.map(res => (
+                <div key={res.id} className="col-md-4 mb-4">
+                  <div className="restaurant-card p-3 shadow-sm border rounded-4 cursor-pointer bg-white" onClick={() => goToSeller(res.id)}>
+                    <div className="res-placeholder mb-3 text-center py-4 bg-light rounded-3" style={{fontSize: '2rem'}}>{res.image}</div>
+                    <h5 className="fw-bold m-0">{res.name}</h5>
+                    <div className="d-flex justify-content-between align-items-center mt-2">
+                      <span className="text-muted small">{res.category}</span>
+                      <span className="text-warning fw-bold">⭐ {res.rating}</span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <div className="menu-grid">
+              {filteredItems.map((item) => (
+                <div key={item.id} className="menu-card">
+                  <div className="card-image"><img src={item.image} alt={item.name} /></div>
+                  <div className="card-info">
+                    <div className="seller-info">
+                      <span className="seller-name text-primary cursor-pointer" onClick={() => goToSeller(item.sellerId)}>{item.seller}</span>
+                      <span className="seller-rating">⭐ {item.rating}</span>
+                    </div>
+                    <h3>{item.name}</h3>
+                    <div className="card-footer">
+                      <span className="price">{item.price} ₺</span>
+                      <button className="btn-add-cart" onClick={() => addToCart(item)}>Ekle</button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
-        {/* SAĞ: SEPET */}
-        <div className="col-md-4">
-          <div className="cart-sidebar">
-            <h3>Sepetiniz</h3>
-            <hr />
-            {cart.length === 0 ? <p className="text-muted text-center py-4">Boş</p> : (
-              <div className="cart-items">
-                {cart.map((item, index) => (
-                  <div key={index} className="cart-item-row">
-                    <span>{item.name}</span>
-                    <strong>{item.price} ₺</strong>
-                  </div>
-                ))}
+        {!showOnlyRestaurants && (
+          <div className="col-md-4">
+            <div className="cart-sidebar shadow-sm">
+              <h3 className="fw-bold">Sepetiniz</h3>
+              <hr />
+              {cart.length === 0 ? <p className="text-muted text-center py-4">Sepetiniz henüz boş.</p> : (
+                <div className="cart-items">
+                  {cart.map((item, index) => (
+                    <div key={index} className="cart-item-row d-flex justify-content-between mb-2">
+                      <span>{item.name}</span>
+                      <strong>{item.price} ₺</strong>
+                    </div>
+                  ))}
+                </div>
+              )}
+              <div className="cart-total mt-4">
+                <div className="d-flex justify-content-between fw-bold fs-5 mb-3"><span>Toplam:</span><span>{totalAmount} ₺</span></div>
+                <button className={`btn-checkout w-100 ${cart.length > 0 ? 'active' : ''}`} disabled={cart.length === 0} onClick={() => navigate("/payment", { state: { amount: totalAmount } })}>Ödemeye Geç</button>
               </div>
-            )}
-            <div className="cart-total mt-4">
-              <div className="d-flex justify-content-between fw-bold"><span>Toplam:</span><span>{totalAmount} ₺</span></div>
-              <button className="btn-checkout mt-3 w-100" disabled={cart.length === 0} onClick={() => navigate("/payment", { state: { amount: totalAmount } })}>Ödemeye Geç</button>
             </div>
           </div>
-        </div>
+        )}
       </div>
 
-      {/* DETAY MODAL */}
       {selectedOrder && (
         <div className="custom-modal-overlay">
-          <div className="custom-modal-card">
-            <div className="modal-header-styled">
-              <div><h4 className="fw-bold m-0">Sipariş Detayı</h4><span className="text-muted">#{selectedOrder.id}</span></div>
-              <button className="close-btn" onClick={() => setSelectedOrder(null)}>&times;</button>
-            </div>
-            <div className="modal-body-styled">
-              <div className="restaurant-info-box"><small>Restoran</small><h5>{selectedOrder.restaurant}</h5></div>
-              <div className="d-flex justify-content-between my-3">
-                <div><small className="d-block text-muted">DURUM</small><strong>{selectedOrder.status}</strong></div>
-                <div className="text-end"><small className="d-block text-muted">TARİH</small><strong>{selectedOrder.date}</strong></div>
-              </div>
-              <hr />
-              <div className="modal-item-list">
-                {selectedOrder.items.map((item, i) => (
-                  <div key={i} className="d-flex justify-content-between"><span>{item.name}</span><span>{item.price} ₺</span></div>
-                ))}
-              </div>
-            </div>
-            <div className="modal-footer-styled mt-4 d-flex gap-2">
-              {selectedOrder.status === "Yeni Sipariş" && (
-                <button className="btn btn-outline-danger flex-grow-1" onClick={() => setShowConfirmModal(true)}>İptal Et</button>
-              )}
-              <button className="btn btn-dark flex-grow-1" onClick={() => setSelectedOrder(null)}>Kapat</button>
-            </div>
+          <div className="custom-modal-card p-4">
+             <div className="d-flex justify-content-between mb-3">
+                <h4 className="fw-bold m-0">Sipariş Detayı #{selectedOrder.id}</h4>
+                <button className="btn-close" onClick={() => setSelectedOrder(null)}></button>
+             </div>
+             <p><strong>Restoran:</strong> {selectedOrder.restaurant}</p>
+             <p><strong>Durum:</strong> {selectedOrder.status}</p>
+             <div className="modal-footer-styled d-flex gap-2 mt-4">
+               {selectedOrder.status === "Yeni Sipariş" && (
+                 <button className="btn btn-outline-danger flex-grow-1" onClick={() => setShowConfirmModal(true)}>İptal Et</button>
+               )}
+               <button className="btn btn-dark flex-grow-1" onClick={() => setSelectedOrder(null)}>Kapat</button>
+             </div>
           </div>
         </div>
       )}
 
-      {/* ONAY MODAL */}
       {showConfirmModal && (
         <div className="custom-modal-overlay overlay-top">
           <div className="confirm-card text-center p-4 bg-white rounded shadow-lg">
             <h4 className="fw-bold">Emin misiniz?</h4>
-            <p className="text-muted">Siparişiniz iptal edilecektir.</p>
             <div className="d-flex gap-2 mt-4">
               <button className="btn btn-light flex-grow-1" onClick={() => setShowConfirmModal(false)}>Vazgeç</button>
               <button className="btn btn-danger flex-grow-1" onClick={confirmCancel}>Evet, İptal Et</button>
