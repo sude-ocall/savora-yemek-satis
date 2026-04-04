@@ -2,14 +2,13 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from 'react-router-dom';
 import AuthModal from "./AuthModal";
 
-const Navbar = ({ isLoggedIn }) => {
+const Navbar = ({ isLoggedIn, userRole }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
-  // Sadece ana sayfada (/) şeffaf olmasını istiyorsan bu kontrolü ekledim
-  const isHomePage = location.pathname === "/";
+  const isHomePage = location.pathname === "/" || location.pathname === "/seller-login";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -19,8 +18,15 @@ const Navbar = ({ isLoggedIn }) => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Dinamik sınıf yapısı
   const navClass = `navbar-settings ${isHomePage && !scrolled ? "is-transparent" : "is-scrolled"}`;
+
+  const handleProfileClick = () => {
+    if (isLoggedIn) {
+      userRole === "seller" ? navigate("/seller-profile") : navigate("/profile");
+    } else {
+      setIsAuthModalOpen(true);
+    }
+  };
 
   return (
     <>
@@ -31,10 +37,7 @@ const Navbar = ({ isLoggedIn }) => {
           </div>
 
           <div className="nav-actions">
-            <button 
-              className="nav-btn-auth" 
-              onClick={() => isLoggedIn ? navigate("/profile") : setIsAuthModalOpen(true)}
-            >
+            <button className="nav-btn-auth" onClick={handleProfileClick}>
               {isLoggedIn ? "Profil" : "Giriş / Kayıt"}
             </button>
           </div>

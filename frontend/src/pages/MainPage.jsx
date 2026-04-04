@@ -1,9 +1,11 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import AuthModal from "../components/AuthModal";
 
 const MainPage = () => {
+  const navigate = useNavigate();
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const [modalTab, setModalTab] = useState("register"); // Hangi tabın açılacağını tutar
+  const [modalTab, setModalTab] = useState("register");
 
   const openModal = (tabName) => {
     setModalTab(tabName);
@@ -20,9 +22,16 @@ const MainPage = () => {
             <p className="hero-subtitle">Hesabını oluştur, profil bilgilerini yönet, satıcıları puanla.</p>
             
             <div className="hero-actions">
-              {/* Butonlara tıklandığında ilgili tab ismini gönderiyoruz */}
               <button className="btn-hero-yellow" onClick={() => openModal("register")}> Kayıt Ol </button>
               <button className="btn-hero-outline" onClick={() => openModal("login")}> Giriş Yap </button>
+            </div>
+
+            {/* Satıcı Yönlendirme Alanı */}
+            <div className="merchant-redirect">
+              <p>İşletme sahibi misiniz?</p>
+              <button className="btn-merchant-link" onClick={() => navigate("/seller-login")}>
+                Savora Satıcı Paneline Git →
+              </button>
             </div>
           </div>
           <div className="hero-bg-icon"></div>
@@ -32,7 +41,7 @@ const MainPage = () => {
       <AuthModal 
         isOpen={isAuthModalOpen} 
         onClose={() => setIsAuthModalOpen(false)} 
-        initialTab={modalTab} // Seçilen tabı modal'a gönderiyoruz
+        initialTab={modalTab}
       />
     </>
   );
