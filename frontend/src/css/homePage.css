@@ -332,3 +332,80 @@
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+/* Arama ve İstek Sistemi Yeni Stiller */
+.search-container-row {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 15px;
+  margin-bottom: 25px;
+}
+
+.btn-request-food {
+  white-space: nowrap;
+  height: 45px;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-request-active {
+  background-color: #ffc107 !important;
+  color: #000 !important;
+  border-color: #ffc107 !important;
+  box-shadow: 0 0 10px rgba(255, 193, 7, 0.4);
+}
+
+.request-textarea {
+  min-height: 100px;
+  border-radius: 10px;
+  border: 1px solid #dee2e6;
+  padding: 10px;
+}
+
+.offers-section {
+  max-height: 250px;
+  overflow-y: auto;
+  margin-top: 15px;
+  padding-right: 5px;
+}
+
+.offer-item {
+  background: #fff;
+  border: 1px solid #e9ecef;
+  padding: 12px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: transform 0.2s;
+}
+
+.offer-item:hover {
+  transform: translateX(5px);
+  border-color: #0d6efd;
+}
+
+.offers-section::-webkit-scrollbar {
+  width: 5px;
+}
+
+.offers-section::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 10px;
+}
+
+.modal-footer-request {
+  border-top: 1px solid #eee;
+  padding-top: 15px;
+  margin-top: 15px;
+}
+
+/* Mevcut modal yapısıyla uyum */
+.overlay-top {
+  z-index: 1060;
+}

@@ -5,71 +5,65 @@ const SellerHome = () => {
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [historyFilter, setHistoryFilter] = useState("Hepsi");
 
-  // Sistem tarihini "YYYY-MM-DD" formatında alalım
-  const todayStr = new Date().toISOString().split('T')[0];
-
-  // --- AKTİF SİPARİŞLER ---
-  const [orders, setOrders] = useState([
-    { 
-      id: "#ORD-5501", 
-      customer: "Ali Mutlu", 
-      price: "180", 
-      status: "Yeni Sipariş", 
-      items: ["1x Pizza Marguerita", "1x Kola"], 
-      phone: "0532 000 00 00", 
-      address: "Antalya, Muratpaşa", 
-      date: todayStr 
-    },
-    { 
-      id: "#ORD-5502", 
-      customer: "Zeynep Kaya", 
-      price: "320", 
-      status: "Hazırlanıyor", 
-      items: ["2x Burger Menü"], 
-      phone: "0533 111 22 33", 
-      address: "Konyaaltı, Liman", 
-      date: todayStr 
-    },
-    { 
-      id: "#ORD-5503", 
-      customer: "Can Demir", 
-      price: "95", 
-      status: "Teslim Edildi", 
-      items: ["1x Lahmacun"], 
-      phone: "0544 555 44 33", 
-      address: "Lara, Fener", 
-      date: todayStr 
-    }
+  // --- Müşteri Talepleri ve Teklif Modalı State'leri ---
+  const [selectedRequest, setSelectedRequest] = useState(null);
+  const [offerPrice, setOfferPrice] = useState("");
+  const [notification, setNotification] = useState(null); // Toast bildirimi için
+  const [customerRequests, setCustomerRequests] = useState([
+    { id: "REQ-101", customer: "Ali Mutlu", details: "2 adet acılı lahmacun ve bol yeşillik istiyorum.", location: "Muratpaşa", time: "5 dk önce" },
+    { id: "REQ-102", customer: "Merve Yılmaz", details: "Vejetaryen pizza, mısır olmasın lütfen.", location: "Konyaaltı", time: "12 dk önce" },
+    { id: "REQ-103", customer: "Selin Ak", details: "Sıcak sufle ve yanında dondurma.", location: "Lara", time: "20 dk önce" },
+    { id: "REQ-104", customer: "Burak Tan", details: "Büyük boy karışık ızgara tabağı.", location: "Döşemealtı", time: "25 dk önce" }
   ]);
 
-  // --- ARŞİVLENMİŞ SİPARİŞLER ---
+  const todayStr = new Date().toISOString().split('T')[0];
+
+  const [orders, setOrders] = useState([
+    { id: "#ORD-5501", customer: "Ali Mutlu", price: "180", status: "Yeni Sipariş", items: ["1x Pizza Marguerita", "1x Kola"], phone: "0532 000 00 00", address: "Antalya, Muratpaşa", date: todayStr },
+    { id: "#ORD-5502", customer: "Zeynep Kaya", price: "320", status: "Hazırlanıyor", items: ["2x Burger Menü"], phone: "0533 111 22 33", address: "Konyaaltı, Liman", date: todayStr },
+    { id: "#ORD-5503", customer: "Can Demir", price: "95", status: "Teslim Edildi", items: ["1x Lahmacun"], phone: "0544 555 44 33", address: "Lara, Fener", date: todayStr }
+  ]);
+
   const [orderHistory, setOrderHistory] = useState([
     { id: "#ORD-5480", customer: "Mehmet Öz", price: "450", status: "Tamamlanan", date: "2026-04-03", items: ["3x Kebap"] },
     { id: "#ORD-5475", customer: "Ayşe Demir", price: "120", status: "İptal Edildi", date: "2026-04-02", items: ["2x Pide"] }
   ]);
 
-  // --- GÜNLÜK KAZANÇ HESAPLAMA ---
-  // Sadece bugünün tarihine sahip VE (Teslim Edildi veya Tamamlanan) olanları toplar
+  // Bildirim zamanlayıcısı
+  useEffect(() => {
+    if (notification) {
+      const timer = setTimeout(() => setNotification(null), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [notification]);
+
+  const sendOffer = () => {
+    if (!offerPrice) {
+      setNotification("Lütfen bir fiyat giriniz!");
+      return;
+    }
+
+    // Alert yerine Notification kullanıyoruz
+    setNotification(`${selectedRequest.customer} kullanıcısına ₺${offerPrice} teklifiniz iletildi.`);
+
+    setCustomerRequests(prev => prev.filter(r => r.id !== selectedRequest.id));
+    setSelectedRequest(null);
+    setOfferPrice("");
+  };
+
   const calculateDailyEarnings = () => {
-    const activeDelivered = orders
-      .filter(o => o.date === todayStr && o.status === "Teslim Edildi")
-      .reduce((acc, curr) => acc + parseFloat(curr.price), 0);
-
-    const archivedToday = orderHistory
-      .filter(o => o.date === todayStr && o.status === "Tamamlanan")
-      .reduce((acc, curr) => acc + parseFloat(curr.price), 0);
-
+    const activeDelivered = orders.filter(o => o.date === todayStr && o.status === "Teslim Edildi").reduce((acc, curr) => acc + parseFloat(curr.price), 0);
+    const archivedToday = orderHistory.filter(o => o.date === todayStr && o.status === "Tamamlanan").reduce((acc, curr) => acc + parseFloat(curr.price), 0);
     return activeDelivered + archivedToday;
   };
 
-  // --- OTOMATİK GÜN SONU MANTIĞI ---
   useEffect(() => {
     const checkTime = setInterval(() => {
       const now = new Date();
       if (now.getHours() === 23 && now.getMinutes() === 59 && now.getSeconds() >= 55) {
         handleDayEndCleanup();
       }
-    }, 5000); 
+    }, 5000);
     return () => clearInterval(checkTime);
   }, [orders]);
 
@@ -83,12 +77,11 @@ const SellerHome = () => {
   };
 
   const updateStatus = (orderId, newStatus) => {
-    setOrders(prev => prev.map(order => 
-      order.id === orderId ? { ...order, status: newStatus } : order
-    ));
+    setOrders(prev => prev.map(order => order.id === orderId ? { ...order, status: newStatus } : order));
     if (selectedOrder && selectedOrder.id === orderId) {
       setSelectedOrder(prev => ({ ...prev, status: newStatus }));
     }
+    setNotification(`Sipariş durumu: ${newStatus}`);
   };
 
   const filteredHistory = orderHistory.filter(order => {
@@ -98,19 +91,28 @@ const SellerHome = () => {
 
   return (
     <div className="seller-home-container">
+      {/* Toast Bildirim Alanı */}
+      {notification && (
+        <div className="seller-toast-container">
+          <div className="seller-toast-content">
+            <span>✅</span> {notification}
+          </div>
+        </div>
+      )}
+
       <div className="dashboard-content">
         <header className="dashboard-header">
           <div className="header-text">
             <h1>Mağaza Özeti</h1>
             <p className="day-info">
-              Sistem Tarihi: {new Date().toLocaleDateString('tr-TR')} | 
+              Sistem Tarihi: {new Date().toLocaleDateString('tr-TR')} |
               Kazanç Periyodu: Bugün
             </p>
           </div>
         </header>
 
         <div className="stats-grid">
-          <div className="stat-card" onClick={() => setIsListModalOpen(true)} style={{cursor: 'pointer'}}>
+          <div className="stat-card" onClick={() => setIsListModalOpen(true)} style={{ cursor: 'pointer' }}>
             <div className="stat-icon">🔔</div>
             <div className="stat-info">
               <h3>Yeni Siparişler</h3>
@@ -139,6 +141,24 @@ const SellerHome = () => {
             </div>
           </div>
         </div>
+
+        <section className="customer-requests-section">
+          <div className="section-header">
+            <h2>Müşteri Talepleri <small style={{ fontSize: '0.6em', color: '#ffc107' }}>● Canlı</small></h2>
+          </div>
+          <div className="request-scroll-area">
+            {customerRequests.length > 0 ? customerRequests.map((req) => (
+              <div key={req.id} className="request-card-item">
+                <div className="request-info">
+                  <h4>{req.customer} <small className="text-muted" style={{ fontSize: '0.7em' }}>• {req.time}</small></h4>
+                  <p className="request-details">"{req.details}"</p>
+                  <span className="request-location">📍 {req.location}</span>
+                </div>
+                <button className="btn-give-offer" onClick={() => setSelectedRequest(req)}>Teklif Ver</button>
+              </div>
+            )) : <p className="empty-text">Şu an yeni bir talep bulunmuyor.</p>}
+          </div>
+        </section>
 
         <section className="recent-orders-section">
           <div className="section-header">
@@ -173,13 +193,7 @@ const SellerHome = () => {
           <div className="history-table-container">
             <table className="history-table">
               <thead>
-                <tr>
-                  <th>Tarih</th>
-                  <th>ID</th>
-                  <th>Müşteri</th>
-                  <th>Tutar</th>
-                  <th>Durum</th>
-                </tr>
+                <tr><th>Tarih</th><th>ID</th><th>Müşteri</th><th>Tutar</th><th>Durum</th></tr>
               </thead>
               <tbody>
                 {filteredHistory.map(h => (
@@ -197,6 +211,56 @@ const SellerHome = () => {
         </section>
       </div>
 
+      {/* --- MODERN TEKLİF MODALI --- */}
+      {selectedRequest && (
+        <div className="order-modal-overlay" onClick={() => setSelectedRequest(null)}>
+          <div className="order-modal-content offer-modal-styled" onClick={e => e.stopPropagation()}>
+
+            <div className="offer-header-gradient">
+              <button className="close-modal-btn" onClick={() => setSelectedRequest(null)}>×</button>
+              <h2>Teklif Oluştur</h2>
+              <div className="customer-info-badge">
+                <div className="cust-avatar">{selectedRequest.customer.charAt(0)}</div>
+                <div>
+                  <div style={{ fontWeight: '600' }}>{selectedRequest.customer}</div>
+                  <div style={{ fontSize: '0.75rem', opacity: 0.8 }}>📍 {selectedRequest.location}</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="request-content-box">
+              <div className="request-quote-card">
+                <span className="request-text-display">"{selectedRequest.details}"</span>
+                <small className="text-muted" style={{ fontSize: '0.7rem' }}>Talep Zamanı: {selectedRequest.time}</small>
+              </div>
+
+              <div className="offer-form-elements">
+                <label style={{ fontWeight: '700', color: '#2d5a47', marginBottom: '10px', display: 'block' }}>Fiyat Teklifiniz</label>
+                <div className="price-input-wrapper">
+                  <span className="currency-symbol">₺</span>
+                  <input
+                    type="number"
+                    className="modern-price-input"
+                    placeholder="0.00"
+                    autoFocus
+                    value={offerPrice}
+                    onChange={(e) => setOfferPrice(e.target.value)}
+                  />
+                </div>
+
+                <button className="btn-send-offer-modern" onClick={sendOffer}>
+                  Teklifi Müşteriye Gönder
+                </button>
+                <p className="text-center text-muted mt-3 mb-0" style={{ fontSize: '0.75rem' }}>
+                  Teklifiniz müşterinin ekranında anlık olarak görünecektir.
+                </p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      )}
+
       {/* MODAL 1: Tüm Aktif Liste */}
       {isListModalOpen && (
         <div className="order-modal-overlay" onClick={() => setIsListModalOpen(false)}>
@@ -212,7 +276,7 @@ const SellerHome = () => {
                 </thead>
                 <tbody>
                   {orders.map(o => (
-                    <tr key={o.id} onClick={() => {setSelectedOrder(o); setIsListModalOpen(false)}} className="clickable-row">
+                    <tr key={o.id} onClick={() => { setSelectedOrder(o); setIsListModalOpen(false) }} className="clickable-row">
                       <td>{o.id}</td>
                       <td>{o.customer}</td>
                       <td><span className="status-badge" data-status={o.status}>{o.status}</span></td>
