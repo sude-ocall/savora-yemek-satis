@@ -468,74 +468,83 @@
 
 /* Ana konteyner düzeni */
 .order-item-mini {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px 24px; /* İç boşluğu artırdık */
-  background: #ffffff;
-  border: 1px solid #f0f0f0;
-  border-radius: 12px;
-  margin-bottom: 12px;
-  transition: all 0.2s ease;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 24px;
+    /* İç boşluğu artırdık */
+    background: #ffffff;
+    border: 1px solid #f0f0f0;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    transition: all 0.2s ease;
 }
 
 .order-item-mini:hover {
-  transform: translateX(5px); /* Hafif bir kayma efekti */
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-  border-color: #e0e0e0;
+    transform: translateX(5px);
+    /* Hafif bir kayma efekti */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border-color: #e0e0e0;
 }
 
 /* Sol taraf: ID ve İsim */
 .order-main-info {
-  display: flex;
-  align-items: center;
-  gap: 15px; /* ID ve İsim arasına net boşluk */
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    /* ID ve İsim arasına net boşluk */
 }
 
 .order-id-tag {
-  font-weight: 700;
-  color: #2d6a4f;
-  font-family: 'Courier New', Courier, monospace; /* ID olduğu belli olsun */
-  background: #f0f7f4;
-  padding: 4px 8px;
-  border-radius: 6px;
-  font-size: 0.9rem;
+    font-weight: 700;
+    color: #2d6a4f;
+    font-family: 'Courier New', Courier, monospace;
+    /* ID olduğu belli olsun */
+    background: #f0f7f4;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 0.9rem;
 }
 
 .order-cust-name {
-  font-weight: 600;
-  color: #333;
-  font-size: 1rem;
+    font-weight: 600;
+    color: #333;
+    font-size: 1rem;
 }
 
 /* Sağ taraf: Durum ve Fiyat */
 .order-meta-info {
-  display: flex;
-  align-items: center;
-  gap: 20px; /* Durum rozeti ve fiyat arasına boşluk */
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    /* Durum rozeti ve fiyat arasına boşluk */
 }
 
 .order-price-text {
-  font-weight: 700;
-  color: #1b4332;
-  font-size: 1.05rem;
-  min-width: 60px; /* Fiyatların hizalı durması için */
-  text-align: right;
+    font-weight: 700;
+    color: #1b4332;
+    font-size: 1.05rem;
+    min-width: 60px;
+    /* Fiyatların hizalı durması için */
+    text-align: right;
 }
 
 /* Durum rozetlerinde fontu biraz daha netleştirelim */
 .status-badge {
-  font-size: 0.8rem;
-  font-weight: 700;
-  padding: 6px 14px;
-  border-radius: 8px;
-  white-space: nowrap; /* Metnin kırılmasını engeller */
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 6px 14px;
+    border-radius: 8px;
+    white-space: nowrap;
+    /* Metnin kırılmasını engeller */
 }
 
 /* Detay Modalı Genel */
 .detail-modal {
-    max-width: 550px !important; /* Biraz genişlettik */
-    border-radius: 24px !important; /* Daha yumuşak köşeler */
+    max-width: 550px !important;
+    /* Biraz genişlettik */
+    border-radius: 24px !important;
+    /* Daha yumuşak köşeler */
 }
 
 .order-id-highlight {
@@ -545,7 +554,8 @@
 }
 
 .detail-body {
-    padding: 30px 40px !important; /* İç boşluğu artırdık */
+    padding: 30px 40px !important;
+    /* İç boşluğu artırdık */
 }
 
 /* Bölüm Başlıkları ve İkonlar */
@@ -584,13 +594,16 @@
 }
 
 .info-label {
-    width: 100px; /* Sabit genişlik hizalama sağlar */
-    color: #888; /* Soluk gri */
+    width: 100px;
+    /* Sabit genişlik hizalama sağlar */
+    color: #888;
+    /* Soluk gri */
     font-weight: 500;
 }
 
 .info-data {
-    color: #222; /* Koyu siyah */
+    color: #222;
+    /* Koyu siyah */
     font-weight: 600;
     flex: 1;
 }
@@ -641,9 +654,11 @@
 }
 
 .total-value {
-    font-size: 1.8rem; /* Daha vurgulu */
+    font-size: 1.8rem;
+    /* Daha vurgulu */
     font-weight: 800;
-    color: #2d6a4f; /* Savora Yeşili */
+    color: #2d6a4f;
+    /* Savora Yeşili */
 }
 
 /* Gelişmiş Aksiyon Butonları */
@@ -654,9 +669,11 @@
 
 .btn-action-enhanced {
     flex: 1;
-    padding: 16px; /* Daha kalın butonlar */
+    padding: 16px;
+    /* Daha kalın butonlar */
     border: none;
-    border-radius: 14px; /* Buton köşeleri */
+    border-radius: 14px;
+    /* Buton köşeleri */
     font-weight: 700;
     font-size: 1rem;
     cursor: pointer;
@@ -665,7 +682,7 @@
 
 .btn-action-enhanced:hover {
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
 .btn-action-enhanced.approve {
@@ -674,10 +691,282 @@
 }
 
 .btn-action-enhanced.cancel {
-    background: #fff1f0; /* Soluk kırmızı arka plan */
+    background: #fff1f0;
+    /* Soluk kırmızı arka plan */
     color: #d32f2f;
 }
 
 .btn-action-enhanced.cancel:hover {
     background: #ffebe9;
+}
+
+/* Müşteri Talep Bölümü Stilleri */
+.customer-requests-section {
+    background: #fff;
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.request-scroll-area {
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+.request-card-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border: 1px solid #f0f0f0;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    transition: all 0.2s ease;
+}
+
+.request-card-item:hover {
+    border-color: #ffc107;
+    background-color: #fffdf7;
+}
+
+.request-info h4 {
+    margin: 0 0 5px 0;
+    font-size: 1rem;
+    color: #333;
+}
+
+.request-details {
+    font-size: 0.85rem;
+    color: #666;
+    margin: 0;
+}
+
+.request-location {
+    display: inline-block;
+    background: #e9ecef;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    margin-top: 5px;
+}
+
+.btn-give-offer {
+    background: #ffc107;
+    color: #000;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-give-offer:hover {
+    background: #e5ad06;
+}
+
+/* Teklif Modalı Özel Alanları */
+.offer-input-group {
+    margin-top: 20px;
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.offer-price-input {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #dee2e6;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-top: 8px;
+}
+
+.offer-price-input:focus {
+    border-color: #ffc107;
+    outline: none;
+}
+
+.request-scroll-area::-webkit-scrollbar {
+    width: 6px;
+}
+
+.request-scroll-area::-webkit-scrollbar-thumb {
+    background: #ddd;
+    border-radius: 10px;
+}
+
+/* Gelişmiş Teklif Modalı Tasarımı */
+.order-modal-content.offer-modal-styled {
+    max-width: 450px;
+    border-radius: 24px;
+    overflow: hidden;
+    border: none;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+.offer-header-gradient {
+    background: linear-gradient(135deg, #1e4d3a 0%, #2d5a47 100%);
+    padding: 30px 25px;
+    color: white;
+    position: relative;
+}
+
+.offer-header-gradient h2 {
+    font-size: 1.4rem;
+    margin: 0;
+    font-weight: 700;
+}
+
+.offer-header-gradient .close-modal-btn {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 2rem;
+    top: 20px;
+    right: 20px;
+}
+
+.customer-info-badge {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 15px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 10px 15px;
+    border-radius: 12px;
+    backdrop-filter: blur(5px);
+}
+
+.cust-avatar {
+    width: 40px;
+    height: 40px;
+    background: #ffc107;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: #000;
+}
+
+.request-content-box {
+    padding: 25px;
+    background: #fff;
+}
+
+.request-quote-card {
+    background: #f8fbf9;
+    border-left: 5px solid #ffc107;
+    padding: 20px;
+    border-radius: 0 15px 15px 0;
+    margin-bottom: 25px;
+    position: relative;
+}
+
+.request-quote-card i {
+    position: absolute;
+    top: -10px;
+    left: 10px;
+    font-size: 2rem;
+    color: #eee;
+    z-index: 0;
+}
+
+.request-text-display {
+    position: relative;
+    z-index: 1;
+    font-style: italic;
+    color: #444;
+    line-height: 1.6;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.price-input-wrapper {
+    position: relative;
+    margin-top: 10px;
+}
+
+.currency-symbol {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-weight: 700;
+    color: #2d5a47;
+    font-size: 1.2rem;
+}
+
+.modern-price-input {
+    width: 100%;
+    padding: 15px 15px 15px 45px;
+    border: 2px solid #eef2f0;
+    border-radius: 16px;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #2d5a47;
+    transition: all 0.3s ease;
+    background: #fcfdfc;
+}
+
+.modern-price-input:focus {
+    border-color: #2d5a47;
+    background: #fff;
+    box-shadow: 0 5px 15px rgba(45, 90, 71, 0.1);
+    outline: none;
+}
+
+.btn-send-offer-modern {
+    width: 100%;
+    padding: 18px;
+    border-radius: 16px;
+    border: none;
+    background: #2d5a47;
+    color: white;
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-top: 25px;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 20px rgba(45, 90, 71, 0.2);
+}
+
+.btn-send-offer-modern:hover {
+    background: #1e4d3a;
+    transform: translateY(-2px);
+    box-shadow: 0 15px 25px rgba(45, 90, 71, 0.3);
+}
+
+/* Toast Notification Stilleri */
+.seller-toast-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+  animation: slideInRight 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.seller-toast-content {
+  background: #2d5a47;
+  color: white;
+  padding: 16px 24px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 600;
+  border-left: 5px solid #ffc107;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
