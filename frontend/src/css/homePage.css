@@ -1,6 +1,7 @@
 /* Sayfa Düzeni */
 .home-page-container {
-  padding-top: 100px; /* Navbar fixed olduğu için üstten boşluk */
+  padding-top: 100px;
+  /* Navbar fixed olduğu için üstten boşluk */
   padding-bottom: 50px;
   min-height: 80vh;
 }
@@ -27,8 +28,8 @@
 }
 
 .card-image {
-    min-width: 2rem;
-    min-height: 2rem;
+  min-width: 2rem;
+  min-height: 2rem;
 }
 
 .card-image img {
@@ -51,7 +52,8 @@
 .card-info p {
   font-size: 0.9rem;
   color: var(--muted);
-  height: 3.6rem; /* İki satırla sınırla */
+  height: 3.6rem;
+  /* İki satırla sınırla */
   overflow: hidden;
   margin-bottom: 1.5rem;
 }
@@ -69,7 +71,8 @@
 }
 
 .btn-add-cart {
-  background: #FF5C00; /* Görseldeki o canlı turuncu */
+  background: #FF5C00;
+  /* Görseldeki o canlı turuncu */
   color: white;
   border: none;
   padding: 8px 20px;
@@ -130,4 +133,67 @@
 .btn-checkout:disabled {
   background: #ccc;
   cursor: not-allowed;
+}
+
+/* --- Yeni Eklenen Stiller --- */
+
+/* Arama Çubuğu */
+.search-wrapper {
+  position: relative;
+  margin-bottom: 10px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 12px 20px 12px 45px;
+  border-radius: 15px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.search-input:focus {
+  border-color: #FF5C00;
+}
+
+.search-icon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.2rem;
+}
+
+/* Satıcı Bilgisi */
+.seller-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.seller-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #FF5C00;
+  /* Marka turuncusu */
+  text-transform: uppercase;
+}
+
+.seller-rating {
+  background: #fff9f0;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #ffa000;
+  border: 1px solid #ffe0b2;
+}
+
+/* Kart Başlığı Düzeltme (Satıcı ismi geldiği için margin azaldı) */
+.card-info h3 {
+  margin-top: 5px;
+  margin-bottom: 10px;
 }
