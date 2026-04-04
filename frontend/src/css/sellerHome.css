@@ -1,0 +1,261 @@
+.seller-home-container {
+    padding: 120px 20px 60px;
+    /* Navbar altında kalmaması için padding */
+    min-height: 100vh;
+    background-color: #f8f9fa;
+    display: flex;
+    justify-content: center;
+}
+
+.dashboard-content {
+    width: 100%;
+    max-width: 1200px;
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.header-text h1 {
+    font-size: 2rem;
+    color: #1b4332;
+    margin: 0;
+}
+
+.header-text p {
+    color: #666;
+    margin: 5px 0 0;
+}
+
+/* Kart Izgarası */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-bottom: 40px;
+}
+
+.stat-card {
+    background: white;
+    padding: 25px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+}
+
+.stat-card.highlight {
+    background: #2d6a4f;
+    color: white;
+}
+
+.stat-icon {
+    font-size: 2rem;
+    background: #f0f7f4;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+}
+
+.stat-card.highlight .stat-icon {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.stat-info h3 {
+    font-size: 0.9rem;
+    color: #888;
+    margin: 0;
+    font-weight: 500;
+}
+
+.stat-card.highlight .stat-info h3 {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    display: block;
+    margin-top: 5px;
+}
+
+/* Siparişler Bölümü */
+.recent-orders-section {
+    background: white;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
+}
+
+.section-header h2 {
+    font-size: 1.25rem;
+    color: #1b4332;
+    margin: 0;
+}
+
+.btn-link {
+    background: none;
+    border: none;
+    color: #ffb800;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.empty-order-state {
+    padding: 40px;
+    text-align: center;
+    color: #999;
+    border: 2px dashed #eee;
+    border-radius: 12px;
+}
+
+.btn-refresh {
+    background: #ffb800;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.3s;
+}
+
+.btn-refresh:hover {
+    opacity: 0.9;
+}
+
+/* Modal Overlay */
+.order-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    padding: 20px;
+}
+
+/* Modal Content Box */
+.order-modal-content {
+    background: white;
+    width: 100%;
+    max-width: 800px;
+    max-height: 80vh;
+    /* Ekranın %80'i kadar yükseklik */
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    /* Dışarı taşmayı engelle */
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    animation: modalSlideUp 0.3s ease-out;
+}
+
+@keyframes modalSlideUp {
+    from {
+        transform: translateY(30px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Modal Header */
+.order-modal-header {
+    padding: 20px 25px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.order-modal-header h2 {
+    margin: 0;
+    font-size: 1.4rem;
+    color: #1b4332;
+}
+
+.close-modal-btn {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    color: #999;
+}
+
+/* Modal Body (Scroll Olan Yer) */
+.order-modal-body {
+    padding: 0;
+    overflow-y: auto;
+    /* Dikey scroll */
+    flex: 1;
+}
+
+/* Tablo Stilleri */
+.orders-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.orders-table th {
+    background: #fcfcfc;
+    padding: 15px 25px;
+    font-size: 0.85rem;
+    color: #888;
+    font-weight: 600;
+    border-bottom: 1px solid #eee;
+    position: sticky;
+    /* Tablo başlığı scroll olsa bile en üstte kalır */
+    top: 0;
+}
+
+.orders-table td {
+    padding: 15px 25px;
+    border-bottom: 1px solid #f9f9f9;
+    font-size: 0.95rem;
+    color: #444;
+}
+
+.orders-table tr:hover {
+    background-color: #fcfcfc;
+}
+
+/* Durum Rozeti */
+.status-badge {
+    background: #fff8e6;
+    color: #ffb800;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
