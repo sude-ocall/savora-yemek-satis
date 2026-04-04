@@ -10,16 +10,13 @@ const SellerHome = () => {
   const [offerPrice, setOfferPrice] = useState("");
   const [notification, setNotification] = useState(null); // Toast bildirimi için
   const [customerRequests, setCustomerRequests] = useState([
-    { id: "REQ-101", customer: "Ali Mutlu", details: "2 adet acılı lahmacun ve bol yeşillik istiyorum.", location: "Muratpaşa", time: "5 dk önce" },
     { id: "REQ-102", customer: "Merve Yılmaz", details: "Vejetaryen pizza, mısır olmasın lütfen.", location: "Konyaaltı", time: "12 dk önce" },
-    { id: "REQ-103", customer: "Selin Ak", details: "Sıcak sufle ve yanında dondurma.", location: "Lara", time: "20 dk önce" },
     { id: "REQ-104", customer: "Burak Tan", details: "Büyük boy karışık ızgara tabağı.", location: "Döşemealtı", time: "25 dk önce" }
   ]);
 
   const todayStr = new Date().toISOString().split('T')[0];
 
   const [orders, setOrders] = useState([
-    { id: "#ORD-5501", customer: "Ali Mutlu", price: "180", status: "Yeni Sipariş", items: ["1x Pizza Marguerita", "1x Kola"], phone: "0532 000 00 00", address: "Antalya, Muratpaşa", date: todayStr },
     { id: "#ORD-5502", customer: "Zeynep Kaya", price: "320", status: "Hazırlanıyor", items: ["2x Burger Menü"], phone: "0533 111 22 33", address: "Konyaaltı, Liman", date: todayStr },
     { id: "#ORD-5503", customer: "Can Demir", price: "95", status: "Teslim Edildi", items: ["1x Lahmacun"], phone: "0544 555 44 33", address: "Lara, Fener", date: todayStr }
   ]);
