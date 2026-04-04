@@ -349,3 +349,82 @@ input:disabled {
     background: #fffdf8;
 }
 
+/* Adres ve Modal Stilleri */
+.modal-overlay {
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.scrollable-content {
+    max-height: 500px;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+.scrollable-content::-webkit-scrollbar {
+    width: 5px;
+}
+
+.scrollable-content::-webkit-scrollbar-thumb {
+    background: #eee;
+    border-radius: 10px;
+}
+
+.fade-in {
+    animation: slideUp 0.4s ease-out;
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.btn-add-card-dash {
+    width: 100%;
+    border: 2px dashed #ddd;
+    background: transparent;
+    padding: 15px;
+    border-radius: 12px;
+    color: #666;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.btn-add-card-dash:hover {
+    border-color: #ffc107;
+    color: #000;
+    background: #fffbef;
+}
+
+.payment-card-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    margin-bottom: 10px;
+}
+
+/* İl ve İlçe Inputları için Yan Yana Görünüm */
+.address-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.form-control {
+    border-radius: 10px !important;
+    padding: 10px 15px !important;
+    border: 1px solid #dee2e6 !important;
+}
+
+.form-control:focus {
+    border-color: #ffc107 !important;
+    box-shadow: 0 0 0 0.25rem rgba(255, 193, 7, 0.1) !important;
+}
