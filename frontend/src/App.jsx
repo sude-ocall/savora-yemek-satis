@@ -7,6 +7,7 @@ import MainPage from "./pages/MainPage";
 import HomePage from "./pages/HomePage";
 import PaymentPage from "./pages/PaymentPage";
 import ProfilePage from "./pages/ProfilePage";
+import SellerPage from "./pages/SellerPage";
 
 import './App.css';
 import './css/navbar.css';
@@ -16,6 +17,7 @@ import './css/authModal.css';
 import './css/homePage.css'
 import './css/paymentPage.css'
 import './css/profilePage.css'
+import './css/sellerPage.css'
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(true);
@@ -34,6 +36,7 @@ function App() {
           <Route path="/payment" element={ <PaymentPage/> } />
 
           <Route path="/profile" element={ <ProfilePage/> } />
+          <Route path="/seller-profile" element={ <SellerPage/> } />
         </Routes>
 
         <Footer />
