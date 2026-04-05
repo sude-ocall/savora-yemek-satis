@@ -1,9 +1,9 @@
 import axios from "axios";
 
 const http = axios.create({
-  baseURL: "http://localhost:3000/api",
+  baseURL: "https://savora-yemek-satis-backend.vercel.app/api",
   headers: {
-    "Accept": "application/json",
+    Accept: "application/json",
     "Content-Type": "application/json;charset=UTF-8",
   },
 });

@@ -11,7 +11,10 @@ const app = express();
 
 // ─── CORS ─────────────────────────────────────────────────────────────────────
 const corsOptions = {
-  origin: "http://localhost:5173",
+  origin: [
+    "http://localhost:5173",
+    "https://savora-yemek-satis-frontend.vercel.app"
+  ],
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"]
@@ -20,6 +23,11 @@ app.use(cors(corsOptions));
 
 // ─── Body parser ───────────────────────────────────────────────────────────────
 app.use(express.json());
+
+// ─── ROOT TEST (Vercel için) ──────────────────────────────────────────────────
+app.get("/", (req, res) => {
+  res.send("API çalışıyor 🚀");
+});
 
 // ─── Routes ───────────────────────────────────────────────────────────────────
 app.use("/api/users",    userRoutes);
