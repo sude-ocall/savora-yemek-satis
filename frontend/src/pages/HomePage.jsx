@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import BackendDataService from "../services/BackendDataServices";
 
@@ -11,32 +11,61 @@ const STATUS_MAP = {
   completed: "Tamamlandı"
 };
 
-const HomePage = ({ token, user }) => {
+// ─── Aktif istek localStorage ───
+const OFFER_KEY = "savora_active_request";
+
+const loadActiveRequest = () => {
+  try {
+    const raw = localStorage.getItem(OFFER_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
+};
+
+const saveActiveRequest = (req) => {
+  try {
+    if (req) {
+      localStorage.setItem(OFFER_KEY, JSON.stringify(req));
+    } else {
+      localStorage.removeItem(OFFER_KEY);
+    }
+  } catch {}
+};
+
+const HomePage = ({ token, user, cart, onAddToCart, onRemoveFromCart, onClearCart }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [cart, setCart]                         = useState(location.state?.updatedCart || []);
+  // conflictModal: { item, existingRestaurant, newRestaurant }
+  const [conflictModal, setConflictModal] = useState(null);
+
   const [searchTerm, setSearchTerm]             = useState("");
   const [selectedCategory, setSelectedCategory] = useState("Tümü");
   const [showOnlyRestaurants, setShowOnlyRestaurants] = useState(false);
 
-  const [products, setProducts]       = useState([]);
-  const [sellers, setSellers]         = useState([]);
+  const [products, setProducts]         = useState([]);
+  const [sellers, setSellers]           = useState([]);
   const [activeOrders, setActiveOrders] = useState([]);
-  const [loadingData, setLoadingData] = useState(true);
+  const [loadingData, setLoadingData]   = useState(true);
 
-  const [selectedOrder, setSelectedOrder]     = useState(null);
+  const [selectedOrder, setSelectedOrder]       = useState(null);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const [notification, setNotification]       = useState(null);
+  const [notification, setNotification]         = useState(null);
 
-  // Offer system
+  // Teklif sistemi
   const [showRequestModal, setShowRequestModal] = useState(false);
-  const [requestData, setRequestData] = useState({ title: "", description: "", category: "" });
-  const [activeRequest, setActiveRequest]       = useState(null);
+  const [requestData, setRequestData]           = useState({ title: "", description: "", category: "" });
+  const [activeRequest, setActiveRequest]       = useState(loadActiveRequest);
   const [offers, setOffers]                     = useState([]);
   const [offerLoading, setOfferLoading]         = useState(false);
 
-  // Initial fetch
+  // ─── Aktif isteği localStorage'a kaydet ───
+  useEffect(() => {
+    saveActiveRequest(activeRequest);
+  }, [activeRequest]);
+
+  // ─── İlk veri çekme ───
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -45,9 +74,13 @@ const HomePage = ({ token, user }) => {
           BackendDataService.getSellers(),
           BackendDataService.getUserOrders(token)
         ]);
-        setProducts(prodRes.data);
+
+        const loadedProducts = prodRes.data;
+        setProducts(loadedProducts);
         setSellers(sellerRes.data);
         setActiveOrders(ordersRes.data.filter(o => o.status !== "completed"));
+
+
       } catch (err) {
         console.error("Veri yükleme hatası:", err);
       } finally {
@@ -57,27 +90,37 @@ const HomePage = ({ token, user }) => {
     fetchData();
   }, [token]);
 
-  // Poll for offer updates every 5 seconds when there's an active request
-  useEffect(() => {
+  // ─── Aktif istek varsa teklifleri 5sn'de bir çek ───
+  const fetchOffers = useCallback(async () => {
     if (!activeRequest) return;
-    const interval = setInterval(async () => {
-      try {
-        const res = await BackendDataService.getUserOffers(token);
-        const myOffer = res.data.find(o => o._id === activeRequest._id);
-        if (myOffer) setOffers(myOffer.incomingOffers || []);
-      } catch {}
-    }, 5000);
-    return () => clearInterval(interval);
+    try {
+      const res = await BackendDataService.getUserOffers(token);
+      const myOffer = res.data.find(o => o._id === activeRequest._id);
+      if (myOffer) {
+        setOffers(myOffer.incomingOffers || []);
+        if (myOffer.status === "closed") {
+          setActiveRequest(null);
+          setOffers([]);
+        }
+      }
+    } catch {}
   }, [activeRequest, token]);
 
-  // Notification auto-dismiss
+  useEffect(() => {
+    if (!activeRequest) return;
+    fetchOffers();
+    const interval = setInterval(fetchOffers, 5000);
+    return () => clearInterval(interval);
+  }, [activeRequest, fetchOffers]);
+
+  // ─── Bildirim otomatik kapat ───
   useEffect(() => {
     if (!notification) return;
     const t = setTimeout(() => setNotification(null), 3000);
     return () => clearTimeout(t);
   }, [notification]);
 
-  // ─── Offer handlers ────────────────────────────────────────────
+  // ─── Teklif isteği gönder ───
   const handleSendRequest = async () => {
     if (!requestData.title || !requestData.description) {
       setNotification("Lütfen tüm alanları doldurun.");
@@ -90,6 +133,7 @@ const HomePage = ({ token, user }) => {
       setOffers([]);
       setNotification("İsteğiniz restoranlara iletildi!");
       setShowRequestModal(false);
+      setRequestData({ title: "", description: "", category: "" });
     } catch {
       setNotification("İstek gönderilemedi.");
     } finally {
@@ -97,42 +141,72 @@ const HomePage = ({ token, user }) => {
     }
   };
 
+  // ─── İsteği geri çek ───
   const handleWithdrawRequest = () => {
     setActiveRequest(null);
     setOffers([]);
     setShowRequestModal(false);
+    setRequestData({ title: "", description: "", category: "" });
     setNotification("İsteğiniz geri çekildi.");
   };
 
-  const addToCartFromOffer = async (offer) => {
-    try {
-      await BackendDataService.acceptOffer(
-        { offerId: activeRequest._id, restaurantId: offer.restaurantId, price: offer.price },
-        token
-      );
-      setNotification("Teklif kabul edildi! Sipariş oluşturuldu.");
-      setActiveRequest(null);
-      setOffers([]);
-      setShowRequestModal(false);
-      const ordersRes = await BackendDataService.getUserOrders(token);
-      setActiveOrders(ordersRes.data.filter(o => o.status !== "completed"));
-    } catch {
-      setNotification("Teklif kabul edilirken hata oluştu.");
+  // ─── Teklifi kabul et → SADECE ödeme sayfasına yönlendir ───
+  // Sipariş ödeme SONRASI oluşturulur. Kullanıcı geri dönerse istek açık kalır.
+  const handleAcceptOffer = (offer) => {
+    const restaurantId = offer.restaurantId?._id || offer.restaurantId;
+    setShowRequestModal(false);
+
+    navigate("/payment", {
+      state: {
+        amount: offer.price,
+        cart: [],
+        fromOffer: true,
+        offerData: {
+          offerId: activeRequest._id,
+          restaurantId,
+          price: offer.price,
+          note: activeRequest.menuRequest?.description || ""
+        }
+      }
+    });
+    // activeRequest burada temizlenmez — ödeme tamamlanana kadar kalır
+  };
+
+  // ─── Sepete ekle ───
+  // ─── Restoran kontrolü ile sepete ekle ───
+  const getRestId  = (item) => item.sellerId?._id || item.sellerId;
+  const getRestName = (item) => item.sellerId?.restaurantName || "Restoran";
+
+  const handleAddToCart = (item) => {
+    if (cart.length === 0) {
+      onAddToCart(item);
+      setNotification(`${item.name} sepete eklendi!`);
+      return;
+    }
+    const existingId = getRestId(cart[0]);
+    const newId      = getRestId(item);
+    if (String(existingId) === String(newId)) {
+      onAddToCart(item);
+      setNotification(`${item.name} sepete eklendi!`);
+    } else {
+      setConflictModal({
+        item,
+        existingRestaurant: getRestName(cart[0]),
+        newRestaurant: getRestName(item)
+      });
     }
   };
 
-  const addToCart = (item) => {
-    setCart([...cart, item]);
-    setNotification(`${item.name} sepete eklendi!`);
-  };
-
+  // ─── Sipariş iptal onayla ───
   const confirmCancel = async () => {
     try {
       await BackendDataService.cancelOrder(selectedOrder._id, token);
-      setActiveOrders(prev => prev.filter(o => o._id !== selectedOrder._id));
+      // DB'den güncel sipariş listesini çek
+      const ordersRes = await BackendDataService.getUserOrders(token);
+      setActiveOrders(ordersRes.data.filter(o => o.status !== "completed"));
       setNotification("Sipariş iptal edildi.");
-    } catch {
-      setNotification("Sipariş iptal edilemedi.");
+    } catch (err) {
+      setNotification("Sipariş iptal edilemedi: " + (err.response?.data?.message || "Hata oluştu."));
     }
     setShowConfirmModal(false);
     setSelectedOrder(null);
@@ -165,7 +239,7 @@ const HomePage = ({ token, user }) => {
         </div>
       )}
 
-      {/* ─── Active Orders Banner ─── */}
+      {/* ─── Aktif Siparişler ─── */}
       {activeOrders.length > 0 && (
         <div className="row mb-4">
           <div className="col-12">
@@ -180,12 +254,18 @@ const HomePage = ({ token, user }) => {
                     key={order._id}
                     className="mini-order-card vertical mb-2"
                     onClick={() => setSelectedOrder(order)}
+                    style={{ cursor: "pointer" }}
                   >
                     <div className="d-flex justify-content-between align-items-center">
                       <div>
                         <span className="order-number">#{order._id.slice(-6).toUpperCase()}</span>
                         <br />
                         <small>{order.restaurantId?.restaurantName || "Restoran"}</small>
+                        {(!order.menu || order.menu.length === 0) && order.note && (
+                          <small className="text-muted d-block" style={{ fontSize: "0.7rem", maxWidth: 160, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                            📝 {order.note}
+                          </small>
+                        )}
                       </div>
                       <span className={`status-pill ${order.status === "new" ? "status-new" : "status-pro"}`}>
                         {STATUS_MAP[order.status] || order.status}
@@ -199,7 +279,7 @@ const HomePage = ({ token, user }) => {
         </div>
       )}
 
-      {/* ─── Search Row ─── */}
+      {/* ─── Arama Satırı ─── */}
       <div className="row mb-4 search-container-row align-items-center shadow-sm mx-0">
         <div className="col-12 d-flex gap-2">
           <button
@@ -242,11 +322,13 @@ const HomePage = ({ token, user }) => {
         </div>
       </div>
 
-      {/* ─── Main Content ─── */}
+      {/* ─── Ana İçerik ─── */}
       <div className="row mb-5">
         <div className={showOnlyRestaurants ? "col-12" : "col-md-8"}>
           <h2 className="section-title mb-4">
-            {showOnlyRestaurants ? "Popüler Restoranlar" : selectedCategory === "Tümü" ? "Günün Menüsü" : selectedCategory}
+            {showOnlyRestaurants
+              ? "Popüler Restoranlar"
+              : selectedCategory === "Tümü" ? "Günün Menüsü" : selectedCategory}
           </h2>
 
           {showOnlyRestaurants ? (
@@ -256,6 +338,7 @@ const HomePage = ({ token, user }) => {
                   <div
                     className="restaurant-card p-3 shadow-sm border rounded-4 cursor-pointer bg-white"
                     onClick={() => navigate(`/sellers/${res._id}`, { state: { currentCart: cart } })}
+                    style={{ cursor: "pointer" }}
                   >
                     <div className="res-placeholder mb-3 text-center py-4 bg-light rounded-3" style={{ fontSize: "2rem" }}>🏪</div>
                     <h5 className="fw-bold m-0">{res.restaurantName}</h5>
@@ -265,12 +348,14 @@ const HomePage = ({ token, user }) => {
                   </div>
                 </div>
               ))}
-              {sellers.length === 0 && <p className="text-muted text-center py-5 col-12">Restoran bulunamadı.</p>}
+              {sellers.length === 0 && (
+                <p className="text-muted text-center py-5 col-12">Restoran bulunamadı.</p>
+              )}
             </div>
           ) : (
             <div className="menu-grid">
               {filteredProducts.map(item => (
-                <div key={item._id} className="menu-card">
+                <div key={item._id} className="menu-card" style={{ cursor: "pointer" }} onClick={() => navigate(`/sellers/${item.sellerId?._id}`, { state: { currentCart: cart } })}>
                   <div className="card-image">
                     {item.imgURL
                       ? <img src={item.imgURL} alt={item.name} />
@@ -280,7 +365,8 @@ const HomePage = ({ token, user }) => {
                   <div className="card-info">
                     <div className="seller-info">
                       <span
-                        className="seller-name text-primary cursor-pointer"
+                        className="seller-name text-primary"
+                        style={{ cursor: "pointer" }}
                         onClick={() => navigate(`/sellers/${item.sellerId?._id}`, { state: { currentCart: cart } })}
                       >
                         {item.sellerId?.restaurantName || "Restoran"}
@@ -289,7 +375,7 @@ const HomePage = ({ token, user }) => {
                     <h3>{item.name}</h3>
                     <div className="card-footer">
                       <span className="price">{item.price} ₺</span>
-                      <button className="btn-add-cart" onClick={() => addToCart(item)}>Ekle</button>
+                      <button className="btn-add-cart" onClick={(e) => { e.stopPropagation(); handleAddToCart(item); }}>Ekle</button>
                     </div>
                   </div>
                 </div>
@@ -301,28 +387,46 @@ const HomePage = ({ token, user }) => {
           )}
         </div>
 
-        {/* ─── Cart Sidebar ─── */}
+        {/* ─── Sepet Sidebar ─── */}
         {!showOnlyRestaurants && (
           <div className="col-md-4">
             <div className="cart-sidebar shadow-sm">
               <h3 className="fw-bold">Sepetiniz</h3>
               <hr />
-              {cart.length === 0
-                ? <p className="text-muted text-center py-4">Sepetiniz henüz boş.</p>
-                : (
-                  <div className="cart-items">
-                    {cart.map((item, index) => (
-                      <div key={index} className="cart-item-row d-flex justify-content-between mb-2">
-                        <span>{item.name}</span>
+              {cart.length === 0 ? (
+                <p className="text-muted text-center py-4">Sepetiniz henüz boş.</p>
+              ) : (
+                <div className="cart-items">
+                  {cart.map((item, index) => (
+                    <div key={index} className="cart-item-row d-flex justify-content-between align-items-center mb-2">
+                      <span>{item.name}</span>
+                      <div className="d-flex align-items-center gap-2">
                         <strong>{item.price} ₺</strong>
+                        <button
+                          onClick={() => onRemoveFromCart(index)}
+                          style={{
+                            background: "none",
+                            border: "none",
+                            color: "#dc3545",
+                            cursor: "pointer",
+                            fontSize: "18px",
+                            padding: "0 4px",
+                            lineHeight: 1,
+                            fontWeight: "bold"
+                          }}
+                          title="Sepetten çıkar"
+                        >
+                          ×
+                        </button>
                       </div>
-                    ))}
-                  </div>
-                )
-              }
+                    </div>
+                  ))}
+                </div>
+              )}
               <div className="cart-total mt-4">
                 <div className="d-flex justify-content-between fw-bold fs-5 mb-3">
-                  <span>Toplam:</span><span>{totalAmount} ₺</span>
+                  <span>Toplam:</span>
+                  <span>{totalAmount} ₺</span>
                 </div>
                 <button
                   className={`btn-checkout w-100 ${cart.length > 0 ? "active" : ""}`}
@@ -337,56 +441,82 @@ const HomePage = ({ token, user }) => {
         )}
       </div>
 
-      {/* ─── Offer Modal ─── */}
+      {/* ─── Teklif / İstek Modalı ─── */}
       {showRequestModal && (
         <div className="custom-modal-overlay">
           <div className="custom-modal-card p-4" style={{ maxWidth: "500px" }}>
             <div className="d-flex justify-content-between mb-3 border-bottom pb-2">
-              <h4 className="fw-bold m-0">{activeRequest ? "İsteğiniz ve Teklifler" : "Özel Yemek İsteği"}</h4>
+              <h4 className="fw-bold m-0">
+                {activeRequest ? "İsteğiniz ve Teklifler" : "Özel Yemek İsteği"}
+              </h4>
               <button className="btn-close" onClick={() => setShowRequestModal(false)}></button>
             </div>
+
             <div className="request-form">
               <label className="small fw-bold text-muted">Başlık</label>
               <input
                 type="text"
                 className="form-control mb-3"
                 placeholder="Örn: Vejetaryen Öğle Yemeği"
-                value={requestData.title}
+                value={activeRequest ? activeRequest.menuRequest?.title : requestData.title}
                 onChange={e => setRequestData({ ...requestData, title: e.target.value })}
                 disabled={!!activeRequest}
               />
+
               <label className="small fw-bold text-muted">Ne yemek istiyorsunuz?</label>
               <textarea
                 className="form-control request-textarea mb-3"
                 placeholder="Örn: 2 adet acılı lahmacun ve bol yeşillik..."
-                value={requestData.description}
+                value={activeRequest ? activeRequest.menuRequest?.description : requestData.description}
                 onChange={e => setRequestData({ ...requestData, description: e.target.value })}
                 disabled={!!activeRequest}
               />
 
               {!activeRequest ? (
-                <button className="btn btn-primary w-100 py-2 fw-bold" onClick={handleSendRequest} disabled={offerLoading}>
+                <button
+                  className="btn btn-primary w-100 py-2 fw-bold"
+                  onClick={handleSendRequest}
+                  disabled={offerLoading}
+                >
                   {offerLoading ? "Gönderiliyor..." : "İsteği Gönder"}
                 </button>
               ) : (
                 <div className="active-request-controls">
                   <div className="d-flex gap-2 mb-3">
-                    <button className="btn btn-outline-danger flex-grow-1 small py-1" onClick={handleWithdrawRequest}>Geri Çek</button>
+                    <button
+                      className="btn btn-outline-danger flex-grow-1 small py-1"
+                      onClick={handleWithdrawRequest}
+                    >
+                      Geri Çek
+                    </button>
                   </div>
-                  <h6 className="fw-bold border-top pt-3">Gelen Teklifler ({offers.length})</h6>
+
+                  <h6 className="fw-bold border-top pt-3">
+                    Gelen Teklifler ({offers.length})
+                  </h6>
+
                   <div className="offers-section">
                     {offers.length === 0 ? (
-                      <p className="text-center text-muted small py-3">Restoranlardan teklif bekleniyor...</p>
+                      <p className="text-center text-muted small py-3">
+                        Restoranlardan teklif bekleniyor...
+                      </p>
                     ) : (
                       offers.map((offer, idx) => (
                         <div key={idx} className="offer-item shadow-sm">
                           <div className="offer-info">
-                            <div className="fw-bold">{offer.restaurantId?.restaurantName || "Restoran"}</div>
+                            <div className="fw-bold">
+                              {offer.restaurantId?.restaurantName || "Restoran"}
+                            </div>
                             <div className="text-muted small">{offer.message}</div>
                             <div className="text-primary fw-bold">{offer.price} ₺</div>
                           </div>
                           <div className="offer-actions d-flex gap-2">
-                            <button className="btn btn-sm btn-success" onClick={() => addToCartFromOffer(offer)}>Kabul Et</button>
+                            <button
+                              className="btn btn-sm btn-success"
+                              onClick={() => handleAcceptOffer(offer)}
+                            >
+                              Kabul Et
+                            </button>
                           </div>
                         </div>
                       ))
@@ -399,38 +529,115 @@ const HomePage = ({ token, user }) => {
         </div>
       )}
 
-      {/* ─── Order Detail Modal ─── */}
+      {/* ─── Sipariş Detay Modalı ─── */}
       {selectedOrder && (
         <div className="custom-modal-overlay">
           <div className="custom-modal-card p-4">
             <div className="d-flex justify-content-between mb-3">
-              <h4 className="fw-bold m-0">Sipariş #{selectedOrder._id.slice(-6).toUpperCase()}</h4>
+              <h4 className="fw-bold m-0">
+                Sipariş #{selectedOrder._id.slice(-6).toUpperCase()}
+              </h4>
               <button className="btn-close" onClick={() => setSelectedOrder(null)}></button>
             </div>
+
             <p><strong>Restoran:</strong> {selectedOrder.restaurantId?.restaurantName || "Restoran"}</p>
             <p><strong>Durum:</strong> {STATUS_MAP[selectedOrder.status] || selectedOrder.status}</p>
+
+            {/* Sipariş içeriği */}
+            <div className="mt-2 mb-3">
+              {selectedOrder.menu && selectedOrder.menu.length > 0 ? (
+                <>
+                  <strong>Sipariş İçeriği:</strong>
+                  <ul className="mt-2 mb-0 ps-3">
+                    {selectedOrder.menu.map((item, idx) => (
+                      <li key={idx} className="text-muted small">
+                        {item.productId?.name
+                          ? `${item.productId.name} × ${item.quantity}`
+                          : `Ürün #${idx + 1} × ${item.quantity}`}
+                        {item.productId?.price ? ` — ${item.productId.price} ₺` : ""}
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              ) : (
+                <>
+                  <strong>Ne yemek istiyorsunuz?</strong>
+                  <p className="text-muted small mt-1 mb-0">
+                    {selectedOrder.note || "—"}
+                  </p>
+                </>
+              )}
+            </div>
+
             <div className="modal-footer-styled d-flex gap-2 mt-4">
               {selectedOrder.status === "new" && (
-                <button className="btn btn-outline-danger flex-grow-1" onClick={() => setShowConfirmModal(true)}>İptal Et</button>
+                <button
+                  className="btn btn-outline-danger flex-grow-1"
+                  onClick={() => setShowConfirmModal(true)}
+                >
+                  İptal Et
+                </button>
               )}
-              <button className="btn btn-dark flex-grow-1" onClick={() => setSelectedOrder(null)}>Kapat</button>
+              <button
+                className="btn btn-dark flex-grow-1"
+                onClick={() => setSelectedOrder(null)}
+              >
+                Kapat
+              </button>
             </div>
           </div>
         </div>
       )}
 
-      {/* ─── Confirm Cancel Modal ─── */}
+      {/* ─── İptal Onay Modalı ─── */}
       {showConfirmModal && (
         <div className="custom-modal-overlay overlay-top">
           <div className="confirm-card text-center p-4 bg-white rounded shadow-lg">
             <h4 className="fw-bold">Emin misiniz?</h4>
+            <p className="text-muted small">Bu sipariş iptal edilecektir.</p>
             <div className="d-flex gap-2 mt-4">
-              <button className="btn btn-light flex-grow-1" onClick={() => setShowConfirmModal(false)}>Vazgeç</button>
-              <button className="btn btn-danger flex-grow-1" onClick={confirmCancel}>Evet, İptal Et</button>
+              <button
+                className="btn btn-light flex-grow-1"
+                onClick={() => setShowConfirmModal(false)}
+              >
+                Vazgeç
+              </button>
+              <button
+                className="btn btn-danger flex-grow-1"
+                onClick={confirmCancel}
+              >
+                Evet, İptal Et
+              </button>
             </div>
           </div>
         </div>
       )}
+      {/* ─── Farklı Restoran Uyarı Modalı ─── */}
+      {conflictModal && (
+        <div className="custom-modal-overlay overlay-top">
+          <div className="confirm-card text-center p-4 bg-white rounded shadow-lg" style={{ maxWidth: 420 }}>
+            <div style={{ fontSize: "2.5rem", marginBottom: "0.5rem" }}>🛒</div>
+            <h5 className="fw-bold mb-2">Farklı Restoran</h5>
+            <p className="text-muted mb-4" style={{ fontSize: "0.9rem" }}>
+              Sepetinizde <strong>{conflictModal.existingRestaurant}</strong> restoranından ürünler var.<br />
+              <strong>{conflictModal.newRestaurant}</strong> restoranından ürün eklemek için
+              mevcut sepeti temizlemeniz gerekiyor.
+            </p>
+            <div className="d-flex gap-2">
+              <button className="btn btn-light flex-grow-1 fw-bold rounded-pill"
+                onClick={() => setConflictModal(null)}>İptal</button>
+              <button className="btn btn-danger flex-grow-1 fw-bold rounded-pill"
+                onClick={() => {
+                  onClearCart();
+                  onAddToCart(conflictModal.item);
+                  setNotification(`${conflictModal.item.name} sepete eklendi!`);
+                  setConflictModal(null);
+                }}>Sepeti Temizle ve Ekle</button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };

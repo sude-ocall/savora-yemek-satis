@@ -5,33 +5,45 @@ import BackendDataService from "../services/BackendDataServices";
 const AuthModal = ({ isOpen, onClose, initialTab, onLoginSuccess }) => {
   const navigate = useNavigate();
 
-  const [activeTab, setActiveTab]   = useState("register");
-  const [loading, setLoading]       = useState(false);
-  const [error, setError]           = useState("");
+  const [activeTab, setActiveTab]     = useState("register");
+  const [loading, setLoading]         = useState(false);
+  const [error, setError]             = useState("");
+  const [phoneError, setPhoneError]   = useState("");
 
-  // Register form
-  const [regForm, setRegForm] = useState({ name: "", email: "", phone: "", password: "" });
-
-  // Login form
+  const [regForm, setRegForm]     = useState({ name: "", email: "", phone: "", password: "" });
   const [loginForm, setLoginForm] = useState({ email: "", password: "" });
 
   useEffect(() => {
     if (isOpen) {
       setActiveTab(initialTab || "register");
       setError("");
+      setPhoneError("");
     }
   }, [isOpen, initialTab]);
 
   if (!isOpen) return null;
 
-  // ---------- REGISTER ----------
+  // Türkiye telefon numarası doğrulama
+  const validatePhone = (phone) => {
+    if (!phone) return true; // opsiyonel alan
+    const cleaned = phone.replace(/\s/g, "");
+    const regex = /^(\+90|0)?5[0-9]{9}$/;
+    return regex.test(cleaned);
+  };
+
   const handleRegister = async (e) => {
     e.preventDefault();
-    setLoading(true);
     setError("");
+    setPhoneError("");
+
+    if (regForm.phone && !validatePhone(regForm.phone)) {
+      setPhoneError("Geçerli bir Türkiye telefon numarası giriniz. (05XX XXX XX XX)");
+      return;
+    }
+
+    setLoading(true);
     try {
       await BackendDataService.registerUser(regForm);
-      // Kayıt başarılı → otomatik giriş
       const loginRes = await BackendDataService.loginUser({
         email: regForm.email,
         password: regForm.password,
@@ -47,7 +59,6 @@ const AuthModal = ({ isOpen, onClose, initialTab, onLoginSuccess }) => {
     }
   };
 
-  // ---------- LOGIN ----------
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -59,7 +70,7 @@ const AuthModal = ({ isOpen, onClose, initialTab, onLoginSuccess }) => {
       onClose();
       navigate("/home");
     } catch (err) {
-      setError(err.response?.data?.message || "Geçersiz e-posta veya şifre.");
+      setError(err.response?.data?.message || "E-posta veya şifre hatalı.");
     } finally {
       setLoading(false);
     }
@@ -68,6 +79,7 @@ const AuthModal = ({ isOpen, onClose, initialTab, onLoginSuccess }) => {
   const switchTab = (tab) => {
     setActiveTab(tab);
     setError("");
+    setPhoneError("");
   };
 
   return (
@@ -95,10 +107,9 @@ const AuthModal = ({ isOpen, onClose, initialTab, onLoginSuccess }) => {
           </button>
         </div>
 
-        {/* Hata mesajı */}
         {error && (
           <div style={{
-            margin: "0 1.5rem",
+            margin: "0 1.5rem 8px",
             padding: "10px 14px",
             background: "#fff0f0",
             border: "1px solid #ffcccc",
@@ -124,15 +135,34 @@ const AuthModal = ({ isOpen, onClose, initialTab, onLoginSuccess }) => {
                   required
                 />
               </div>
+
               <div className="input-group">
-                <label>Telefon <span style={{ fontWeight: 400, color: "#999" }}>(opsiyonel)</span></label>
+                <label>
+                  Telefon{" "}
+                  <span style={{ fontWeight: 400, color: "#999" }}>(opsiyonel)</span>
+                </label>
                 <input
                   type="tel"
                   placeholder="05XX XXX XX XX"
                   value={regForm.phone}
-                  onChange={(e) => setRegForm({ ...regForm, phone: e.target.value })}
+                  onChange={(e) => {
+                    setRegForm({ ...regForm, phone: e.target.value });
+                    setPhoneError("");
+                  }}
                 />
+                {phoneError && (
+                  <span style={{
+                    color: "#cc0000",
+                    fontSize: "12px",
+                    marginTop: "4px",
+                    display: "block",
+                    fontWeight: 500
+                  }}>
+                    ⚠️ {phoneError}
+                  </span>
+                )}
               </div>
+
               <div className="input-group">
                 <label>E-posta</label>
                 <input
@@ -143,6 +173,7 @@ const AuthModal = ({ isOpen, onClose, initialTab, onLoginSuccess }) => {
                   required
                 />
               </div>
+
               <div className="input-group">
                 <label>Şifre</label>
                 <input
@@ -154,6 +185,7 @@ const AuthModal = ({ isOpen, onClose, initialTab, onLoginSuccess }) => {
                   minLength={6}
                 />
               </div>
+
               <button className="btn-submit" type="submit" disabled={loading}>
                 {loading ? "Oluşturuluyor..." : "Hesap Oluştur"}
               </button>
@@ -170,6 +202,7 @@ const AuthModal = ({ isOpen, onClose, initialTab, onLoginSuccess }) => {
                   required
                 />
               </div>
+
               <div className="input-group">
                 <label>Şifre</label>
                 <input
@@ -180,9 +213,11 @@ const AuthModal = ({ isOpen, onClose, initialTab, onLoginSuccess }) => {
                   required
                 />
               </div>
+
               <div className="info-box">
                 💡 Giriş yapmak için kayıtlı e-posta adresinizi kullanın.
               </div>
+
               <button className="btn-submit" type="submit" disabled={loading}>
                 {loading ? "Giriş yapılıyor..." : "Giriş Yap"}
               </button>

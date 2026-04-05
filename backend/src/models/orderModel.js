@@ -31,6 +31,11 @@ const orderSchema = new mongoose.Schema({
     type: String,
     enum: ["new", "preparing", "on_the_way", "completed"],
     default: "new"
+  },
+
+  note: {
+    type: String,
+    default: ""
   }
 
 }, {

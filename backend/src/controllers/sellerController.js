@@ -2,52 +2,45 @@ import Seller from "../models/sellerModel.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-
-// 🟢 SELLER REGISTER
+// SATICI KAYIT
 export const createSeller = async (req, res) => {
-    try {
-        const { taxNumber, restaurantName, phone, email, password } = req.body;
+  try {
+    const { taxNumber, restaurantName, phone, email, password } = req.body;
 
-        const exists = await Seller.findOne({ email });
-        if (exists) {
-            return res.status(400).json({ message: "Seller already exists" });
-        }
-
-        const hashedPassword = await bcrypt.hash(password, 10);
-
-        const seller = await Seller.create({
-            taxNumber,
-            restaurantName,
-            phone,
-            email,
-            password: hashedPassword
-        });
-
-        res.status(201).json({
-            id: seller._id,
-            email: seller.email
-        });
-
-    } catch (error) {
-        res.status(500).json({ message: error.message });
+    const exists = await Seller.findOne({ email });
+    if (exists) {
+      return res.status(400).json({ message: "Bu e-posta adresi zaten kayıtlı." });
     }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const seller = await Seller.create({
+      taxNumber,
+      restaurantName,
+      phone,
+      email,
+      password: hashedPassword
+    });
+
+    res.status(201).json({ id: seller._id, email: seller.email });
+  } catch (error) {
+    res.status(500).json({ message: "Sunucu hatası.", error: error.message });
+  }
 };
 
-// 🟢 SELLER LOGIN
+// SATICI GİRİŞ
 export const loginSeller = async (req, res) => {
   try {
     const { email, password } = req.body;
 
     const seller = await Seller.findOne({ email });
-
     if (!seller) {
-      return res.status(400).json({ message: "Invalid credentials" });
+      return res.status(400).json({ message: "Geçersiz e-posta veya şifre." });
     }
 
     const isMatch = await bcrypt.compare(password, seller.password);
-
     if (!isMatch) {
-      return res.status(400).json({ message: "Invalid credentials" });
+      return res.status(400).json({ message: "Geçersiz e-posta veya şifre." });
     }
 
     const token = jwt.sign(
@@ -64,18 +57,17 @@ export const loginSeller = async (req, res) => {
         restaurantName: seller.restaurantName
       }
     });
-
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: "Sunucu hatası.", error: error.message });
   }
 };
 
-// 🔵 GET ALL SELLERS
+// TÜM SATICILAR
 export const getSellers = async (req, res) => {
-    try {
-        const sellers = await Seller.find();
-        res.json(sellers);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
+  try {
+    const sellers = await Seller.find();
+    res.json(sellers);
+  } catch (error) {
+    res.status(500).json({ message: "Sunucu hatası.", error: error.message });
+  }
 };

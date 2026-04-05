@@ -21,6 +21,34 @@ class BackendDataService {
         return http.get("/users/profile", config(token));
     }
 
+    updateUserProfile(data, token) {
+        return http.put("/users/profile", data, config(token));
+    }
+
+    updatePassword(data, token) {
+        return http.put("/users/password", data, config(token));
+    }
+
+    deleteUser(token) {
+        return http.delete("/users/account", config(token));
+    }
+
+    addAddress(data, token) {
+        return http.post("/users/addresses", data, config(token));
+    }
+
+    deleteAddress(index, token) {
+        return http.delete(`/users/addresses/${index}`, config(token));
+    }
+
+    addCreditCard(data, token) {
+        return http.post("/users/cards", data, config(token));
+    }
+
+    deleteCreditCard(index, token) {
+        return http.delete(`/users/cards/${index}`, config(token));
+    }
+
     /*********************** SELLERS ***********************/
     registerSeller(data) {
         return http.post("/sellers/register", data);
@@ -72,6 +100,10 @@ class BackendDataService {
         return http.put(`/orders/${id}/status`, data, config(token));
     }
 
+    getSellerOrders(token) {
+        return http.get("/orders/seller", config(token));
+    }
+
     /*********************** OFFERS ***********************/
     createOfferRequest(data, token) {
         return http.post("/offers/", data, config(token));
@@ -92,6 +124,15 @@ class BackendDataService {
     addRestaurantOffer(offerId, data, token) {
         return http.post(`/offers/${offerId}`, data, config(token));
     }
+    /*********************** REVIEWS ***********************/
+    getReviews(sellerId) {
+        return http.get(`/reviews/${sellerId}`);
+    }
+
+    addReview(sellerId, data, token) {
+        return http.post(`/reviews/${sellerId}`, data, config(token));
+    }
+
 }
 
 export default new BackendDataService();

@@ -6,27 +6,22 @@ export const createOrder = async (req, res) => {
     const { menu } = req.body;
 
     if (!menu || menu.length === 0) {
-      return res.status(400).json({ message: "Menu is empty" });
+      return res.status(400).json({ message: "Sepet boş." });
     }
 
-    // ürünleri çek
     const products = await Product.find({
       _id: { $in: menu.map(m => m.productId) }
     });
 
     if (products.length === 0) {
-      return res.status(400).json({ message: "Products not found" });
+      return res.status(400).json({ message: "Ürünler bulunamadı." });
     }
 
-    // restaurant kontrol (tek restaurant kuralı)
     const restaurantId = products[0].sellerId.toString();
-
-    const isValid = products.every(
-      p => p.sellerId.toString() === restaurantId
-    );
+    const isValid = products.every(p => p.sellerId.toString() === restaurantId);
 
     if (!isValid) {
-      return res.status(400).json({ message: "Multiple restaurants not allowed" });
+      return res.status(400).json({ message: "Farklı restoranlardan ürün eklenemez." });
     }
 
     const order = await Order.create({
@@ -42,7 +37,7 @@ export const createOrder = async (req, res) => {
   }
 };
 
-//USER ORDER LİST
+// USER ORDER LIST
 export const getUserOrders = async (req, res) => {
   try {
     const orders = await Order.find({ userId: req.user._id })
@@ -56,33 +51,33 @@ export const getUserOrders = async (req, res) => {
   }
 };
 
-//NEW ORDER CANCEL
+// CANCEL ORDER (sadece "new" durumdakiler)
 export const cancelOrder = async (req, res) => {
   try {
     const order = await Order.findById(req.params.id);
 
     if (!order) {
-      return res.status(404).json({ message: "Order not found" });
+      return res.status(404).json({ message: "Sipariş bulunamadı." });
     }
 
     if (order.userId.toString() !== req.user._id.toString()) {
-      return res.status(403).json({ message: "Not allowed" });
+      return res.status(403).json({ message: "Yetkiniz yok." });
     }
 
     if (order.status !== "new") {
-      return res.status(400).json({ message: "Order cannot be cancelled" });
+      return res.status(400).json({ message: "Yalnızca 'Yeni' durumdaki siparişler iptal edilebilir." });
     }
 
     await order.deleteOne();
 
-    res.json({ message: "Order cancelled" });
+    res.json({ message: "Sipariş iptal edildi." });
 
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-//RESTAURANT STATUS UPDATE
+// RESTAURANT STATUS UPDATE
 export const updateOrderStatus = async (req, res) => {
   try {
     const { status } = req.body;
@@ -90,12 +85,11 @@ export const updateOrderStatus = async (req, res) => {
     const order = await Order.findById(req.params.id);
 
     if (!order) {
-      return res.status(404).json({ message: "Order not found" });
+      return res.status(404).json({ message: "Sipariş bulunamadı." });
     }
 
-    // restaurant kontrol
     if (order.restaurantId.toString() !== req.seller._id.toString()) {
-      return res.status(403).json({ message: "Not allowed" });
+      return res.status(403).json({ message: "Yetkiniz yok." });
     }
 
     order.status = status;
@@ -108,7 +102,15 @@ export const updateOrderStatus = async (req, res) => {
   }
 };
 
+// SELLER ORDER LIST
 export const getSellerOrders = async (req, res) => {
-  const orders = await Order.find({ restaurantId: req.seller._id }).populate("userId", "name phone").populate("menu.productId");
-  res.json(orders);
+  try {
+    const orders = await Order.find({ restaurantId: req.seller._id })
+      .populate("userId", "name phone")
+      .populate("menu.productId");
+
+    res.json(orders);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
