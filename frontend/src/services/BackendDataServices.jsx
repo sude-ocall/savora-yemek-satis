@@ -58,6 +58,10 @@ class BackendDataService {
         return http.post("/sellers/login", data);
     }
 
+    updateSellerProfile(data, token) {
+        return http.put("/sellers/profile", data, config(token));
+    }
+
     getSellers() {
         return http.get("/sellers/");
     }

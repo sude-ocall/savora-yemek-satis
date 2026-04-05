@@ -77,6 +77,12 @@ function App() {
     setAuth({ token: null, role: null, user: null });
   };
 
+  const handleUpdateUser = (updatedFields) => {
+    const newUser = { ...auth.user, ...updatedFields };
+    localStorage.setItem("savora_user", JSON.stringify(newUser));
+    setAuth(prev => ({ ...prev, user: newUser }));
+  };
+
   const isLoggedIn = !!auth.token;
 
   return (
@@ -117,7 +123,7 @@ function App() {
           path="/profile"
           element={
             isLoggedIn && auth.role === "user"
-              ? <ProfilePage token={auth.token} user={auth.user} onLogout={handleLogout} />
+              ? <ProfilePage token={auth.token} user={auth.user} onLogout={handleLogout} onUpdateUser={handleUpdateUser} />
               : <Navigate to="/" replace />
           }
         />

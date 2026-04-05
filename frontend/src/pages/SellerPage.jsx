@@ -15,6 +15,14 @@ const SellerPage = ({ token, seller }) => {
   const [saving, setSaving]           = useState(false);
   const [notification, setNotification] = useState(null);
 
+  // ── Profil düzenleme ─────────────────────────────────────────────────────
+  const [showProfileModal, setShowProfileModal] = useState(false);
+  const [profileForm, setProfileForm] = useState({
+    email: seller?.email || "",
+    phone: seller?.phone || ""
+  });
+  const [savingProfile, setSavingProfile] = useState(false);
+
   // Fetch seller's own products
   useEffect(() => {
     const fetchProducts = async () => {
@@ -49,6 +57,20 @@ const SellerPage = ({ token, seller }) => {
     setFormData({ name: "", category: "Burger", price: "", description: "", imgURL: "", previewImage: "" });
     setImageTab("url");
     setEditingItem(null);
+  };
+
+  const handleSaveProfile = async (e) => {
+    e.preventDefault();
+    setSavingProfile(true);
+    try {
+      await BackendDataService.updateSellerProfile(profileForm, token);
+      setNotification("Profil bilgileri güncellendi.");
+      setShowProfileModal(false);
+    } catch (err) {
+      setNotification("Güncelleme başarısız: " + (err.response?.data?.message || "Hata"));
+    } finally {
+      setSavingProfile(false);
+    }
   };
 
   const handleSave = async (e) => {
@@ -115,12 +137,20 @@ const SellerPage = ({ token, seller }) => {
               <h1>{seller?.restaurantName || "Restoran"}</h1>
               <div className="sl-meta">
                 <span><i className="fa-solid fa-utensils"></i> {menu.length} İlan</span>
+                {seller?.email && <span style={{marginLeft:8}}>✉️ {seller.email}</span>}
+                {seller?.phone && <span style={{marginLeft:8}}>📞 {seller.phone}</span>}
               </div>
             </div>
           </div>
-          <button className="sl-add-btn" onClick={() => { resetForm(); setIsFormOpen(true); }}>
-            + Yeni Ürün Ekle
-          </button>
+          <div style={{ display: "flex", gap: "10px" }}>
+            <button className="sl-add-btn" style={{ background: "#6c757d" }}
+              onClick={() => { setProfileForm({ email: seller?.email || "", phone: seller?.phone || "" }); setShowProfileModal(true); }}>
+              ✏️ Bilgileri Düzenle
+            </button>
+            <button className="sl-add-btn" onClick={() => { resetForm(); setIsFormOpen(true); }}>
+              + Yeni Ürün Ekle
+            </button>
+          </div>
         </div>
       </header>
 
@@ -230,6 +260,42 @@ const SellerPage = ({ token, seller }) => {
                 <button type="button" className="sl-btn-secondary" style={{ padding: "8px 16px", borderRadius: "6px" }} onClick={() => setIsFormOpen(false)}>İptal</button>
                 <button type="submit" className="sl-btn-primary" style={{ padding: "8px 16px", borderRadius: "6px" }} disabled={saving}>
                   {saving ? "Kaydediliyor..." : "Kaydet"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+
+      {/* ─── Profil Düzenleme Modalı ─── */}
+      {showProfileModal && (
+        <div className="sl-custom-modal">
+          <div className="sl-modal-backdrop" onClick={() => setShowProfileModal(false)} />
+          <div className="sl-modal-content" style={{ maxWidth: 420 }}>
+            <div className="sl-modal-header">
+              <h3>Bilgileri Düzenle</h3>
+              <button className="close-x" onClick={() => setShowProfileModal(false)}>&times;</button>
+            </div>
+            <form onSubmit={handleSaveProfile}>
+              <div className="sl-form-group">
+                <label>E-posta</label>
+                <input type="email" required className="sl-input"
+                  value={profileForm.email}
+                  onChange={e => setProfileForm({ ...profileForm, email: e.target.value })} />
+              </div>
+              <div className="sl-form-group">
+                <label>Telefon</label>
+                <input type="tel" className="sl-input" placeholder="05XX XXX XX XX"
+                  value={profileForm.phone}
+                  onChange={e => setProfileForm({ ...profileForm, phone: e.target.value })} />
+              </div>
+              <div className="sl-modal-footer" style={{ display: "flex", justifyContent: "flex-end", gap: "10px", marginTop: "15px" }}>
+                <button type="button" className="sl-btn-secondary" style={{ padding: "8px 16px", borderRadius: "6px" }}
+                  onClick={() => setShowProfileModal(false)}>İptal</button>
+                <button type="submit" className="sl-btn-primary" style={{ padding: "8px 16px", borderRadius: "6px" }}
+                  disabled={savingProfile}>
+                  {savingProfile ? "Kaydediliyor..." : "Kaydet"}
                 </button>
               </div>
             </form>
