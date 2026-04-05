@@ -21,12 +21,6 @@ app.use(cors(corsOptions));
 // ─── Body parser ───────────────────────────────────────────────────────────────
 app.use(express.json());
 
-// ─── Request logger (teşhis icin) ─────────────────────────────────────────────
-app.use((req, _res, next) => {
-  console.log("ISTEK:", req.method, req.originalUrl);
-  next();
-});
-
 // ─── Routes ───────────────────────────────────────────────────────────────────
 app.use("/api/users",    userRoutes);
 app.use("/api/sellers",  sellerRoutes);

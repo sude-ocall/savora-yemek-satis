@@ -8,7 +8,8 @@ const STATUS_MAP = {
   new: "Yeni Sipariş",
   preparing: "Hazırlanıyor",
   on_the_way: "Yolda",
-  completed: "Tamamlandı"
+  completed: "Tamamlandı",
+  cancelled: "Restoran İptali"
 };
 
 // ─── Aktif istek localStorage ───
@@ -51,6 +52,7 @@ const HomePage = ({ token, user, cart, onAddToCart, onRemoveFromCart, onClearCar
 
   const [selectedOrder, setSelectedOrder]       = useState(null);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [showAddressAlert, setShowAddressAlert]   = useState(false);
   const [notification, setNotification]         = useState(null);
 
   // Teklif sistemi
@@ -173,6 +175,16 @@ const HomePage = ({ token, user, cart, onAddToCart, onRemoveFromCart, onClearCar
   };
 
   // ─── Sepete ekle ───
+  // ─── Adres kontrolü ile ödemeye geç ───
+  const handleCheckout = async () => {
+    try {
+      const res = await BackendDataService.getUserProfile(token);
+      const addresses = res.data.user?.addresses || [];
+      if (addresses.length === 0) { setShowAddressAlert(true); return; }
+    } catch {}
+    navigate("/payment", { state: { amount: totalAmount, cart } });
+  };
+
   // ─── Restoran kontrolü ile sepete ekle ───
   const getRestId  = (item) => item.sellerId?._id || item.sellerId;
   const getRestName = (item) => item.sellerId?.restaurantName || "Restoran";
@@ -431,7 +443,7 @@ const HomePage = ({ token, user, cart, onAddToCart, onRemoveFromCart, onClearCar
                 <button
                   className={`btn-checkout w-100 ${cart.length > 0 ? "active" : ""}`}
                   disabled={cart.length === 0}
-                  onClick={() => navigate("/payment", { state: { amount: totalAmount, cart } })}
+                  onClick={handleCheckout}
                 >
                   Ödemeye Geç
                 </button>
@@ -633,6 +645,27 @@ const HomePage = ({ token, user, cart, onAddToCart, onRemoveFromCart, onClearCar
                   setNotification(`${conflictModal.item.name} sepete eklendi!`);
                   setConflictModal(null);
                 }}>Sepeti Temizle ve Ekle</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ─── Adres Uyarı Modalı ─── */}
+      {showAddressAlert && (
+        <div className="custom-modal-overlay overlay-top">
+          <div className="confirm-card text-center p-4 bg-white rounded shadow-lg" style={{ maxWidth: 400 }}>
+            <div style={{ fontSize: "2.5rem", marginBottom: "0.5rem" }}>📍</div>
+            <h5 className="fw-bold mb-2">Adres Bulunamadı</h5>
+            <p className="text-muted small mb-4">
+              Ödemeye geçmeden önce profilinize en az bir teslimat adresi eklemeniz gerekiyor.
+            </p>
+            <div className="d-flex gap-2">
+              <button className="btn btn-light flex-grow-1 rounded-pill fw-bold"
+                onClick={() => setShowAddressAlert(false)}>Kapat</button>
+              <button className="btn btn-warning flex-grow-1 rounded-pill fw-bold"
+                onClick={() => { setShowAddressAlert(false); navigate("/profile", { state: { tab: "addresses" } }); }}>
+                Adres Ekle
+              </button>
             </div>
           </div>
         </div>

@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import BackendDataService from "../services/BackendDataServices";
 
 const STATUS_MAP = {
   new: "Yeni",
   preparing: "Hazırlanıyor",
   on_the_way: "Yolda",
-  completed: "Tamamlandı"
+  completed: "Tamamlandı",
+  cancelled: "Restoran İptali"
 };
 
-const ProfilePage = ({ token, user, onLogout }) => {
-  const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState("profile");
+const ProfilePage = ({ token, user, onLogout, onUpdateUser }) => {
+  const navigate  = useNavigate();
+  const location  = useLocation();
+  const [activeTab, setActiveTab] = useState(location.state?.tab || "profile");
 
   const [userInfo, setUserInfo]         = useState({ fullName: user?.name || "", email: user?.email || "", phone: "" });
   const [tempUserInfo, setTempUserInfo] = useState({ fullName: user?.name || "", email: user?.email || "", phone: "" });
@@ -89,6 +91,7 @@ const ProfilePage = ({ token, user, onLogout }) => {
       setTempUserInfo(info);
       setIsEditing(false);
       showNotification("✅ Profil bilgileri güncellendi.");
+      if (onUpdateUser) onUpdateUser({ name: u.name, phone: u.phone || "" });
     } catch (err) {
       showNotification("❌ " + (err.response?.data?.message || "Güncelleme başarısız."));
     } finally {
