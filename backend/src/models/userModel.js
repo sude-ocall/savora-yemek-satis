@@ -16,6 +16,11 @@ const creditCardSchema = new mongoose.Schema({
 }, { _id: false });
 
 const addressSchema = new mongoose.Schema({
+  title: {
+    type: String,
+    default: "",
+    trim: true
+  },
   addressLine: {
     type: String,
     required: true,

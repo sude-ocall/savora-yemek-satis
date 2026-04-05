@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -37,6 +37,30 @@ const getInitialAuth = () => {
 function App() {
   const [auth, setAuth] = useState(getInitialAuth);
 
+  // ─── Sepet (tüm sayfalar arası paylaşımlı) ───────────────────────────────
+  const [cart, setCart] = useState(() => {
+    try {
+      const raw = localStorage.getItem("savora_cart");
+      if (!raw) return [];
+      const { cart: c, expiresAt } = JSON.parse(raw);
+      if (Date.now() > expiresAt) { localStorage.removeItem("savora_cart"); return []; }
+      return Array.isArray(c) ? c : [];
+    } catch { return []; }
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem("savora_cart", JSON.stringify({
+        cart,
+        expiresAt: Date.now() + 30 * 60 * 1000   // 30 dakika
+      }));
+    } catch {}
+  }, [cart]);
+
+  const addToCart      = (item)  => setCart(prev => [...prev, item]);
+  const removeFromCart = (index) => setCart(prev => prev.filter((_, i) => i !== index));
+  const clearCart      = ()      => setCart([]);
+
   const handleLogin = (token, role, user) => {
     localStorage.setItem("savora_token", token);
     localStorage.setItem("savora_role", role);
@@ -48,13 +72,15 @@ function App() {
     localStorage.removeItem("savora_token");
     localStorage.removeItem("savora_role");
     localStorage.removeItem("savora_user");
+    localStorage.removeItem("savora_cart");
+    setCart([]);
     setAuth({ token: null, role: null, user: null });
   };
 
   const isLoggedIn = !!auth.token;
 
   return (
-    <>  {/* ← BrowserRouter yerine Fragment */}
+    <>
       <Navbar
         isLoggedIn={isLoggedIn}
         userRole={auth.role}
@@ -83,7 +109,7 @@ function App() {
           path="/home"
           element={
             isLoggedIn && auth.role === "user"
-              ? <HomePage token={auth.token} user={auth.user} />
+              ? <HomePage token={auth.token} user={auth.user} cart={cart} onAddToCart={addToCart} onRemoveFromCart={removeFromCart} onClearCart={clearCart} />
               : <Navigate to="/" replace />
           }
         />
@@ -99,7 +125,7 @@ function App() {
           path="/payment"
           element={
             isLoggedIn
-              ? <PaymentPage token={auth.token} />
+              ? <PaymentPage token={auth.token} onClearCart={clearCart} />
               : <Navigate to="/" replace />
           }
         />
@@ -119,7 +145,10 @@ function App() {
               : <Navigate to="/seller-login" replace />
           }
         />
-        <Route path="/sellers/:id" element={<SellerShow />} />
+
+        {/* token geçildi — kullanıcı adı JWT'den okunacak */}
+        <Route path="/sellers/:id" element={<SellerShow token={auth.token} cart={cart} onAddToCart={addToCart} onRemoveFromCart={removeFromCart} onClearCart={clearCart} />} />
+
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
       <Footer/>

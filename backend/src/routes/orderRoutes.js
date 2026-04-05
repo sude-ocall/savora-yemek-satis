@@ -12,13 +12,13 @@ import { protectSeller } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
-// user
+// SELLER (önce tanımlanmalı - yoksa /:id ile çakışır)
+router.get("/seller", protectSeller, getSellerOrders);
+router.put("/:id/status", protectSeller, updateOrderStatus);
+
+// USER
 router.post("/", protectUser, createOrder);
 router.get("/", protectUser, getUserOrders);
 router.delete("/:id", protectUser, cancelOrder);
-router.get("/seller", protectSeller, getSellerOrders);
-
-// seller
-router.put("/:id/status", protectSeller, updateOrderStatus);
 
 export default router;
