@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import BackendDataService from "../services/BackendDataServices";
 
@@ -58,15 +58,26 @@ const ProfilePage = ({ token, user, onLogout, onUpdateUser }) => {
       });
   }, [token]);
 
-  // ─── Siparişleri yükle ───
+  // ─── Siparişleri 15sn'de bir yenile (orders tab aktifken) ───
+  const fetchOrders = useCallback(async () => {
+    if (activeTab !== "orders") return;
+    try {
+      const res = await BackendDataService.getUserOrders(token);
+      setOrders(res.data);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoadingOrders(false);
+    }
+  }, [activeTab, token]);
+
   useEffect(() => {
     if (activeTab !== "orders") return;
     setLoadingOrders(true);
-    BackendDataService.getUserOrders(token)
-      .then(res => setOrders(res.data))
-      .catch(err => console.error(err))
-      .finally(() => setLoadingOrders(false));
-  }, [activeTab, token]);
+    fetchOrders();
+    const interval = setInterval(fetchOrders, 15000);
+    return () => clearInterval(interval);
+  }, [activeTab, fetchOrders]);
 
   // ─── Bildirim otomatik kapat ───
   useEffect(() => {
