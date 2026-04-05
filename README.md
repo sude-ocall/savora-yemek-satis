@@ -7,7 +7,7 @@ Savora, evinde yemek yapan yetenekli aşçılar ile lezzetli ev yemeği özlemi 
 
 ## Proje Bağlantıları
 * **Rest API Adresi:** https://raw.githubusercontent.com/alarakokbudak/savora-yemek-satis/refs/heads/main/SavoraAPI.yaml
-* **Web Ön Yüz Adresi:**
+* **Web Ön Yüz Adresi:** https://savora-yemek-satis-frontend.vercel.app/
 
 ## 👥 Geliştirici Ekip
 Bu proje, aşağıdaki 4 kişilik geliştirici ekip tarafından tasarlanıp kodlanmaktadır:
