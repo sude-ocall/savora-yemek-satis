@@ -2,8 +2,8 @@
 
 | # | Başlık | Bağlantı |
 |---|---|---|
-| 1 | Frontend Demosu | |
-| 2 | Postman Demosu | |
+| 1 | Frontend Demosu | |https://youtu.be/MF3a_1A90T0?si=jHhgz2ukCYrTXJsU
+| 2 | Postman Demosu | |https://youtu.be/4B3HCzjBGHc?si=HKfaNiVEyK-alWh7
 
 ---
 
