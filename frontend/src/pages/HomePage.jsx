@@ -67,30 +67,40 @@ const HomePage = ({ token, user, cart, onAddToCart, onRemoveFromCart, onClearCar
     saveActiveRequest(activeRequest);
   }, [activeRequest]);
 
-  // ─── İlk veri çekme ───
+  // ─── Ürün + Satıcı: mount'ta bir kez, sonra 60sn'de bir ───
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchCatalog = async () => {
       try {
-        const [prodRes, sellerRes, ordersRes] = await Promise.all([
+        const [prodRes, sellerRes] = await Promise.all([
           BackendDataService.getProducts(),
-          BackendDataService.getSellers(),
-          BackendDataService.getUserOrders(token)
+          BackendDataService.getSellers()
         ]);
-
-        const loadedProducts = prodRes.data;
-        setProducts(loadedProducts);
+        setProducts(prodRes.data);
         setSellers(sellerRes.data);
-        setActiveOrders(ordersRes.data.filter(o => o.status !== "completed"));
-
-
       } catch (err) {
-        console.error("Veri yükleme hatası:", err);
+        console.error("Katalog yükleme hatası:", err);
       } finally {
         setLoadingData(false);
       }
     };
-    fetchData();
+    fetchCatalog();
+    const catalogInterval = setInterval(fetchCatalog, 60000);
+    return () => clearInterval(catalogInterval);
   }, [token]);
+
+  // ─── Aktif siparişler: 15sn'de bir yenile ───
+  const fetchOrders = useCallback(async () => {
+    try {
+      const res = await BackendDataService.getUserOrders(token);
+      setActiveOrders(res.data.filter(o => o.status !== "completed" && o.status !== "cancelled"));
+    } catch {}
+  }, [token]);
+
+  useEffect(() => {
+    fetchOrders();
+    const ordersInterval = setInterval(fetchOrders, 15000);
+    return () => clearInterval(ordersInterval);
+  }, [fetchOrders]);
 
   // ─── Aktif istek varsa teklifleri 5sn'de bir çek ───
   const fetchOffers = useCallback(async () => {
@@ -214,8 +224,7 @@ const HomePage = ({ token, user, cart, onAddToCart, onRemoveFromCart, onClearCar
     try {
       await BackendDataService.cancelOrder(selectedOrder._id, token);
       // DB'den güncel sipariş listesini çek
-      const ordersRes = await BackendDataService.getUserOrders(token);
-      setActiveOrders(ordersRes.data.filter(o => o.status !== "completed"));
+      await fetchOrders();
       setNotification("Sipariş iptal edildi.");
     } catch (err) {
       setNotification("Sipariş iptal edilemedi: " + (err.response?.data?.message || "Hata oluştu."));
@@ -244,7 +253,7 @@ const HomePage = ({ token, user, cart, onAddToCart, onRemoveFromCart, onClearCar
   }
 
   return (
-    <div className="home-page-container container py-4">
+    <div className="home-page-container container py-4 min-vh-100">
       {notification && (
         <div className="toast-notification">
           <div className="toast-content">✅ {notification}</div>

@@ -52,7 +52,7 @@ const PaymentPage = ({ token, onClearCart }) => {
       if (card) {
         setCardNumber(`**** **** **** ${card.lastFour}`);
         setExpiryDate(card.expiry);
-        setCardName(card.name || "");
+        setCardName("**********");
         setCvv("");
       }
     } else {
