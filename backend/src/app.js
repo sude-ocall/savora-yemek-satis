@@ -10,12 +10,24 @@ import reviewRoutes  from "./routes/reviewRoutes.js";
 const app = express();
 
 // ─── CORS ─────────────────────────────────────────────────────────────────────
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://savora-yemek-satis-frontend.vercel.app"
+];
+
 const corsOptions = {
-  origin: [
-    "http://localhost:5173",
-    "https://savora-yemek-satis-frontend.vercel.app"
-  ],
-  credentials: true,
+  origin: function(origin, callback) {
+    // Postman veya server-side request
+    if (!origin) return callback(null, true);
+
+    // Vercel preview URL desteği
+    if (allowedOrigins.includes(origin) || (origin && origin.includes("vercel.app"))) {
+      return callback(null, true);
+    }
+
+    return callback(new Error("CORS hatasi: " + origin));
+  },
+  credentials: true, // cookie/auth için zorunlu
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"]
 };
