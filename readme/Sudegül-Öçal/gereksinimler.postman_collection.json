@@ -1,0 +1,250 @@
+{
+  "info": {
+    "_postman_id": "bb454b97-6ee5-4f77-b075-1315d8ca5ad6",
+    "name": "Savora - Sudegül ÖÇAL Gereksinimler",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "53342890",
+    "_collection_link": "https://go.postman.co/collection/53342890-bb454b97-6ee5-4f77-b075-1315d8ca5ad6?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Seller Login",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"email\" : \"suderestoran@example.com\",\r\n    \"password\": \"123456\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://savora-yemek-satis-backend.vercel.app/api/sellers/login",
+          "protocol": "https",
+          "host": [
+            "savora-yemek-satis-backend",
+            "vercel",
+            "app"
+          ],
+          "path": [
+            "api",
+            "sellers",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Yemek İlanı Ekleme",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5ZDJjZmY0ZmMxYjU4MzA1NjhiZDRmYiIsImlhdCI6MTc3NTQyMzUwMSwiZXhwIjoxNzc2MDI4MzAxfQ.EuoK65YFZlggKEeh0YYyRTNARbydZIGdASJ64YzmDTw",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"name\": \"Mercimek Çorbası\",\r\n  \"category\": \"Çorba\",\r\n  \"price\": 75,\r\n  \"description\": \"Geleneksel tarife göre hazırlanan kırmızı mercimek çorbası.\",\r\n  \"imgURL\": \"https://example.com/mercimek.jpg\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://savora-yemek-satis-backend.vercel.app/api/products",
+          "protocol": "https",
+          "host": [
+            "savora-yemek-satis-backend",
+            "vercel",
+            "app"
+          ],
+          "path": [
+            "api",
+            "products"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Aktif Menü Listeleme",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5ZDJjZmY0ZmMxYjU4MzA1NjhiZDRmYiIsImlhdCI6MTc3NTQyMzUwMSwiZXhwIjoxNzc2MDI4MzAxfQ.EuoK65YFZlggKEeh0YYyRTNARbydZIGdASJ64YzmDTw",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"name\": \"Mercimek Çorbası\",\r\n  \"category\": \"Çorba\",\r\n  \"price\": 75,\r\n  \"description\": \"Geleneksel tarife göre hazırlanan kırmızı mercimek çorbası.\",\r\n  \"imgURL\": \"https://example.com/mercimek.jpg\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://savora-yemek-satis-backend.vercel.app/api/products",
+          "protocol": "https",
+          "host": [
+            "savora-yemek-satis-backend",
+            "vercel",
+            "app"
+          ],
+          "path": [
+            "api",
+            "products"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Porsiyon/Fiyat Güncelleme",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5ZDJjZmY0ZmMxYjU4MzA1NjhiZDRmYiIsImlhdCI6MTc3NTQyMzUwMSwiZXhwIjoxNzc2MDI4MzAxfQ.EuoK65YFZlggKEeh0YYyRTNARbydZIGdASJ64YzmDTw",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"name\": \"Mercimek Çorbası\",\r\n  \"price\": 85,\r\n  \"description\": \"Güncel fiyat - büyük porsiyon\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://savora-yemek-satis-backend.vercel.app/api/products/69d2d049e9611b828cc8f3a3",
+          "protocol": "https",
+          "host": [
+            "savora-yemek-satis-backend",
+            "vercel",
+            "app"
+          ],
+          "path": [
+            "api",
+            "products",
+            "69d2d049e9611b828cc8f3a3"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Yemek İlanı Kaldırma",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5ZDJjZmY0ZmMxYjU4MzA1NjhiZDRmYiIsImlhdCI6MTc3NTQyMzUwMSwiZXhwIjoxNzc2MDI4MzAxfQ.EuoK65YFZlggKEeh0YYyRTNARbydZIGdASJ64YzmDTw",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "DELETE",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"name\": \"Mercimek Çorbası\",\r\n  \"price\": 85,\r\n  \"description\": \"Güncel fiyat - büyük porsiyon\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://savora-yemek-satis-backend.vercel.app/api/products/69d2d049e9611b828cc8f3a3",
+          "protocol": "https",
+          "host": [
+            "savora-yemek-satis-backend",
+            "vercel",
+            "app"
+          ],
+          "path": [
+            "api",
+            "products",
+            "69d2d049e9611b828cc8f3a3"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Yemek Kategorilerini Listeleme",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5ZDJjZmY0ZmMxYjU4MzA1NjhiZDRmYiIsImlhdCI6MTc3NTQyMzUwMSwiZXhwIjoxNzc2MDI4MzAxfQ.EuoK65YFZlggKEeh0YYyRTNARbydZIGdASJ64YzmDTw",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"name\": \"Mercimek Çorbası\",\r\n  \"price\": 85,\r\n  \"description\": \"Güncel fiyat - büyük porsiyon\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://savora-yemek-satis-backend.vercel.app/api/products",
+          "protocol": "https",
+          "host": [
+            "savora-yemek-satis-backend",
+            "vercel",
+            "app"
+          ],
+          "path": [
+            "api",
+            "products"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
