@@ -16,7 +16,7 @@ Postman Collections JSON -> [➥ Aç - gereksinimler.postman_collection.json](ht
 | # | Başlık | Bağlantı |
 |---|---|---|
 | 1 | Postman Documenter | [➥ Git-](https://documenter.getpostman.com/view/53402253/2sBXiqFUqu) |
-| 2 | Postman Collection | [➥ Git - postman.co/workspace]() |
+| 2 | Postman Collection | [➥ Git - postman.co/workspace](https://senaao-3709628.postman.co/workspace/0b4f3bc9-53e7-4072-860e-b9bbc5b4d98e/collection/53402253-18e4ba3e-0eeb-4af3-b4af-74a139a08423?action=share&source=copy-link&creator=53402253) |
 
 ---
 
