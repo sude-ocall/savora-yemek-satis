@@ -9,6 +9,10 @@
 
 ## 🔑 Postman Collecitons
 
+Postman Collections JSON -> [➥ Aç - gereksinimler.postman_collection.json](./gereksinimler.postman_collection.json)
+
+<br/>
+
 | # | Başlık | Bağlantı |
 |---|---|---|
 | 1 | Postman Documenter | [➥ Git - documenter.getpostman.com]() |
