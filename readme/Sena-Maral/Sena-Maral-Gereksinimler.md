@@ -9,7 +9,7 @@
 
 ## 🔑 Postman Collecitons
 
-Postman Collections JSON -> [➥ Aç - gereksinimler.postman_collection.json](https://senaao-3709628.postman.co/workspace/Sena's-Workspace~0b4f3bc9-53e7-4072-860e-b9bbc5b4d98e/collection/53402253-18e4ba3e-0eeb-4af3-b4af-74a139a08423?action=share&source=copy-link&creator=53402253)
+Postman Collections JSON -> [➥ Aç - gereksinimler.postman_collection.json](./gereksinimler/gereksinimler.postman_collection.json)
 
 <br/>
 
