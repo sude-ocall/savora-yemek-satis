@@ -7,6 +7,18 @@
 
 ---
 
+## 🔑 Postman Collecitons
+
+| # | Başlık | Bağlantı |
+|---|---|---|
+| 1 | Postman Documenter | [➥ Git - documenter.getpostman.com]() |
+| 2 | Postman Collection | [➥ Git - postman.co/workspace]() |
+
+---
+
+<br/>
+<br/>
+
 **Sena Maral – Talep (İstek) ve Geri Bildirim Sistemi Gereksinimleri**
 
 **Özel Yemek Talebi Oluşturma**
