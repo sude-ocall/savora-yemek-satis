@@ -15,7 +15,7 @@ Postman Collections JSON -> [➥ Aç - gereksinimler.postman_collection.json](ht
 
 | # | Başlık | Bağlantı |
 |---|---|---|
-| 1 | Postman Documenter | [➥ Git]() |
+| 1 | Postman Documenter | [➥ Git-documenter.getpostman.com]() |
 | 2 | Postman Collection | [➥ Git - postman.co/workspace]() |
 
 ---
