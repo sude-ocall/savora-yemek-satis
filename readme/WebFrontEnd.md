@@ -1,6 +1,6 @@
 # Web Frontend Görev Dağılımı
 
-**Web Frontend Adresi:** [frontend.yazmuh.com](https://frontend.yazmuh.com)
+**Web Frontend Adresi:** [savora-yemek-satis-frontend.vercel.app/](https://savora-yemek-satis-frontend.vercel.app/)
 
 Bu dokümanda, web uygulamasının kullanıcı arayüzü (UI) ve kullanıcı deneyimi (UX) görevleri listelenmektedir. Her grup üyesi, kendisine atanan sayfaların tasarımı, implementasyonu ve kullanıcı etkileşimlerinden sorumludur.
 
@@ -8,12 +8,10 @@ Bu dokümanda, web uygulamasının kullanıcı arayüzü (UI) ve kullanıcı den
 
 ## Grup Üyelerinin Web Frontend Görevleri
 
-1. [Ali Tutar'ın Web Frontend Görevleri](Ali-Tutar/Ali-Tutar-Web-Frontend-Gorevleri.md)
-2. [Grup Üyesi 2'nin Web Frontend Görevleri](Grup-Uyesi-2/Grup-Uyesi-2-Frontend-Gorevleri.md)
-3. [Grup Üyesi 3'ün Web Frontend Görevleri](Grup-Uyesi-3/Grup-Uyesi-3-Frontend-Gorevleri.md)
-4. [Grup Üyesi 4'ün Web Frontend Görevleri](Grup-Uyesi-4/Grup-Uyesi-4-Frontend-Gorevleri.md)
-5. [Grup Üyesi 5'in Web Frontend Görevleri](Grup-Uyesi-5/Grup-Uyesi-5-Frontend-Gorevleri.md)
-6. [Grup Üyesi 6'nın Web Frontend Görevleri](Grup-Uyesi-6/Grup-Uyesi-6-Frontend-Gorevleri.md)
+1. [Alara Kökbudak'ın Web Frontend Görevleri](Alara-Kökbudak/Alara-Kökbudak-Web-Frontend-Gorevleri.md)
+2. [Sena Maral'ın Web Frontend Görevleri](Sena-Maral/Sena-Maral-Web-Frontend-Gorevleri.md)
+3. [Sudegül Öçal'ın Web Frontend Görevleri](Sudegül-Öçal/Sudegül-Öçal-Web-Frontend-Gorevleri.md)
+4. [İrem Nur Yaşlı'nın Web Frontend Görevleri](İrem-Nur-Yasli/Irem-Nur-Yasli-Web-Frontend-Gorevleri.md)
 
 ---
 
