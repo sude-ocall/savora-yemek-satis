@@ -12,4 +12,10 @@ export const getPaymentMethods = async () => {
   return response.data;
 };
 
-export default { savePaymentMethod, getPaymentMethods };
+// ─── Kayıtlı Ödeme Yöntemini Sil ──────────────────────────────────────────────
+export const deletePaymentMethod = async (index) => {
+  const response = await api.delete(`/payments/${index}`);
+  return response.data;
+};
+
+export default { savePaymentMethod, getPaymentMethods, deletePaymentMethod };

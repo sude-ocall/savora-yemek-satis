@@ -24,6 +24,12 @@ export const cancelOrder = async (orderId) => {
   return response.data;
 };
 
+// ─── Satıcı Siparişlerini Listele ─────────────────────────────────────────────
+export const getSellerOrders = async () => {
+  const response = await api.get("/orders/seller");
+  return response.data;
+};
+
 // ─── Sipariş Durumu Güncelle (Satıcı) ───────────────────────────────────────
 export const updateOrderStatus = async (orderId, status) => {
   const response = await api.put(`/orders/${orderId}/status`, { status });
@@ -36,4 +42,5 @@ export default {
   getOrderById,
   cancelOrder,
   updateOrderStatus,
+  getSellerOrders,
 };

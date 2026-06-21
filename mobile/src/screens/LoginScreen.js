@@ -11,12 +11,13 @@ import {
   ActivityIndicator,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { loginUser } from "../services/authService";
+import { loginUser, loginSeller } from "../services/authService";
 
 const LoginScreen = ({ onLoginSuccess }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isSeller, setIsSeller] = useState(false);
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -26,12 +27,25 @@ const LoginScreen = ({ onLoginSuccess }) => {
 
     setLoading(true);
     try {
-      const data = await loginUser(email, password);
-
-      await AsyncStorage.setItem("savora_token", data.token);
-      await AsyncStorage.setItem("savora_user", JSON.stringify(data.user));
-
-      onLoginSuccess(data.token, data.user);
+      if (isSeller) {
+        // Satıcı Girişi
+        const data = await loginSeller(email, password);
+        await AsyncStorage.setItem("savora_token", data.token);
+        await AsyncStorage.setItem(
+          "savora_user",
+          JSON.stringify({ ...data.seller, role: "seller" })
+        );
+        onLoginSuccess(data.token, { ...data.seller, role: "seller" });
+      } else {
+        // Müşteri Girişi
+        const data = await loginUser(email, password);
+        await AsyncStorage.setItem("savora_token", data.token);
+        await AsyncStorage.setItem(
+          "savora_user",
+          JSON.stringify({ ...data.user, role: data.user.role || "customer" })
+        );
+        onLoginSuccess(data.token, { ...data.user, role: data.user.role || "customer" });
+      }
     } catch (error) {
       const msg =
         error.response?.data?.message || "Giriş başarısız. Tekrar deneyin.";
@@ -44,13 +58,35 @@ const LoginScreen = ({ onLoginSuccess }) => {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={styles.container}
+      style={[styles.container, isSeller && styles.containerSeller]}
     >
       <View style={styles.card}>
         {/* Logo */}
-        <Text style={styles.logo}>🍳</Text>
+        <Text style={styles.logo}>{isSeller ? "🏪" : "🍳"}</Text>
         <Text style={styles.title}>Savora</Text>
-        <Text style={styles.subtitle}>Ev yapımı lezzetler kapınızda</Text>
+        <Text style={styles.subtitle}>
+          {isSeller ? "Satıcı Paneli Girişi" : "Ev yapımı lezzetler kapınızda"}
+        </Text>
+
+        {/* Müşteri / Satıcı Toggle */}
+        <View style={styles.toggleContainer}>
+          <TouchableOpacity
+            style={[styles.toggleBtn, !isSeller && styles.toggleBtnActive]}
+            onPress={() => setIsSeller(false)}
+          >
+            <Text style={[styles.toggleText, !isSeller && styles.toggleTextActive]}>
+              🍽️ Müşteri
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.toggleBtn, isSeller && styles.toggleBtnActiveSeller]}
+            onPress={() => setIsSeller(true)}
+          >
+            <Text style={[styles.toggleText, isSeller && styles.toggleTextActive]}>
+              🏪 Satıcı
+            </Text>
+          </TouchableOpacity>
+        </View>
 
         {/* Email */}
         <View style={styles.inputContainer}>
@@ -59,7 +95,7 @@ const LoginScreen = ({ onLoginSuccess }) => {
             style={styles.input}
             value={email}
             onChangeText={setEmail}
-            placeholder="ornek@email.com"
+            placeholder={isSeller ? "satici@email.com" : "ornek@email.com"}
             placeholderTextColor="#999"
             keyboardType="email-address"
             autoCapitalize="none"
@@ -81,14 +117,20 @@ const LoginScreen = ({ onLoginSuccess }) => {
 
         {/* Giriş Butonu */}
         <TouchableOpacity
-          style={[styles.loginButton, loading && styles.loginButtonDisabled]}
+          style={[
+            styles.loginButton,
+            isSeller && styles.loginButtonSeller,
+            loading && styles.loginButtonDisabled,
+          ]}
           onPress={handleLogin}
           disabled={loading}
         >
           {loading ? (
             <ActivityIndicator color="#fff" />
           ) : (
-            <Text style={styles.loginButtonText}>Giriş Yap</Text>
+            <Text style={styles.loginButtonText}>
+              {isSeller ? "Satıcı Girişi Yap" : "Giriş Yap"}
+            </Text>
           )}
         </TouchableOpacity>
       </View>
@@ -103,6 +145,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 20,
+  },
+  containerSeller: {
+    backgroundColor: "#10B981",
   },
   card: {
     backgroundColor: "#fff",
@@ -131,7 +176,34 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#888",
     textAlign: "center",
-    marginBottom: 28,
+    marginBottom: 20,
+  },
+  toggleContainer: {
+    flexDirection: "row",
+    backgroundColor: "#f0f0f3",
+    borderRadius: 12,
+    padding: 4,
+    marginBottom: 24,
+  },
+  toggleBtn: {
+    flex: 1,
+    paddingVertical: 10,
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  toggleBtnActive: {
+    backgroundColor: "#FF6B35",
+  },
+  toggleBtnActiveSeller: {
+    backgroundColor: "#10B981",
+  },
+  toggleText: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: "#888",
+  },
+  toggleTextActive: {
+    color: "#fff",
   },
   inputContainer: {
     marginBottom: 16,
@@ -157,6 +229,9 @@ const styles = StyleSheet.create({
     padding: 16,
     alignItems: "center",
     marginTop: 8,
+  },
+  loginButtonSeller: {
+    backgroundColor: "#10B981",
   },
   loginButtonDisabled: {
     opacity: 0.7,

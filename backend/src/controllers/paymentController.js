@@ -1,4 +1,27 @@
 import User from "../models/userModel.js";
+import crypto from "crypto";
+
+// AES-256 için gizli anahtar (Gerçekte .env içinde olmalı, burada örnek olarak JWT_SECRET veya sabit bir key kullanıyoruz)
+const ENCRYPTION_KEY = process.env.ENCRYPTION_KEY || crypto.randomBytes(32).toString('hex').slice(0, 32);
+const IV_LENGTH = 16;
+
+function encrypt(text) {
+  let iv = crypto.randomBytes(IV_LENGTH);
+  let cipher = crypto.createCipheriv('aes-256-cbc', Buffer.from(ENCRYPTION_KEY), iv);
+  let encrypted = cipher.update(text);
+  encrypted = Buffer.concat([encrypted, cipher.final()]);
+  return iv.toString('hex') + ':' + encrypted.toString('hex');
+}
+
+function decrypt(text) {
+  let textParts = text.split(':');
+  let iv = Buffer.from(textParts.shift(), 'hex');
+  let encryptedText = Buffer.from(textParts.join(':'), 'hex');
+  let decipher = crypto.createDecipheriv('aes-256-cbc', Buffer.from(ENCRYPTION_KEY), iv);
+  let decrypted = decipher.update(encryptedText);
+  decrypted = Buffer.concat([decrypted, decipher.final()]);
+  return decrypted.toString();
+}
 
 // ===================== SAVE PAYMENT METHOD =====================
 export const savePaymentMethod = async (req, res) => {
@@ -13,8 +36,8 @@ export const savePaymentMethod = async (req, res) => {
     const rawNumber = cardNumber.replace(/\s/g, "");
     const last4 = rawNumber.slice(-4);
 
-    // Basit hash (gerçek projede AES-256 kullanılmalı)
-    const cardHash = Buffer.from(rawNumber).toString("base64");
+    // AES-256 simetrik şifreleme algoritması ile kartı şifrele
+    const cardHash = encrypt(rawNumber);
 
     const user = await User.findByIdAndUpdate(
       req.user._id,

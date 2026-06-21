@@ -6,7 +6,13 @@ export const loginUser = async (email, password) => {
   return response.data;
 };
 
-// ─── Kullanıcı Kayıt ────────────────────────────────────────────────────────
+// ─── Satıcı Giriş ───────────────────────────────────────────────────────────
+export const loginSeller = async (email, password) => {
+  const response = await api.post("/sellers/login", { email, password });
+  return response.data;
+};
+
+// ─── Kullanıcı Kayıt ─────────────────────────────────────────────────────────
 export const registerUser = async (data) => {
   const response = await api.post("/users/register", data);
   return response.data;
@@ -18,4 +24,5 @@ export const getUserProfile = async () => {
   return response.data;
 };
 
-export default { loginUser, registerUser, getUserProfile };
+export default { loginUser, loginSeller, registerUser, getUserProfile };
+

@@ -6,17 +6,17 @@ let redisClient = null;
 export const connectRedis = async () => {
   try {
     redisClient = new Redis(process.env.REDIS_URL || "redis://localhost:6379", {
-      maxRetriesPerRequest: 3,
-      retryDelayOnFailover: 1000,
+      maxRetriesPerRequest: null,
+      retryStrategy: () => null,
       lazyConnect: true
     });
-
-    await redisClient.connect();
-    console.log("✅ Redis bağlantısı kuruldu.");
 
     redisClient.on("error", (err) => {
       console.error("❌ Redis hatası:", err.message);
     });
+
+    await redisClient.connect();
+    console.log("✅ Redis bağlantısı kuruldu.");
 
     return redisClient;
   } catch (error) {

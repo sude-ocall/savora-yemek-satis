@@ -10,7 +10,7 @@ import {
   ScrollView,
   Switch,
 } from "react-native";
-import { savePaymentMethod, getPaymentMethods } from "../services/paymentService";
+import { savePaymentMethod, getPaymentMethods, deletePaymentMethod } from "../services/paymentService";
 
 const PaymentScreen = () => {
   const [cardNumber, setCardNumber] = useState("");
@@ -123,6 +123,30 @@ const PaymentScreen = () => {
     }
   };
 
+  // ─── Kart Sil ──────────────────────────────────────────────────────────────
+  const handleDeleteCard = (index) => {
+    Alert.alert(
+      "Kartı Sil",
+      "Bu kayıtlı kartı silmek istediğinize emin misiniz?",
+      [
+        { text: "İptal", style: "cancel" },
+        {
+          text: "Sil",
+          style: "destructive",
+          onPress: async () => {
+            try {
+              await deletePaymentMethod(index);
+              Alert.alert("Başarılı", "Kart silindi.");
+              fetchSavedCards();
+            } catch (error) {
+              Alert.alert("Hata", "Kart silinirken bir sorun oluştu.");
+            }
+          },
+        },
+      ]
+    );
+  };
+
   const cardType = getCardType();
 
   return (
@@ -136,7 +160,7 @@ const PaymentScreen = () => {
           {savedCards.map((card, index) => (
             <View key={index} style={styles.savedCard}>
               <Text style={styles.savedCardIcon}>💳</Text>
-              <View>
+              <View style={{ flex: 1 }}>
                 <Text style={styles.savedCardNumber}>
                   •••• •••• •••• {card.last4}
                 </Text>
@@ -144,6 +168,9 @@ const PaymentScreen = () => {
                   SKT: {card.expiryDate}
                 </Text>
               </View>
+              <TouchableOpacity onPress={() => handleDeleteCard(index)}>
+                <Text style={{ fontSize: 18, color: "#e74c3c", padding: 8 }}>🗑️</Text>
+              </TouchableOpacity>
             </View>
           ))}
         </View>

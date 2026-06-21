@@ -4,7 +4,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { View, Text, ActivityIndicator, StyleSheet } from "react-native";
+import { View, Text, ActivityIndicator, StyleSheet, TouchableOpacity, Alert } from "react-native";
 
 // Screens
 import LoginScreen from "./src/screens/LoginScreen";
@@ -12,6 +12,8 @@ import OrderConfirmScreen from "./src/screens/OrderConfirmScreen";
 import OrderHistoryScreen from "./src/screens/OrderHistoryScreen";
 import PaymentScreen from "./src/screens/PaymentScreen";
 import OrderTrackingScreen from "./src/screens/OrderTrackingScreen";
+import SellerDashboardScreen from "./src/screens/SellerDashboardScreen";
+import SellerMenuScreen from "./src/screens/SellerMenuScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -24,7 +26,7 @@ const TAB_ICONS = {
 };
 
 // ─── Tab Navigator ──────────────────────────────────────────────────────────
-function MainTabs() {
+function MainTabs({ handleLogout }) {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -58,6 +60,19 @@ function MainTabs() {
         headerTitleStyle: {
           fontWeight: "700",
         },
+        headerRight: () => (
+          <TouchableOpacity 
+            onPress={() => {
+              Alert.alert("Çıkış Yap", "Hesabınızdan çıkış yapmak istediğinize emin misiniz?", [
+                { text: "İptal", style: "cancel" },
+                { text: "Çıkış Yap", style: "destructive", onPress: handleLogout }
+              ]);
+            }} 
+            style={{ marginRight: 16, backgroundColor: "rgba(255,255,255,0.2)", paddingHorizontal: 12, paddingVertical: 6, borderRadius: 8 }}
+          >
+            <Text style={{ color: "#fff", fontWeight: "700", fontSize: 13 }}>Çıkış Yap</Text>
+          </TouchableOpacity>
+        ),
       })}
     >
       <Tab.Screen
@@ -79,9 +94,61 @@ function MainTabs() {
   );
 }
 
+// ─── Satıcı Tab Navigator ───────────────────────────────────────────────────
+function SellerTabs({ handleLogout }) {
+  return (
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused }) => {
+          const icons = { "Gelen Siparişler": "📦", "Menü Yönetimi": "📋" };
+          return <Text style={{ fontSize: focused ? 26 : 22 }}>{icons[route.name] || "🏪"}</Text>;
+        },
+        tabBarActiveTintColor: "#10B981",
+        tabBarInactiveTintColor: "#888",
+        tabBarLabelStyle: { fontSize: 11, fontWeight: "600", marginBottom: 4 },
+        tabBarStyle: {
+          height: 65,
+          paddingTop: 6,
+          backgroundColor: "#fff",
+          borderTopWidth: 0,
+          elevation: 10,
+        },
+        headerStyle: { backgroundColor: "#10B981" },
+        headerTintColor: "#fff",
+        headerTitleStyle: { fontWeight: "700" },
+        headerRight: () => (
+          <TouchableOpacity 
+            onPress={() => {
+              Alert.alert("Çıkış Yap", "Emin misiniz?", [
+                { text: "İptal", style: "cancel" },
+                { text: "Çıkış Yap", style: "destructive", onPress: handleLogout }
+              ]);
+            }} 
+            style={{ marginRight: 16, backgroundColor: "rgba(255,255,255,0.2)", paddingHorizontal: 12, paddingVertical: 6, borderRadius: 8 }}
+          >
+            <Text style={{ color: "#fff", fontWeight: "700", fontSize: 13 }}>Çıkış Yap</Text>
+          </TouchableOpacity>
+        ),
+      })}
+    >
+      <Tab.Screen
+        name="Gelen Siparişler"
+        component={SellerDashboardScreen}
+        options={{ headerShown: false }}
+      />
+      <Tab.Screen
+        name="Menü Yönetimi"
+        component={SellerMenuScreen}
+        options={{ headerShown: false }}
+      />
+    </Tab.Navigator>
+  );
+}
+
 // ─── Ana Uygulama ───────────────────────────────────────────────────────────
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userRole, setUserRole] = useState("customer");
   const [isLoading, setIsLoading] = useState(true);
 
   // Uygulama açılışında token kontrolü
@@ -92,7 +159,15 @@ export default function App() {
   const checkAuth = async () => {
     try {
       const token = await AsyncStorage.getItem("savora_token");
-      setIsLoggedIn(!!token);
+      const userStr = await AsyncStorage.getItem("savora_user");
+      
+      if (token && userStr) {
+        const userObj = JSON.parse(userStr);
+        setUserRole(userObj.role || "customer");
+        setIsLoggedIn(true);
+      } else {
+        setIsLoggedIn(false);
+      }
     } catch (error) {
       setIsLoggedIn(false);
     } finally {
@@ -101,11 +176,13 @@ export default function App() {
   };
 
   const handleLoginSuccess = (token, user) => {
+    setUserRole(user.role || "customer");
     setIsLoggedIn(true);
   };
 
   const handleLogout = async () => {
     await AsyncStorage.multiRemove(["savora_token", "savora_user"]);
+    setUserRole("customer");
     setIsLoggedIn(false);
   };
 
@@ -135,11 +212,15 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen
-          name="Ana Sayfa"
-          component={MainTabs}
-          options={{ headerShown: false }}
-        />
+        {userRole === "seller" ? (
+          <Stack.Screen name="Satıcı Ana Sayfa" options={{ headerShown: false }}>
+            {(props) => <SellerTabs {...props} handleLogout={handleLogout} />}
+          </Stack.Screen>
+        ) : (
+          <Stack.Screen name="Ana Sayfa" options={{ headerShown: false }}>
+            {(props) => <MainTabs {...props} handleLogout={handleLogout} />}
+          </Stack.Screen>
+        )}
         <Stack.Screen
           name="SiparişTakip"
           component={OrderTrackingScreen}

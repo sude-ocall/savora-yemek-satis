@@ -3,10 +3,10 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // ─── API Base URL ────────────────────────────────────────────────────────────
 // ⚡ GELIŞTIRME (yerel ağ): Aynı WiFi'deki bilgisayarın IP'si
-// const API_BASE_URL = "http://10.138.16.28:3000/api";
-//
+const API_BASE_URL = "http://10.138.16.28:3000/api";
+
 // 🚀 PRODUCTION (Vercel):
-const API_BASE_URL = "https://savora-yemek-satis-backend.vercel.app/api";
+// const API_BASE_URL = "https://savora-yemek-satis-backend.vercel.app/api";
 
 const api = axios.create({
   baseURL: API_BASE_URL,
