@@ -970,3 +970,149 @@
     opacity: 1;
   }
 }
+
+/* ─── Gelişmiş Filtreler ──────────────────────────────────────────────────── */
+.advanced-filters {
+  margin-top: 16px;
+  margin-bottom: 8px;
+  padding: 16px 20px;
+  background: #f8fbf9;
+  border-radius: 12px;
+  border: 1px solid #e8f0ec;
+}
+
+.filter-row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 140px;
+}
+
+.filter-group label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.filter-group input {
+  padding: 8px 12px;
+  border: 1px solid #dde5df;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  background: white;
+  transition: border-color 0.2s;
+  color: #333;
+}
+
+.filter-group input:focus {
+  border-color: #2d6a4f;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(45, 106, 79, 0.1);
+}
+
+.btn-clear-filters {
+  padding: 8px 18px;
+  background: #fff1f0;
+  color: #d32f2f;
+  border: 1px solid #ffd6d6;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  align-self: flex-end;
+}
+
+.btn-clear-filters:hover {
+  background: #ffe8e6;
+  border-color: #ffb8b8;
+}
+
+.filter-result-info {
+  margin-top: 10px;
+  font-size: 0.82rem;
+  color: #888;
+  font-weight: 500;
+}
+
+/* ─── Durum Rozetleri (data-status olarak) ─────────────────────────────────── */
+[data-status="new"] {
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+[data-status="preparing"] {
+  background: #fff3e0;
+  color: #f57c00;
+}
+
+[data-status="on_the_way"] {
+  background: #f3e5f5;
+  color: #7b1fa2;
+}
+
+[data-status="completed"] {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+[data-status="cancelled"] {
+  background: #ffebee;
+  color: #d32f2f;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .filter-row {
+    flex-direction: column;
+  }
+  .filter-group {
+    min-width: 100%;
+  }
+}
+
+/* Satıcı butonları */
+.btn-action-enhanced.shipping {
+  background: #7b1fa2;
+  color: white;
+}
+
+.btn-action-enhanced.delivered {
+  background: #ffb800;
+  color: white;
+}
+
+.success-status-msg {
+  text-align: center;
+  color: #2e7d32;
+  font-weight: 600;
+  width: 100%;
+  padding: 12px;
+  background: #e8f5e9;
+  border-radius: 10px;
+}
+
+.error-status-msg {
+  text-align: center;
+  color: #d32f2f;
+  font-weight: 600;
+  width: 100%;
+  padding: 12px;
+  background: #ffebee;
+  border-radius: 10px;
+}
+
+.empty-text {
+  color: #999;
+  text-align: center;
+  padding: 20px 0;
+}

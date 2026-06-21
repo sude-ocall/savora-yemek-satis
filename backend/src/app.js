@@ -6,22 +6,33 @@ import productRoutes from "./routes/productRoutes.js";
 import orderRoutes   from "./routes/orderRoutes.js";
 import offerRoutes   from "./routes/offerRoutes.js";
 import reviewRoutes  from "./routes/reviewRoutes.js";
+import paymentRoutes from "./routes/paymentRoutes.js";
 
 const app = express();
 
 // ─── CORS ─────────────────────────────────────────────────────────────────────
 const allowedOrigins = [
   "http://localhost:5173",
+  "http://localhost:8081",
+  "http://localhost:19006",
+  "http://10.138.16.28:5173",
+  "http://10.138.16.28:8081",
+  "http://10.138.16.28:19006",
   "https://savora-yemek-satis-frontend.vercel.app"
 ];
 
 const corsOptions = {
   origin: function(origin, callback) {
-    // Postman veya server-side request
+    // Postman, mobil uygulama veya server-side request (origin yok)
     if (!origin) return callback(null, true);
 
-    // Vercel preview URL desteği
-    if (allowedOrigins.includes(origin) || (origin && origin.includes("vercel.app"))) {
+    // Vercel preview URL desteği + yerel ağ IP desteği
+    if (
+      allowedOrigins.includes(origin) ||
+      (origin && origin.includes("vercel.app")) ||
+      (origin && origin.startsWith("http://192.168.")) ||
+      (origin && origin.startsWith("http://10."))
+    ) {
       return callback(null, true);
     }
 
@@ -48,6 +59,7 @@ app.use("/api/products", productRoutes);
 app.use("/api/orders",   orderRoutes);
 app.use("/api/offers",   offerRoutes);
 app.use("/api/reviews",  reviewRoutes);
+app.use("/api/payments", paymentRoutes);
 
 // ─── 404 handler ──────────────────────────────────────────────────────────────
 app.use((req, res) => {

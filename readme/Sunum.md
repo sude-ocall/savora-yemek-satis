@@ -80,6 +80,38 @@ Her ekip üyesi için aşağıdaki yapı takip edilecektir:
 
 ---
 
+#### Alara Kökbudak
+**Kişisel Tanıtım:**
+- İsim: Alara Kökbudak
+- Rol: Sipariş ve Ödeme Sistemi Sorumlusu
+
+**Gereksinimler:**
+1. **Sipariş Oluşturma**
+   - API Metodu: `POST /orders`
+   - Demo: Sepetten sipariş oluşturma işleminin gösterilmesi
+
+2. **Sipariş Geçmişini Görüntüleme**
+   - API Metodu: `GET /orders`
+   - Demo: Kullanıcının geçmiş siparişlerinin listelenmesi
+
+3. **Sipariş Durumu Güncelleme**
+   - API Metodu: `PUT /orders/{orderId}/status`
+   - Demo: Satıcı tarafından sipariş durumunun güncellenmesi (Hazırlanıyor → Yola Çıktı → Teslim Edildi)
+
+4. **Sipariş İptal Etme**
+   - API Metodu: `DELETE /orders/{orderId}`
+   - Demo: Yeni durumdaki siparişin iptal edilmesi
+
+5. **Aktif Sipariş Detayı**
+   - API Metodu: `GET /orders/{orderId}`
+   - Demo: Sipariş takip ekranında detayların ve durum çizelgesinin gösterilmesi
+
+6. **Ödeme Yöntemi Kaydetme**
+   - API Metodu: `POST /payments`
+   - Demo: Kredi kartı bilgilerinin şifrelenmiş olarak kaydedilmesi
+
+---
+
 ### 4. Grup Lideri - Kapanış Konuşması (1 dakika)
 
 **Konuşma İçeriği:**
@@ -88,6 +120,17 @@ Her ekip üyesi için aşağıdaki yapı takip edilecektir:
 
 **Örnek Konuşma:**
 > "Bugün sizlere [Proje Adı] projemizi sunduk. Tüm ekip üyelerimiz sorumlu oldukları gereksinimleri başarıyla tamamladılar ve çalışır durumda gösterdiler. Projemiz [kısa özet]. Teşekkürler!"
+
+---
+
+### 5. CI/CD ve Docker Gösterimi (Grup Görevi - 7. Madde)
+
+> **CI/CD ve Docker Kanıt Video Linki:** [Docker & CI/CD videosu linki buraya eklenecek](https://example.com)
+
+**Gereksinimler (15 Puan):**
+- Jenkinsfile üzerinden CI/CD aşamalarının (Checkout, Build, Test, Deploy) başarıyla çalıştığının gösterilmesi.
+- `docker-compose up` komutuyla Frontend ve REST API'nin Docker üzerinde lokalde ayağa kaldırılması.
+- Konteynerlerin çalıştığının (`docker ps` veya Docker Desktop üzerinden) ve uygulamanın lokal portlarda (Frontend: 5173, Backend: 3000) erişilebilir olduğunun kanıtlanması.
 
 ---
 

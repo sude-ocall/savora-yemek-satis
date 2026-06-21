@@ -1,5 +1,16 @@
 # Alara Kökbudak - Mobil Arka Uç (BFF) Görevleri
 
+## 🎬 Mobil Backend Kanıt Videoları
+
+| # | Servis | Bağlantı |
+|---|---|---|
+| 1 | Sipariş Oluşturma (POST /orders) | [▶ İzle](https://youtu.be/kkpDatfP44k) |
+| 2 | Ödeme Yöntemi Kaydetme (POST /payments) | [▶ İzle](https://youtu.be/kkpDatfP44k) |
+
+> **Not:** Videolarda mobil uygulamadan REST API'ye isteğin gittiği ve işlemin gerçekleştiği net olarak gösterilmiştir.
+
+---
+
 ### 1. Sipariş Oluşturma Servisi
 * **API Uç Noktası:** `POST /orders`
 * **Görev:** Kullanıcının sepetindeki ürünleri siparişe dönüştürme işlemini gerçekleştirmek

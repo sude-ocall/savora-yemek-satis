@@ -1,5 +1,16 @@
 # Alara Kökbudak - Mobil Ön Uç (Frontend) Görevleri
 
+## 🎬 Mobil Frontend Kanıt Videoları
+
+| # | Ekran | Bağlantı |
+|---|---|---|
+| 1 | Sipariş Onay Ekranı | [▶ İzle](https://youtu.be/zJbpzKOvJRs) |
+| 2 | Sipariş Geçmişi Ekranı | [▶ İzle](https://youtu.be/zJbpzKOvJRs) |
+| 3 | Ödeme Formu Ekranı | [▶ İzle](https://youtu.be/zJbpzKOvJRs) |
+| 4 | Sipariş Takip Ekranı | [▶ İzle](https://youtu.be/zJbpzKOvJRs) |
+
+---
+
 ### 1. Sipariş Onay ve Tamamlama Ekranı Tasarımı
 * **Görev:** Sepetteki ürünlerin son kontrolünün yapıldığı ve siparişin resmileştirildiği arayüzün geliştirilmesi.
 * **İşleticiler:**
