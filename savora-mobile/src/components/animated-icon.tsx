@@ -1,0 +1,89 @@
+import { Image } from 'expo-image';
+import { useEffect, useRef, useState } from 'react';
+import { Animated, Dimensions, StyleSheet, View } from 'react-native';
+
+const INITIAL_SCALE_FACTOR = Dimensions.get('screen').height / 90;
+const DURATION = 600;
+
+export function AnimatedSplashOverlay() {
+  const [visible, setVisible] = useState(true);
+  const opacity = useRef(new Animated.Value(1)).current;
+
+  useEffect(() => {
+    Animated.timing(opacity, {
+      toValue: 0,
+      duration: DURATION,
+      delay: 100,
+      useNativeDriver: true,
+    }).start(() => setVisible(false));
+  }, []);
+
+  if (!visible) return null;
+
+  return <Animated.View style={[styles.backgroundSolidColor, { opacity }]} />;
+}
+
+export function AnimatedIcon() {
+  const scale = useRef(new Animated.Value(INITIAL_SCALE_FACTOR)).current;
+  const logoOpacity = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    Animated.parallel([
+      Animated.timing(scale, {
+        toValue: 1,
+        duration: DURATION,
+        useNativeDriver: true,
+      }),
+      Animated.timing(logoOpacity, {
+        toValue: 1,
+        duration: DURATION,
+        delay: 200,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  }, []);
+
+  return (
+    <View style={styles.iconContainer}>
+      <Animated.View style={[styles.background, { transform: [{ scale }] }]} />
+      <Animated.View style={[styles.imageContainer, { opacity: logoOpacity }]}>
+        <Image style={styles.image} source={require('@/assets/images/expo-logo.png')} />
+      </Animated.View>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  imageContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  iconContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 128,
+    height: 128,
+    zIndex: 100,
+  },
+  image: {
+    position: 'absolute',
+    width: 76,
+    height: 71,
+  },
+  background: {
+    borderRadius: 40,
+    backgroundColor: '#0274DF',
+    width: 128,
+    height: 128,
+    position: 'absolute',
+  },
+  backgroundSolidColor: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: '#208AEF',
+    zIndex: 1000,
+  },
+});
