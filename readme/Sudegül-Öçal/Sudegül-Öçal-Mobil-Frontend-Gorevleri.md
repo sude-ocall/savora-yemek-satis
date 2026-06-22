@@ -1,5 +1,13 @@
 # Sudegül Öçal - Mobil Ön Uç Görevleri
 
+## 🎬 Kanıt Videosu
+
+| # | Başlık | Bağlantı |
+|---|---|---|
+| 1 | Mobil Frontend Demosu | [▶ İzle](https://youtube.com/shorts/62DOkjw5iq0?feature=share) |
+
+---
+
 1. **Yemek İlanı Oluşturma Formu** *(Gereksinim 1: Yemek İlanı Ekleme)*
    - **Açıklama:** Satıcı; yemek adı, fiyat ve açıklama bilgilerini girer, "Kaydet" butonuyla backend'e gönderir. *(Not: Porsiyon bu ekranda girilmiyor — ürün 0 porsiyonla oluşturulur, miktar menü ekranından ayrıca girilir.)*
 

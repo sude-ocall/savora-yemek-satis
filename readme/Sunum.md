@@ -6,6 +6,19 @@
 
 ---
 
+---
+
+## 📹 Sudegül Öçal - Bireysel Kanıt Videoları
+
+| # | Teknoloji | Video |
+|---|---|---|
+| 1 | Redis (CACHE HIT / CACHE MISS) | [▶ İzle](https://youtu.be/MOw9BcBovcw) |
+| 2 | RabbitMQ (Mesaj Gönderimi) | [▶ İzle](https://youtu.be/MOw9BcBovcw) |
+| 3 | Docker | kullanmadım |
+| 4 | CI/CD | kullanmadım |
+
+---
+
 ## Sunum Yapısı
 
 ### 1. Grup Lideri - Açılış Konuşması (1-2 dakika)

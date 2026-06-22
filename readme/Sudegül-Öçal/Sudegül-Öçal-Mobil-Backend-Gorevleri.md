@@ -1,5 +1,13 @@
 # Sudegül Öçal - Mobil Arka Uç Görevleri
 
+## 🎬 Kanıt Videosu
+
+| # | Başlık | Bağlantı |
+|---|---|---|
+| 1 | Mobil Backend Demosu | [▶ İzle](https://youtu.be/MOw9BcBovcw) |
+
+---
+
 1. **Ürün Oluşturma Endpoint'i** *(Gereksinim 1: Yemek İlanı Ekleme)*
    - **Açıklama:** `POST /api/products`, satıcı girişi yapılmadan çağrılamaz (`protectSeller` middleware); ürünün `sellerId`'si gönderilen JWT token'dan otomatik alınır, body'den tekrar istenmez.
 
