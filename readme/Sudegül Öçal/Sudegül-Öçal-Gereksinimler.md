@@ -6,6 +6,7 @@
 |---|---|---|
 | 1 | Frontend Demosu | [▶ İzle](https://youtu.be/0IXPhNU6bF8?si=TRB3RSLH3V-eOzva) |
 | 2 | Postman Demosu | [▶ İzle](https://youtu.be/PXIwzlWdlhw?si=QCBPCSeOlGHgJY1e) |
+| 3 | Mobil Frontend Demosu | [▶ İzle](https://youtube.com/shorts/62DOkjw5iq0?feature=share) |
 
 ---
 
