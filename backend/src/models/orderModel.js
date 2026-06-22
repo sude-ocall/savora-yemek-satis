@@ -33,6 +33,11 @@ const orderSchema = new mongoose.Schema({
     default: "new"
   },
 
+  totalAmount: {
+    type: Number,
+    default: 0
+  },
+
   note: {
     type: String,
     default: ""

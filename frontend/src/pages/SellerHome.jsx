@@ -33,6 +33,12 @@ const SellerHome = ({ token, seller }) => {
   const [isListModalOpen, setIsListModalOpen] = useState(false);
   const [historyFilter, setHistoryFilter] = useState("Hepsi");
 
+  // ── Gelişmiş filtreleme (tarih aralığı + tutar) ────────────────────────────
+  const [dateFrom, setDateFrom] = useState("");
+  const [dateTo, setDateTo]     = useState("");
+  const [minAmount, setMinAmount] = useState("");
+  const [maxAmount, setMaxAmount] = useState("");
+
   // ── Veri çekme ────────────────────────────────────────────────────────────
   const fetchOffers = useCallback(async () => {
     try {
@@ -102,19 +108,52 @@ const SellerHome = ({ token, seller }) => {
     }
   };
 
+  // ── Sipariş tutar hesaplama yardımcısı ───────────────────────────────────
+  const calcOrderTotal = (order) => {
+    if (order.totalAmount) return order.totalAmount;
+    return (order.menu || []).reduce((s, m) => s + ((m.productId?.price || 0) * (m.quantity || 1)), 0);
+  };
+
   // ── Kazanç hesabı ─────────────────────────────────────────────────────────
   const dailyEarnings = (() => {
     const today = new Date().toDateString();
     return orderHistory
       .filter(o => o.status === "completed" && new Date(o.createdAt).toDateString() === today)
-      .reduce((total, o) => total + (o.menu || []).reduce((s, m) => s + (m.productId?.price || 0), 0), 0);
+      .reduce((total, o) => total + calcOrderTotal(o), 0);
   })();
 
-  const filteredHistory = historyFilter === "Hepsi"
-    ? orderHistory
-    : orderHistory.filter(o =>
-        historyFilter === "Tamamlandı" ? o.status === "completed" : o.status === "cancelled"
-      );
+  // ── Gelişmiş filtreleme (durum + tarih + tutar) ────────────────────────────
+  const filteredHistory = orderHistory.filter(o => {
+    // Durum filtresi
+    if (historyFilter === "Tamamlandı" && o.status !== "completed") return false;
+    if (historyFilter === "İptal Edildi" && o.status !== "cancelled") return false;
+
+    // Tarih aralığı filtresi
+    if (dateFrom) {
+      const from = new Date(dateFrom);
+      if (new Date(o.createdAt) < from) return false;
+    }
+    if (dateTo) {
+      const to = new Date(dateTo);
+      to.setHours(23, 59, 59, 999);
+      if (new Date(o.createdAt) > to) return false;
+    }
+
+    // Tutar filtresi
+    const total = calcOrderTotal(o);
+    if (minAmount && total < Number(minAmount)) return false;
+    if (maxAmount && total > Number(maxAmount)) return false;
+
+    return true;
+  });
+
+  const clearFilters = () => {
+    setHistoryFilter("Hepsi");
+    setDateFrom("");
+    setDateTo("");
+    setMinAmount("");
+    setMaxAmount("");
+  };
 
   return (
     <div className="seller-home-container">
@@ -211,20 +250,49 @@ const SellerHome = ({ token, seller }) => {
               ))}
             </div>
           </div>
+
+          {/* ── Gelişmiş Filtreler ─── */}
+          <div className="advanced-filters">
+            <div className="filter-row">
+              <div className="filter-group">
+                <label>Başlangıç Tarihi</label>
+                <input type="date" value={dateFrom} onChange={e => setDateFrom(e.target.value)} />
+              </div>
+              <div className="filter-group">
+                <label>Bitiş Tarihi</label>
+                <input type="date" value={dateTo} onChange={e => setDateTo(e.target.value)} />
+              </div>
+              <div className="filter-group">
+                <label>Min Tutar (₺)</label>
+                <input type="number" placeholder="0" value={minAmount} onChange={e => setMinAmount(e.target.value)} />
+              </div>
+              <div className="filter-group">
+                <label>Max Tutar (₺)</label>
+                <input type="number" placeholder="∞" value={maxAmount} onChange={e => setMaxAmount(e.target.value)} />
+              </div>
+              <button className="btn-clear-filters" onClick={clearFilters}>Temizle</button>
+            </div>
+            <div className="filter-result-info">
+              {filteredHistory.length} sipariş bulundu
+              {(dateFrom || dateTo || minAmount || maxAmount) && " (filtreli)"}
+            </div>
+          </div>
+
           <div className="history-table-container">
             <table className="history-table">
-              <thead><tr><th>Tarih</th><th>ID</th><th>Müşteri</th><th>Durum</th></tr></thead>
+              <thead><tr><th>Tarih</th><th>ID</th><th>Müşteri</th><th>Tutar</th><th>Durum</th></tr></thead>
               <tbody>
                 {filteredHistory.map(o => (
-                  <tr key={o._id}>
+                  <tr key={o._id} onClick={() => setSelectedOrder(o)} style={{ cursor: "pointer" }}>
                     <td>{new Date(o.createdAt).toLocaleDateString("tr-TR")}</td>
                     <td>#{o._id.slice(-6).toUpperCase()}</td>
                     <td>{o.userId?.name || "—"}</td>
+                    <td style={{ fontWeight: 600, color: "#2d5a47" }}>₺{calcOrderTotal(o).toFixed(2)}</td>
                     <td><span className="status-badge" data-status={o.status}>{STATUS_MAP[o.status]}</span></td>
                   </tr>
                 ))}
                 {filteredHistory.length === 0 && (
-                  <tr><td colSpan="4" className="text-center text-muted py-3">Kayıt bulunamadı.</td></tr>
+                  <tr><td colSpan="5" className="text-center text-muted py-3">Kayıt bulunamadı.</td></tr>
                 )}
               </tbody>
             </table>
@@ -341,6 +409,11 @@ const SellerHome = ({ token, seller }) => {
                     <p className="text-muted small mt-1">{selectedOrder.note || "Özel talep"}</p>
                   </div>
                 )}
+                {/* Toplam Tutar */}
+                <div style={{ marginTop: "12px", padding: "10px 14px", background: "#f0faf4", borderRadius: "10px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <span style={{ fontWeight: 600, color: "#555" }}>Toplam Tutar</span>
+                  <span style={{ fontWeight: 700, fontSize: "1.1rem", color: "#2d5a47" }}>₺{calcOrderTotal(selectedOrder).toFixed(2)}</span>
+                </div>
               </div>
 
               {/* Durum aksiyonları */}
