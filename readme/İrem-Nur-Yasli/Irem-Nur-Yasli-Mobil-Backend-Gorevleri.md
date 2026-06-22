@@ -2,18 +2,13 @@
 
 Mobil uygulamadan grubun REST API'sine (Express + MongoDB, JWT'li) yapılan bağlantılar. Tüm korumalı isteklerde `Authorization: Bearer <token>` başlığı kullanılır.
 
-## 🎬 Mobil Backend Kanıt Videoları
+## 🎬 Mobil Backend Kanıt Videosu
 
-| # | Servis | Endpoint | Bağlantı |
-|---|---|---|---|
-| 1 | Üye Kaydı | `POST /api/users/register` | [▶ İzle](LINK_EKLENECEK) |
-| 2 | Profil Görüntüleme | `GET /api/users/profile` | [▶ İzle](LINK_EKLENECEK) |
-| 3 | Şifre Güncelleme | `PUT /api/users/password` | [▶ İzle](LINK_EKLENECEK) |
-| 4 | Hesap Silme | `DELETE /api/users/account` | [▶ İzle](LINK_EKLENECEK) |
-| 5 | Adres Tanımlama | `POST /api/users/addresses` | [▶ İzle](LINK_EKLENECEK) |
-| 6 | Satıcı Yorumları | `GET /api/reviews/:sellerId` | [▶ İzle](LINK_EKLENECEK) |
+| Kanıt | Bağlantı |
+|---|---|
+| Mobil Backend Demo Videosu (6 servis) | [▶ İzle](https://youtu.be/uJzC2ts0PK8) |
 
-> **Not:** Videolarda mobil uygulamadan REST API'ye isteğin gittiği ve işlemin gerçekleştiği net olarak gösterilmelidir. Uygulamada her işlemin altında "Sunucu yanıtını gör (teknik)" bölümü vardır; HTTP durum kodu ve dönen JSON burada görünür.
+> **Not:** Videoda mobil uygulamadan REST API'ye isteğin gittiği ve işlemin gerçekleştiği net olarak gösterilmektedir. Backend terminalinde her istek `➡️ METHOD /endpoint → HTTP durum kodu` biçiminde loglanır; ayrıca Redis ve RabbitMQ aktiviteleri de terminalde görünür.
 
 ---
 

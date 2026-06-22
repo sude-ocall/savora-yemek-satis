@@ -2,16 +2,11 @@
 
 Mobil uygulama **React Native + Expo** ile geliştirildi. Aşağıdaki 6 gereksinimin tamamı kodlandı ve gerçek backend'e (JWT'li) bağlandı.
 
-## 🎬 Mobil Frontend Kanıt Videoları
+## 🎬 Mobil Frontend Kanıt Videosu
 
-| # | Ekran | Bağlantı |
-|---|---|---|
-| 1 | Üye Kaydı (Register) Ekranı | [▶ İzle](LINK_EKLENECEK) |
-| 2 | Profil Görüntüleme Ekranı | [▶ İzle](LINK_EKLENECEK) |
-| 3 | Şifre Güncelleme Ekranı | [▶ İzle](LINK_EKLENECEK) |
-| 4 | Hesap Silme | [▶ İzle](LINK_EKLENECEK) |
-| 5 | Adres Tanımlama Ekranı | [▶ İzle](LINK_EKLENECEK) |
-| 6 | Satıcı Yorumları Ekranı | [▶ İzle](LINK_EKLENECEK) |
+| Kanıt | Bağlantı |
+|---|---|
+| Mobil Frontend Demo Videosu (6 gereksinim) | [▶ İzle](https://youtube.com/shorts/O2xSCYzmwHI) |
 
 > Giriş (Login) ekranı da uygulamada mevcuttur; korumalı işlemler için JWT token buradan alınır.
 
