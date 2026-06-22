@@ -14,29 +14,7 @@ pipeline {
             }
         }
 
-        // ─── Aşama 2: Bağımlılıkları Yükleme ───────────────────────────────
-        stage('Install Dependencies') {
-            parallel {
-                stage('Backend Dependencies') {
-                    steps {
-                        echo '📦 Backend bağımlılıkları yükleniyor...'
-                        dir('backend') {
-                            sh 'npm install'
-                        }
-                    }
-                }
-                stage('Frontend Dependencies') {
-                    steps {
-                        echo '📦 Frontend bağımlılıkları yükleniyor...'
-                        dir('frontend') {
-                            sh 'npm install'
-                        }
-                    }
-                }
-            }
-        }
-
-        // ─── Aşama 3: Build ─────────────────────────────────────────────────
+        // ─── Aşama 2: Build ─────────────────────────────────────────────────
         stage('Build') {
             parallel {
                 stage('Build Backend Docker Image') {
