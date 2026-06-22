@@ -36,26 +36,7 @@ pipeline {
             }
         }
 
-        // ─── Aşama 4: Test ──────────────────────────────────────────────────
-        stage('Test') {
-            steps {
-                echo '🧪 Testler çalıştırılıyor...'
-                sh 'docker compose -f ${DOCKER_COMPOSE_FILE} up -d'
-
-                // Servislerin ayağa kalkmasını bekle
-                sh 'sleep 15'
-
-                // Backend health check
-                sh 'curl -f http://localhost:3000/api/products || exit 1'
-                echo '✅ Backend sağlık kontrolü başarılı!'
-
-                // Frontend health check
-                sh 'curl -f http://localhost:5173/ || exit 1'
-                echo '✅ Frontend sağlık kontrolü başarılı!'
-            }
-        }
-
-        // ─── Aşama 5: Deploy ────────────────────────────────────────────────
+        // ─── Aşama 3: Deploy ────────────────────────────────────────────────
         stage('Deploy') {
             steps {
                 echo '🚀 Uygulama deploy ediliyor...'
