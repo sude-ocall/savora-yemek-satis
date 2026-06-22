@@ -62,13 +62,13 @@ pipeline {
         stage('Test') {
             steps {
                 echo '🧪 Testler çalıştırılıyor...'
-                sh 'docker-compose -f ${DOCKER_COMPOSE_FILE} up -d'
+                sh 'docker compose -f ${DOCKER_COMPOSE_FILE} up -d'
 
                 // Servislerin ayağa kalkmasını bekle
                 sh 'sleep 15'
 
                 // Backend health check
-                sh 'curl -f http://localhost:3000/ || exit 1'
+                sh 'curl -f http://localhost:3000/api/products || exit 1'
                 echo '✅ Backend sağlık kontrolü başarılı!'
 
                 // Frontend health check
@@ -81,8 +81,8 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo '🚀 Uygulama deploy ediliyor...'
-                sh 'docker-compose -f ${DOCKER_COMPOSE_FILE} down'
-                sh 'docker-compose -f ${DOCKER_COMPOSE_FILE} up -d --build'
+                sh 'docker compose -f ${DOCKER_COMPOSE_FILE} down'
+                sh 'docker compose -f ${DOCKER_COMPOSE_FILE} up -d --build'
                 echo '✅ Deploy tamamlandı!'
                 echo '📍 Backend:  http://localhost:3000'
                 echo '📍 Frontend: http://localhost:5173'
@@ -100,7 +100,7 @@ pipeline {
         }
         failure {
             echo '❌ Pipeline başarısız oldu!'
-            sh 'docker-compose -f ${DOCKER_COMPOSE_FILE} down || true'
+            sh 'docker compose -f ${DOCKER_COMPOSE_FILE} down || true'
         }
     }
 }
