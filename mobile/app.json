@@ -1,0 +1,30 @@
+{
+  "expo": {
+    "name": "Savora",
+    "slug": "savora-mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "backgroundColor": "#FF6B35"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.savora.mobile"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#FF6B35"
+      },
+      "package": "com.savora.mobile"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-asset"
+    ]
+  }
+}

@@ -2,6 +2,7 @@ import express from "express";
 import {
   createOrder,
   getUserOrders,
+  getOrderById,
   cancelOrder,
   updateOrderStatus,
   getSellerOrders
@@ -19,6 +20,7 @@ router.put("/:id/status", protectSeller, updateOrderStatus);
 // USER
 router.post("/", protectUser, createOrder);
 router.get("/", protectUser, getUserOrders);
+router.get("/:id", protectUser, getOrderById);
 router.delete("/:id", protectUser, cancelOrder);
 
 export default router;

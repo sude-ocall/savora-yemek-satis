@@ -35,5 +35,5 @@
 
 1. [Sudegül Öçal'ın Gereksinimleri](Sudegül%20Öçal/Sudegül-Öçal-Gereksinimler.md)
 2. [İrem Nur Yaslı'nın Gereksinimleri](İrem-Nur-Yasli/Irem-Nur-Yasli-Gereksinimler.md)
-3. [Alara Kökbudak'ın Gereksinimleri](Alara%20Kökbudak/Alara-Kökbudak-Gereksinimler.md)
+3. [Alara Kökbudak'ın Gereksinimleri](Alara-Kökbudak/Alara-Kökbudak-Gereksinimler.md)
 4. [Sena Maral'ın Gereksinimleri](Sena-Maral/Sena-Maral-Gereksinimler.md)
