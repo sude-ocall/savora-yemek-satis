@@ -5,7 +5,7 @@
 | # | Başlık | Bağlantı |
 |---|---|---|
 | 1 | Web Frontend Demosu | [▶ İzle](https://youtu.be/zJbpzKOvJRs) |
-| 2 | Mobil Backend Demosu | [▶ İzle](https://youtu.be/K4Lo0bZVtMs?si=JhLNHwv2gBUK3InV) | 
+| 2 | Mobil Backend Demosu | [▶ İzle](https://youtu.be/K4Lo0bZVtMs?si=etWRxsFXJp99lPwV) | 
 | 2 | Mobil Frontend Demosu | [▶ İzle](https://youtube.com/shorts/_OUe-5e-nkQ?si=bgWjHo4hwSdjT9lN) | 
 | 3 | Mobil Frontend ve Backend cardHash Kısmı | [▶ İzle](https://youtu.be/1n1OE7axuns?si=mjL0-YVdHG5pjeq8) |
 | 4 | Postman Demosu | [▶ İzle](https://youtu.be/kkpDatfP44k) |
