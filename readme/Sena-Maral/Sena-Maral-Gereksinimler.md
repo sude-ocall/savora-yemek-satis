@@ -1,13 +1,26 @@
-## 🎬 Çalışma Videoları
+
+## 🎬 Çalışma Videoları (Kanıt Videoları)
+
+**Önemli Not:** Videolarda kendi sesimle gereksinimlerin tanıtımı yapılmış olup, üzerime düşen toplam 6 gereksinimin 6'sı da (%100) tamamlanmıştır.
 
 | # | Başlık | Bağlantı |
 |---|---|---|
-| 1 | Frontend Demosu | [https://youtu.be/MF3a_1A90T0?si=jHhgz2ukCYrTXJsU]
-| 2 | Postman Demosu | [https://youtu.be/4B3HCzjBGHc?si=HKfaNiVEyK-alWh7]
+| 1 | Frontend Demosu (Madde 5 - Mobil Front-End Kanıtı) | [https://youtu.be/MF3a_1A90T0?si=jHhgz2ukCYrTXJsU] |
+| 2 | Postman Demosu (REST API Testleri) | [https://youtu.be/4B3HCzjBGHc?si=HKfaNiVEyK-alWh7] |
+
+
+## 🚀 Ekstra Teknolojiler ve Final Video Sunumu (Madde 7)
+
+*(Not: Aşağıdaki teknolojilerden kullanılmayanlar için gereksinimler doğrultusunda "Kullanmadım" yazılmıştır)*
+
+* **RabbitMQ / Kafka Kanıt Videosu:** Kullanmadım
+* **Redis / Memcached Kanıt Videosu:** [https://www.youtube.com/watch?v=eaB8Waafi34]
+* **Docker + CI/CD Kanıt Videosu:** Kullanmadım
+* **Genel FİNAL Video Sunumu Linki:** [https://www.youtube.com/watch?v=22ZS9VqU1Fg]
 
 ---
 
-## 🔑 Postman Collecitons
+## 🔑 Postman Collections
 
 Postman Collections JSON -> [➥ Aç - gereksinimler.postman_collection.json](./gereksinimler/gereksinimler.postman_collection.json)
 
