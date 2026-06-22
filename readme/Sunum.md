@@ -14,8 +14,8 @@
 |---|---|---|
 | 1 | Redis (CACHE HIT / CACHE MISS) | [▶ İzle](https://youtu.be/MOw9BcBovcw) |
 | 2 | RabbitMQ (Mesaj Gönderimi) | [▶ İzle](https://youtu.be/MOw9BcBovcw) |
-| 3 | Docker | kullanmadım |
-| 4 | CI/CD | kullanmadım |
+| 3 | Docker | [▶ İzle](https://youtu.be/sein5XOiVD8) |
+| 4 | CI/CD | [▶ İzle](https://youtu.be/sein5XOiVD8) |
 
 ---
 
