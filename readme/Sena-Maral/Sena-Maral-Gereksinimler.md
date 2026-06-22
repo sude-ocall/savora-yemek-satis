@@ -9,7 +9,7 @@
 | 2 | Postman Demosu (REST API Testleri) | [https://youtu.be/4B3HCzjBGHc?si=HKfaNiVEyK-alWh7] |
 
 
-## 🚀 Ekstra Teknolojiler ve Final Video Sunumu (Madde 7)
+## 🚀 Ekstra Teknolojiler ve Final Video Sunumu 
 
 *(Not: Aşağıdaki teknolojilerden kullanılmayanlar için gereksinimler doğrultusunda "Kullanmadım" yazılmıştır)*
 
