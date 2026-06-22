@@ -13,7 +13,7 @@ import {
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { loginUser, loginSeller } from "../services/authService";
 
-const LoginScreen = ({ onLoginSuccess }) => {
+const LoginScreen = ({ onLoginSuccess, navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -133,6 +133,15 @@ const LoginScreen = ({ onLoginSuccess }) => {
             </Text>
           )}
         </TouchableOpacity>
+
+        {/* Üye Ol linki (yalnız müşteri) */}
+        {!isSeller && navigation && (
+          <TouchableOpacity onPress={() => navigation.navigate("Register")} style={{ marginTop: 18 }}>
+            <Text style={styles.registerLink}>
+              Hesabın yok mu? <Text style={{ fontWeight: "800" }}>Üye Ol</Text>
+            </Text>
+          </TouchableOpacity>
+        )}
       </View>
     </KeyboardAvoidingView>
   );
@@ -240,6 +249,11 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 17,
     fontWeight: "700",
+  },
+  registerLink: {
+    color: "#FF6B35",
+    textAlign: "center",
+    fontSize: 14,
   },
 });
 

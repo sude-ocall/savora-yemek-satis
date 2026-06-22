@@ -1,6 +1,9 @@
 import User from "../models/userModel.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+// İrem — Redis (Profil cache) & RabbitMQ (Üye kaydı event'i)
+import { sendUserRegisteredEvent } from "../services/rabbitmqService.js";
+import { cacheUserProfile, getCachedUserProfile, invalidateUserProfile } from "../services/redisService.js";
 
 
 // ===================== REGISTER =====================
@@ -21,6 +24,9 @@ export const registerUser = async (req, res) => {
       phone,
       password: hashedPassword
     });
+
+    // RabbitMQ — yeni üye kaydı event'ini kuyruğa gönder (İrem)
+    await sendUserRegisteredEvent(user);
 
     res.status(201).json({
       message: "Hesap başarıyla oluşturuldu.",
@@ -79,22 +85,39 @@ export const loginUser = async (req, res) => {
 // ===================== GET PROFILE =====================
 export const getUserProfile = async (req, res) => {
   try {
+    // 1) Önce Redis cache'e bak (İrem — Redis kullanımı)
+    const cached = await getCachedUserProfile(req.user._id);
+    if (cached) {
+      return res.json({
+        message: "Profil bilgileri alındı. (Redis cache'den)",
+        source: "redis-cache",
+        user: cached
+      });
+    }
+
+    // 2) Cache yoksa veritabanından çek
     const user = await User.findById(req.user._id).select("-password");
     if (!user) {
       return res.status(404).json({ message: "Kullanıcı bulunamadı." });
     }
 
+    const userPayload = {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      phone: user.phone || "",
+      addresses: user.addresses || [],
+      creditCards: user.creditCards || [],
+      orders: user.orders || []
+    };
+
+    // 3) Sonraki istekler için cache'e yaz
+    await cacheUserProfile(req.user._id, userPayload);
+
     res.json({
-      message: "Profil bilgileri alındı.",
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        phone: user.phone || "",
-        addresses: user.addresses || [],
-        creditCards: user.creditCards || [],
-        orders: user.orders || []
-      }
+      message: "Profil bilgileri alındı. (Veritabanından)",
+      source: "database",
+      user: userPayload
     });
   } catch (error) {
     res.status(500).json({ message: "Sunucu hatası.", error: error.message });
@@ -111,6 +134,8 @@ export const updateUserProfile = async (req, res) => {
       { name, phone },
       { new: true }
     ).select("-password");
+
+    await invalidateUserProfile(req.user._id); // Redis cache temizle
 
     res.json({
       message: "Profil güncellendi.",
@@ -168,6 +193,8 @@ export const addAddress = async (req, res) => {
       { $push: { addresses: { title: title || "", addressLine, city, district } } },
       { new: true }
     ).select("-password");
+
+    await invalidateUserProfile(req.user._id); // Redis cache temizle
 
     res.json({ message: "Adres eklendi.", addresses: user.addresses });
   } catch (error) {
