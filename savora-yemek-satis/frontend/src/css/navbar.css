@@ -1,0 +1,51 @@
+.navbar-settings {
+  background-color: var(--surface);
+  padding: 1rem 5%;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: var(--shadow-sm);
+}
+
+.nav-brand {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  font-size: 1.8rem;
+  color: var(--green);
+}
+
+.nav-brand span {
+  color: var(--yellow);
+}
+
+.nav-btn-auth {
+  background: var(--yellow);
+  color: white;
+  padding: 8px 24px;
+  border-radius: var(--r-pill);
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  box-shadow: 0 4px 12px rgba(245, 166, 35, 0.2);
+}
+
+.nav-btn-auth:hover {
+  background: var(--yellow-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 15px rgba(245, 166, 35, 0.3);
+}
+
+/* Container ayarı (Eğer Bootstrap kullanmıyorsan) */
+.nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
