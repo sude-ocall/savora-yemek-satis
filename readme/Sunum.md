@@ -138,7 +138,7 @@ Her ekip üyesi için aşağıdaki yapı takip edilecektir:
 
 ### 5. CI/CD ve Docker Gösterimi (Grup Görevi - 7. Madde)
 
-> **CI/CD ve Docker Kanıt Video Linki:** [Docker & CI/CD videosu linki buraya eklenecek](https://example.com)
+> **CI/CD ve Docker Kanıt Video Linki:** [▶ İzle](https://youtu.be/sein5XOiVD8)
 
 **Gereksinimler (15 Puan):**
 - Jenkinsfile üzerinden CI/CD aşamalarının (Checkout, Build, Test, Deploy) başarıyla çalıştığının gösterilmesi.
