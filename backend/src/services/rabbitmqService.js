@@ -75,13 +75,40 @@ export const sendOrderStatusUpdate = async (orderId, newStatus) => {
   }
 };
 
+// ─── Üye Kaydı Event'i (İrem — Üye Kaydı gereksinimi) ────────────────────────
+export const sendUserRegisteredEvent = async (user) => {
+  try {
+    if (!isConnected) {
+      console.warn("⚠️ RabbitMQ kanalı mevcut değil, mesaj gönderilemedi.");
+      return false;
+    }
+    const message = {
+      type: "USER_REGISTERED",
+      userId: user._id,
+      name: user.name,
+      email: user.email,
+      timestamp: new Date().toISOString()
+    };
+    console.log("📨 [RabbitMQ] Üye kaydı mesajı kuyruğa gönderildi:", user.email);
+    setTimeout(() => mockQueue.emit(QUEUE_NAME, message), 400);
+    return true;
+  } catch (error) {
+    console.error("❌ [RabbitMQ] Üye kaydı mesajı hatası:", error.message);
+    return false;
+  }
+};
+
 // ─── Kuyruktan Mesaj Tüketici (Consumer) ────────────────────────────────────
 export const startOrderConsumer = async () => {
   try {
     if (!isConnected) return;
 
     mockQueue.on(QUEUE_NAME, (data) => {
-      console.log("📬 Kuyruktan mesaj alındı:", data.type, "| OrderID:", data.orderId);
+      if (data.type === "USER_REGISTERED") {
+        console.log("📬 [RabbitMQ] Kuyruktan mesaj alındı:", data.type, "| Kullanıcı:", data.email);
+      } else {
+        console.log("📬 Kuyruktan mesaj alındı:", data.type, "| OrderID:", data.orderId);
+      }
       // Burada bildirim gönderme, loglama vs. yapılabilir
     });
 
@@ -91,4 +118,4 @@ export const startOrderConsumer = async () => {
   }
 };
 
-export default { connectRabbitMQ, sendOrderNotification, sendOrderStatusUpdate, startOrderConsumer };
+export default { connectRabbitMQ, sendOrderNotification, sendOrderStatusUpdate, sendUserRegisteredEvent, startOrderConsumer };

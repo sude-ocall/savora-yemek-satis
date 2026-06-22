@@ -14,6 +14,12 @@ import PaymentScreen from "./src/screens/PaymentScreen";
 import OrderTrackingScreen from "./src/screens/OrderTrackingScreen";
 import SellerDashboardScreen from "./src/screens/SellerDashboardScreen";
 import SellerMenuScreen from "./src/screens/SellerMenuScreen";
+// İrem Nur Yaşlı — Kullanıcı (kayıt/profil/adres/şifre/yorum) ekranları
+import RegisterScreen from "./src/screens/RegisterScreen";
+import ProfileScreen from "./src/screens/ProfileScreen";
+import AddressScreen from "./src/screens/AddressScreen";
+import PasswordScreen from "./src/screens/PasswordScreen";
+import ReviewsScreen from "./src/screens/ReviewsScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -23,6 +29,7 @@ const TAB_ICONS = {
   "Sipariş Ver": "🍽️",
   "Siparişlerim": "📋",
   "Ödeme": "💳",
+  "Hesabım": "👤",
 };
 
 // ─── Tab Navigator ──────────────────────────────────────────────────────────
@@ -90,6 +97,9 @@ function MainTabs({ handleLogout }) {
         component={PaymentScreen}
         options={{ title: "Ödeme" }}
       />
+      <Tab.Screen name="Hesabım" options={{ title: "Hesabım" }}>
+        {(props) => <ProfileScreen {...props} handleLogout={handleLogout} />}
+      </Tab.Screen>
     </Tab.Navigator>
   );
 }
@@ -198,13 +208,20 @@ export default function App() {
     );
   }
 
-  // ─── Login olmamış kullanıcı ──────────────────────────────────────────────
+  // ─── Login olmamış kullanıcı (Giriş + Üye Ol akışı) ───────────────────────
   if (!isLoggedIn) {
     return (
-      <>
-        <LoginScreen onLoginSuccess={handleLoginSuccess} />
+      <NavigationContainer>
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="Login">
+            {(props) => <LoginScreen {...props} onLoginSuccess={handleLoginSuccess} />}
+          </Stack.Screen>
+          <Stack.Screen name="Register">
+            {(props) => <RegisterScreen {...props} onLoginSuccess={handleLoginSuccess} />}
+          </Stack.Screen>
+        </Stack.Navigator>
         <StatusBar style="light" />
-      </>
+      </NavigationContainer>
     );
   }
 
@@ -231,6 +248,13 @@ export default function App() {
             headerTitleStyle: { fontWeight: "700" },
           }}
         />
+        {/* İrem — Hesabım alt ekranları */}
+        <Stack.Screen name="Adreslerim" component={AddressScreen}
+          options={{ title: "Adres Ekle", headerStyle: { backgroundColor: "#FF6B35" }, headerTintColor: "#fff", headerTitleStyle: { fontWeight: "700" } }} />
+        <Stack.Screen name="SifreDegistir" component={PasswordScreen}
+          options={{ title: "Şifre Değiştir", headerStyle: { backgroundColor: "#FF6B35" }, headerTintColor: "#fff", headerTitleStyle: { fontWeight: "700" } }} />
+        <Stack.Screen name="SaticiYorumlari" component={ReviewsScreen}
+          options={{ title: "Satıcı Yorumları", headerStyle: { backgroundColor: "#FF6B35" }, headerTintColor: "#fff", headerTitleStyle: { fontWeight: "700" } }} />
       </Stack.Navigator>
       <StatusBar style="auto" />
     </NavigationContainer>
