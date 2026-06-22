@@ -40,8 +40,8 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo '🚀 Uygulama deploy ediliyor...'
-                sh 'docker compose -f ${DOCKER_COMPOSE_FILE} down || true'
-                sh 'docker compose -f ${DOCKER_COMPOSE_FILE} up -d --build'
+                sh 'docker compose -p savora -f ${DOCKER_COMPOSE_FILE} down || true'
+                sh 'docker compose -p savora -f ${DOCKER_COMPOSE_FILE} up -d --build'
                 echo '✅ Deploy tamamlandı!'
                 echo '📍 Backend:  http://localhost:3000'
                 echo '📍 Frontend: http://localhost:5173'
@@ -59,7 +59,7 @@ pipeline {
         }
         failure {
             echo '❌ Pipeline başarısız oldu!'
-            sh 'docker compose -f ${DOCKER_COMPOSE_FILE} down || true'
+            sh 'docker compose -p savora -f ${DOCKER_COMPOSE_FILE} down || true'
         }
     }
 }
