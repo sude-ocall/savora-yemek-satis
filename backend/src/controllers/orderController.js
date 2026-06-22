@@ -5,9 +5,11 @@ import { cacheOrder, getCachedOrder, invalidateOrderCache, cacheUserOrders, getC
 
 export const createOrder = async (req, res) => {
   try {
+    console.log("🛒 Yeni sipariş isteği geldi:", req.body);
     const { menu } = req.body;
 
     if (!menu || menu.length === 0) {
+      console.log("❌ Hata: Sepet boş.");
       return res.status(400).json({ message: "Sepet boş." });
     }
 
@@ -16,6 +18,7 @@ export const createOrder = async (req, res) => {
     });
 
     if (products.length === 0) {
+      console.log("❌ Hata: Ürünler bulunamadı.");
       return res.status(400).json({ message: "Ürünler bulunamadı." });
     }
 
@@ -23,6 +26,7 @@ export const createOrder = async (req, res) => {
     const isValid = products.every(p => p.sellerId.toString() === restaurantId);
 
     if (!isValid) {
+      console.log("❌ Hata: Farklı restoranlardan ürün eklenemez.");
       return res.status(400).json({ message: "Farklı restoranlardan ürün eklenemez." });
     }
 
@@ -41,6 +45,8 @@ export const createOrder = async (req, res) => {
       totalAmount
     });
 
+    console.log("✅ Sipariş DB'ye kaydedildi:", order._id);
+
     // RabbitMQ: Yeni sipariş bildirimi gönder
     sendOrderNotification(order).catch(() => {});
 
@@ -50,6 +56,7 @@ export const createOrder = async (req, res) => {
     res.status(201).json(order);
 
   } catch (error) {
+    console.error("❌ Sipariş oluşturma hatası:", error.message);
     res.status(500).json({ message: error.message });
   }
 };
@@ -123,7 +130,15 @@ export const cancelOrder = async (req, res) => {
       return res.status(400).json({ message: "Yalnızca 'Yeni' durumdaki siparişler iptal edilebilir." });
     }
 
-    await order.deleteOne();
+    order.status = "cancelled";
+    await order.save(); // deleteOne yerine iptal edildi olarak güncelledik ki restoran görebilsin
+
+    // RabbitMQ: İptal durumu bildirimi
+    sendOrderStatusUpdate(order._id, "cancelled").catch(() => {});
+
+    // Redis: Cache'i temizle
+    invalidateOrderCache(order._id.toString()).catch(() => {});
+    invalidateUserOrdersCache(order.userId.toString()).catch(() => {});
 
     res.json({ message: "Sipariş iptal edildi." });
 

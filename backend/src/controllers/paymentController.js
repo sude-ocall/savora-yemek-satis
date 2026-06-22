@@ -57,6 +57,9 @@ export const savePaymentMethod = async (req, res) => {
       return res.status(404).json({ message: "Kullanıcı bulunamadı." });
     }
 
+    // Videoda güzel görünmesi için terminale log basalım
+    console.log(`💳 Kullanıcı (ID: ${req.user._id}) için yeni ödeme yöntemi kaydedildi (Son 4 hane: ${last4}, Şifreli: Başarılı)`);
+
     res.status(201).json({
       message: "Ödeme yöntemi başarıyla kaydedildi.",
       card: {

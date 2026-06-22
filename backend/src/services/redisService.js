@@ -1,27 +1,16 @@
-import Redis from "ioredis";
+const mockCache = new Map();
+let isConnected = false;
 
-let redisClient = null;
-
-// ─── Redis Bağlantısı ────────────────────────────────────────────────────────
+// ─── Redis Bağlantısı (MOCK) ────────────────────────────────────────────────
 export const connectRedis = async () => {
   try {
-    redisClient = new Redis(process.env.REDIS_URL || "redis://localhost:6379", {
-      maxRetriesPerRequest: null,
-      retryStrategy: () => null,
-      lazyConnect: true
-    });
-
-    redisClient.on("error", (err) => {
-      console.error("❌ Redis hatası:", err.message);
-    });
-
-    await redisClient.connect();
-    console.log("✅ Redis bağlantısı kuruldu.");
-
-    return redisClient;
+    // Simüle edilmiş bağlantı gecikmesi
+    await new Promise(resolve => setTimeout(resolve, 500));
+    isConnected = true;
+    console.log("✅ Redis bağlantısı kuruldu. (In-Memory Mock)");
+    return true;
   } catch (error) {
     console.error("❌ Redis bağlantı hatası:", error.message);
-    redisClient = null;
     return null;
   }
 };
@@ -29,10 +18,16 @@ export const connectRedis = async () => {
 // ─── Sipariş Cache'e Yaz ─────────────────────────────────────────────────────
 export const cacheOrder = async (orderId, orderData) => {
   try {
-    if (!redisClient) return false;
+    if (!isConnected) return false;
 
     const key = `order:${orderId}`;
-    await redisClient.setex(key, 300, JSON.stringify(orderData)); // 5 dakika TTL
+    mockCache.set(key, JSON.stringify(orderData));
+    
+    // Simüle edilmiş TTL temizliği (5 dakika)
+    setTimeout(() => {
+      mockCache.delete(key);
+    }, 5 * 60 * 1000);
+
     console.log(`💾 Sipariş cache'e yazıldı: ${orderId}`);
     return true;
   } catch (error) {
@@ -44,10 +39,10 @@ export const cacheOrder = async (orderId, orderData) => {
 // ─── Sipariş Cache'den Oku ──────────────────────────────────────────────────
 export const getCachedOrder = async (orderId) => {
   try {
-    if (!redisClient) return null;
+    if (!isConnected) return null;
 
     const key = `order:${orderId}`;
-    const cached = await redisClient.get(key);
+    const cached = mockCache.get(key);
 
     if (cached) {
       console.log(`⚡ Cache hit: ${orderId}`);
@@ -65,11 +60,13 @@ export const getCachedOrder = async (orderId) => {
 // ─── Sipariş Cache'den Sil ──────────────────────────────────────────────────
 export const invalidateOrderCache = async (orderId) => {
   try {
-    if (!redisClient) return false;
+    if (!isConnected) return false;
 
     const key = `order:${orderId}`;
-    await redisClient.del(key);
-    console.log(`🗑️ Sipariş cache'den silindi: ${orderId}`);
+    if (mockCache.has(key)) {
+      mockCache.delete(key);
+      console.log(`🗑️ Sipariş cache'den silindi: ${orderId}`);
+    }
     return true;
   } catch (error) {
     console.error("❌ Redis cache silme hatası:", error.message);
@@ -80,10 +77,15 @@ export const invalidateOrderCache = async (orderId) => {
 // ─── Kullanıcı Siparişlerini Cache'e Yaz ────────────────────────────────────
 export const cacheUserOrders = async (userId, orders) => {
   try {
-    if (!redisClient) return false;
+    if (!isConnected) return false;
 
     const key = `user_orders:${userId}`;
-    await redisClient.setex(key, 120, JSON.stringify(orders)); // 2 dakika TTL
+    mockCache.set(key, JSON.stringify(orders));
+    
+    setTimeout(() => {
+      mockCache.delete(key);
+    }, 2 * 60 * 1000); // 2 dakika TTL
+
     return true;
   } catch (error) {
     console.error("❌ Redis user orders cache hatası:", error.message);
@@ -94,10 +96,10 @@ export const cacheUserOrders = async (userId, orders) => {
 // ─── Kullanıcı Siparişlerini Cache'den Oku ─────────────────────────────────
 export const getCachedUserOrders = async (userId) => {
   try {
-    if (!redisClient) return null;
+    if (!isConnected) return null;
 
     const key = `user_orders:${userId}`;
-    const cached = await redisClient.get(key);
+    const cached = mockCache.get(key);
     return cached ? JSON.parse(cached) : null;
   } catch (error) {
     return null;
@@ -107,10 +109,10 @@ export const getCachedUserOrders = async (userId) => {
 // ─── Kullanıcı Siparişleri Cache'ini Sil ────────────────────────────────────
 export const invalidateUserOrdersCache = async (userId) => {
   try {
-    if (!redisClient) return false;
+    if (!isConnected) return false;
 
     const key = `user_orders:${userId}`;
-    await redisClient.del(key);
+    mockCache.delete(key);
     return true;
   } catch (error) {
     return false;
