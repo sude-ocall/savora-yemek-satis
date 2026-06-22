@@ -8,6 +8,7 @@
 | 2 | Postman Demosu | [▶ İzle](https://youtu.be/PXIwzlWdlhw?si=QCBPCSeOlGHgJY1e) |
 | 3 | Mobil Frontend Demosu | [▶ İzle](https://youtube.com/shorts/62DOkjw5iq0?feature=share) |
 | 4 | Mobil Backend Demosu | [▶ İzle](https://youtu.be/o6RVsRJMCA8) |
+| 5 | Mobil Backend Demosu 2 | [▶ İzle](https://youtu.be/MOw9BcBovcw) |
 
 ---
 
