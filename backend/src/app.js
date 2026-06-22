@@ -47,6 +47,14 @@ app.use(cors(corsOptions));
 // ─── Body parser ───────────────────────────────────────────────────────────────
 app.use(express.json());
 
+// ─── İstek logu (kanıt için) — her isteği ve dönen HTTP durumunu terminale yazar
+app.use((req, res, next) => {
+  res.on("finish", () => {
+    console.log(`➡️  ${req.method} ${req.originalUrl} → ${res.statusCode}`);
+  });
+  next();
+});
+
 // ─── ROOT TEST (Vercel için) ──────────────────────────────────────────────────
 app.get("/", (req, res) => {
   res.send("API çalışıyor 🚀");

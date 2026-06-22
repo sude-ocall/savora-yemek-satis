@@ -119,6 +119,48 @@ export const invalidateUserOrdersCache = async (userId) => {
   }
 };
 
+// ─── Kullanıcı Profili Cache (İrem — Profil Görüntüleme gereksinimi) ─────────
+export const cacheUserProfile = async (userId, data) => {
+  try {
+    if (!isConnected) return false;
+    const key = `user_profile:${userId}`;
+    mockCache.set(key, JSON.stringify(data));
+    setTimeout(() => mockCache.delete(key), 60 * 1000); // 60 sn TTL
+    console.log(`💾 [Redis] Profil cache'e yazıldı: ${userId}`);
+    return true;
+  } catch (error) {
+    console.error("❌ [Redis] Profil cache yazma hatası:", error.message);
+    return false;
+  }
+};
+
+export const getCachedUserProfile = async (userId) => {
+  try {
+    if (!isConnected) return null;
+    const key = `user_profile:${userId}`;
+    const cached = mockCache.get(key);
+    if (cached) {
+      console.log(`⚡ [Redis] Profil cache HIT: ${userId}`);
+      return JSON.parse(cached);
+    }
+    console.log(`🔍 [Redis] Profil cache MISS: ${userId}`);
+    return null;
+  } catch (error) {
+    return null;
+  }
+};
+
+export const invalidateUserProfile = async (userId) => {
+  try {
+    if (!isConnected) return false;
+    mockCache.delete(`user_profile:${userId}`);
+    console.log(`🗑️ [Redis] Profil cache temizlendi: ${userId}`);
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
+
 export default {
   connectRedis,
   cacheOrder,
@@ -126,5 +168,8 @@ export default {
   invalidateOrderCache,
   cacheUserOrders,
   getCachedUserOrders,
-  invalidateUserOrdersCache
+  invalidateUserOrdersCache,
+  cacheUserProfile,
+  getCachedUserProfile,
+  invalidateUserProfile
 };
