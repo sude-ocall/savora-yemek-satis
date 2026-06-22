@@ -40,7 +40,8 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo '🚀 Uygulama deploy ediliyor...'
-                sh 'docker compose -p savora -f ${DOCKER_COMPOSE_FILE} down || true'
+                sh 'docker stop savora-backend savora-frontend savora-redis savora-rabbitmq 2>/dev/null || true'
+                sh 'docker rm savora-backend savora-frontend savora-redis savora-rabbitmq 2>/dev/null || true'
                 sh 'docker compose -p savora -f ${DOCKER_COMPOSE_FILE} up -d --build'
                 echo '✅ Deploy tamamlandı!'
                 echo '📍 Backend:  http://localhost:3000'
