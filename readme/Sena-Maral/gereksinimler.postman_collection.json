@@ -1,0 +1,241 @@
+{
+  "info": {
+    "_postman_id": "18e4ba3e-0eeb-4af3-b4af-74a139a08423",
+    "name": "My Collection",
+    "description": "### Welcome to Postman! This is your first collection. \n\nCollections are your starting point for building and testing APIs. You can use this one to:\n\n• Group related requests\n• Test your API in real-world scenarios\n• Document and share your requests\n\nUpdate the name and overview whenever you’re ready to make it yours.\n\n[Learn more about Postman Collections.](https://learning.postman.com/docs/collections/collections-overview/)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "53402253",
+    "_collection_link": "https://go.postman.co/collection/53402253-18e4ba3e-0eeb-4af3-b4af-74a139a08423?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "New Request",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "\r\n{\r\n  \"email\": \"sena@example.com\",\r\n  \"password\": \"123456\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://savora-yemek-satis-backend.vercel.app/api/users/login",
+          "protocol": "https",
+          "host": [
+            "savora-yemek-satis-backend",
+            "vercel",
+            "app"
+          ],
+          "path": [
+            "api",
+            "users",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Özel Yemek Talebi Açma",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5ZDJkNjdhYzNhNTM3YjY2YmE1YjllMCIsImlhdCI6MTc3NTQ4MTU1OSwiZXhwIjoxNzc2MDg2MzU5fQ.39arXu8MwrIgOjZlU_t_dWO0lQDxF42fsxb66DwXpqg",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"title\": \"4 kişilik vejetaryen iftar menüsü\",\r\n  \"description\": \"Et ürünü içermeyen, ev yapımı tatlar tercih edilir.\",\r\n  \"category\": \"Vejetaryen\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://savora-yemek-satis-backend.vercel.app/api/offers",
+          "protocol": "https",
+          "host": [
+            "savora-yemek-satis-backend",
+            "vercel",
+            "app"
+          ],
+          "path": [
+            "api",
+            "offers"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "seller login",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"email\": \"senarestoran@example.com\",\r\n  \"password\": \"123456\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://savora-yemek-satis-backend.vercel.app/api/sellers/login",
+          "protocol": "https",
+          "host": [
+            "savora-yemek-satis-backend",
+            "vercel",
+            "app"
+          ],
+          "path": [
+            "api",
+            "sellers",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Bölgesel Talepler Listeleme",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5ZDJkNzFmMjJmNWFhN2Y2MTA3MDVlZSIsImlhdCI6MTc3NTQ4MTY4MCwiZXhwIjoxNzc2MDg2NDgwfQ.G2TEe3jDVyIWGfI1O1ZpzfC_Z2ZALiZQGi50NuFSIV0",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://savora-yemek-satis-backend.vercel.app/api/offers/open",
+          "protocol": "https",
+          "host": [
+            "savora-yemek-satis-backend",
+            "vercel",
+            "app"
+          ],
+          "path": [
+            "api",
+            "offers",
+            "open"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Talep Teklifi Güncelleme (Satıcı teklif ekler)",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5ZDJkNzFmMjJmNWFhN2Y2MTA3MDVlZSIsImlhdCI6MTc3NTQ4MTY4MCwiZXhwIjoxNzc2MDg2NDgwfQ.G2TEe3jDVyIWGfI1O1ZpzfC_Z2ZALiZQGi50NuFSIV0",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "https://savora-yemek-satis-backend.vercel.app/api/offers/open",
+          "protocol": "https",
+          "host": [
+            "savora-yemek-satis-backend",
+            "vercel",
+            "app"
+          ],
+          "path": [
+            "api",
+            "offers",
+            "open"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Satıcıya Yorum Yapma",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5ZDJkNjdhYzNhNTM3YjY2YmE1YjllMCIsImlhdCI6MTc3NTQ4MTU1OSwiZXhwIjoxNzc2MDg2MzU5fQ.39arXu8MwrIgOjZlU_t_dWO0lQDxF42fsxb66DwXpqg",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"text\": \"Yemekler çok lezzetliydi, zamanında teslim edildi. Teşekkürler!\",\r\n  \"rating\": 5\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://savora-yemek-satis-backend.vercel.app/api/reviews/69d2d71f22f5aa7f610705ee",
+          "protocol": "https",
+          "host": [
+            "savora-yemek-satis-backend",
+            "vercel",
+            "app"
+          ],
+          "path": [
+            "api",
+            "reviews",
+            "69d2d71f22f5aa7f610705ee"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Yorum ve Şikayetler Listeleme",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://savora-yemek-satis-backend.vercel.app/api/reviews/69d2d71f22f5aa7f610705ee",
+          "protocol": "https",
+          "host": [
+            "savora-yemek-satis-backend",
+            "vercel",
+            "app"
+          ],
+          "path": [
+            "api",
+            "reviews",
+            "69d2d71f22f5aa7f610705ee"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

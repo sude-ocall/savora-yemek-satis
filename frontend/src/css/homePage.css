@@ -1,0 +1,411 @@
+/* Sayfa Düzeni */
+.home-page-container {
+  padding-top: 100px;
+  padding-bottom: 50px;
+  min-height: 80vh;
+}
+
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 25px;
+}
+
+/* Kart */
+.menu-card {
+  background: var(--surface);
+  border-radius: var(--r-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: 0.3s;
+  border: 1px solid var(--border);
+}
+
+.menu-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-md);
+}
+
+.card-image img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.card-info {
+  padding: 1.5rem;
+}
+
+.card-info h3 {
+  font-size: 1.25rem;
+  margin: 5px 0 10px;
+  font-weight: 700;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.price {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--green);
+}
+
+.btn-add-cart {
+  background: #FF5C00;
+  color: white;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-add-cart:hover {
+  background: #e65200;
+}
+
+/* Sepet */
+.cart-sidebar {
+  background: var(--surface);
+  padding: 2rem;
+  border-radius: var(--r-md);
+  border: 1px solid var(--border);
+  position: sticky;
+  top: 110px;
+  box-shadow: var(--shadow-sm);
+}
+
+.cart-item-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px dashed var(--border);
+}
+
+.btn-checkout {
+  width: 100%;
+  background: var(--green);
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 12px;
+  font-weight: 700;
+}
+
+.btn-checkout:disabled {
+  background: #ccc;
+}
+
+/* Arama */
+.search-wrapper {
+  position: relative;
+}
+
+.search-input {
+  width: 100%;
+  padding: 12px 20px 12px 45px;
+  border-radius: 15px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.search-input:focus {
+  border-color: #FF5C00;
+}
+
+.search-icon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* Satıcı */
+.seller-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.seller-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #FF5C00;
+  text-transform: uppercase;
+}
+
+.seller-rating {
+  background: #fff9f0;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-weight: 700;
+}
+
+/* Aktif Sipariş */
+.active-orders-banner {
+  background: white;
+  border-radius: 16px;
+  padding: 1.5rem;
+  border: 1px solid #edf2f7;
+}
+
+.order-vertical-scroll {
+  max-height: 200px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 5px;
+}
+
+.mini-order-card.vertical {
+  width: 100%;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  padding: 12px 15px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.mini-order-card.vertical:hover {
+  border-color: #ff9f1c;
+  background: #fff;
+  transform: translateX(4px);
+}
+
+.order-number {
+  font-weight: 700;
+}
+
+.status-pill {
+  font-size: 0.7rem;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-weight: 700;
+}
+
+.status-new {
+  background: #ebf8ff;
+  color: #3182ce;
+}
+
+.status-pro {
+  background: #fffaf0;
+  color: #dd6b20;
+}
+
+/* Modal */
+.custom-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.overlay-top {
+  z-index: 1100;
+}
+
+.custom-modal-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 450px;
+}
+
+.modal-header-styled {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.restaurant-info-box {
+  background: #fff8f0;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px dashed #ff9f1c;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  cursor: pointer;
+}
+
+/* Pulse */
+.pulse-indicator {
+  width: 10px;
+  height: 10px;
+  background: #48bb78;
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(0.95); }
+  70% { transform: scale(1); }
+  100% { transform: scale(0.95); }
+}
+
+/* Toast */
+.toast-notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: #28a745;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 50px;
+  z-index: 9999;
+  animation: slideIn 0.3s ease-out, fadeOut 0.5s ease-in 2.5s forwards;
+}
+
+.toast-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+@keyframes slideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes fadeOut {
+  to { opacity: 0; visibility: hidden; }
+}
+
+/* Kategori Konteynırı */
+.category-scroll-container {
+  overflow-x: auto;
+  white-space: nowrap;
+  padding-bottom: 10px;
+  scrollbar-width: none; /* Firefox için */
+}
+
+.category-scroll-container::-webkit-scrollbar {
+  display: none; /* Chrome/Safari için */
+}
+
+/* Kategori Butonları */
+.category-pill {
+  padding: 8px 20px;
+  border-radius: 50px;
+  border: 1px solid #eee;
+  background-color: #fff;
+  color: #555;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.category-pill:hover {
+  background-color: #f8f9fa;
+  border-color: #ddd;
+}
+
+.category-pill.active {
+  background-color: #ff4757; /* Uygulamanın ana rengine göre değiştirin */
+  color: white;
+  border-color: #ff4757;
+  box-shadow: 0 4px 10px rgba(255, 71, 87, 0.2);
+}
+
+/* Menü geçiş animasyonu (Opsiyonel) */
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Arama ve İstek Sistemi Yeni Stiller */
+.search-container-row {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 15px;
+  margin-bottom: 25px;
+}
+
+.btn-request-food {
+  white-space: nowrap;
+  height: 45px;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-request-active {
+  background-color: #ffc107 !important;
+  color: #000 !important;
+  border-color: #ffc107 !important;
+  box-shadow: 0 0 10px rgba(255, 193, 7, 0.4);
+}
+
+.request-textarea {
+  min-height: 100px;
+  border-radius: 10px;
+  border: 1px solid #dee2e6;
+  padding: 10px;
+}
+
+.offers-section {
+  max-height: 250px;
+  overflow-y: auto;
+  margin-top: 15px;
+  padding-right: 5px;
+}
+
+.offer-item {
+  background: #fff;
+  border: 1px solid #e9ecef;
+  padding: 12px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: transform 0.2s;
+}
+
+.offer-item:hover {
+  transform: translateX(5px);
+  border-color: #0d6efd;
+}
+
+.offers-section::-webkit-scrollbar {
+  width: 5px;
+}
+
+.offers-section::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 10px;
+}
+
+.modal-footer-request {
+  border-top: 1px solid #eee;
+  padding-top: 15px;
+  margin-top: 15px;
+}
+
+/* Mevcut modal yapısıyla uyum */
+.overlay-top {
+  z-index: 1060;
+}

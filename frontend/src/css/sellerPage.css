@@ -1,0 +1,482 @@
+:root {
+    --sl-bg-page: #f9f8f3;
+    --sl-color-primary: #ff6a00;
+    --sl-color-primary-hover: #e05d00;
+    --sl-color-text-dark: #333;
+    --sl-color-text-light: #777;
+    --sl-color-border: #dcd9cd;
+    --sl-shadow-card: 0 10px 25px rgba(0, 0, 0, 0.05);
+}
+
+.sl-page {
+    background-color: var(--sl-bg-page);
+    min-height: 100vh;
+    font-family: 'Poppins', sans-serif;
+    padding-bottom: 4rem;
+}
+
+/* Header */
+.sl-header {
+    background: white;
+    padding: 1.2rem 0;
+    border-bottom: 1px solid var(--sl-color-border);
+    margin-bottom: 2rem;
+}
+
+.sl-header-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 2rem;
+}
+
+.sl-header-profile {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+}
+
+.sl-avatar {
+    width: 55px;
+    height: 55px;
+    background: var(--sl-color-primary);
+    color: white;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+    font-weight: 700;
+    box-shadow: 0 6px 15px rgba(255, 106, 0, 0.2);
+}
+
+.sl-info h1 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin: 0;
+    color: var(--sl-color-text-dark);
+}
+
+.sl-meta {
+    display: flex;
+    gap: 0.8rem;
+    font-size: 0.85rem;
+    color: var(--sl-color-text-light);
+}
+
+.sl-meta i {
+    color: #f59e0b;
+}
+
+.sl-add-btn {
+    background: var(--sl-color-primary);
+    color: white;
+    padding: 0.7rem 1.5rem;
+    border-radius: 10px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+/* Tabs */
+.sl-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.sl-tabs {
+    display: flex;
+    gap: 0.8rem;
+    margin-bottom: 2rem;
+    overflow-x: auto;
+}
+
+.sl-tab {
+    padding: 0.6rem 1.5rem;
+    background: white;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    color: var(--sl-color-text-light);
+    border: 1.5px solid var(--sl-color-border);
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.sl-tab.active {
+    background: var(--sl-color-primary);
+    color: white;
+    border-color: var(--sl-color-primary);
+    box-shadow: 0 5px 12px rgba(255, 106, 0, 0.2);
+}
+
+/* Grid & Cards */
+.sl-menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 2rem;
+}
+
+.sl-menu-card {
+    background: white;
+    border-radius: 20px;
+    box-shadow: var(--sl-shadow-card);
+    transition: 0.3s;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid transparent;
+}
+
+.sl-menu-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+    border-color: var(--sl-color-border);
+}
+
+.sl-card-img-wrap {
+    width: 100%;
+    height: 200px;
+    background: #eee;
+}
+
+.sl-card-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.sl-card-content {
+    padding: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex-grow: 1;
+}
+
+.sl-card-top-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sl-item-cat-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--sl-color-primary);
+}
+
+.sl-item-rating {
+    background: #fff8eb;
+    color: #f59e0b;
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.sl-item-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0;
+}
+
+.sl-item-desc {
+    font-size: 0.85rem;
+    color: #888;
+    line-height: 1.4;
+    margin: 0;
+    min-height: 2.8rem;
+}
+
+.sl-card-action-row {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sl-item-price {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #2d5a27;
+}
+
+/* Action Buttons */
+.sl-admin-btns {
+    display: flex;
+    gap: 8px;
+}
+
+.sl-mini-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    border: 1.5px solid #eee;
+    background: white;
+    color: #666;
+    cursor: pointer;
+    transition: 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sl-mini-btn:hover {
+    border-color: var(--sl-color-primary);
+    color: var(--sl-color-primary);
+}
+
+.sl-btn-del:hover {
+    border-color: #ff4d4d;
+    color: #ff4d4d;
+    background: #fff5f5;
+}
+
+.sl-menu-card.muted {
+    opacity: 0.6;
+    filter: grayscale(0.5);
+}
+
+/* Modal & Form */
+.sl-custom-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.sl-modal-backdrop {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+}
+
+.sl-modal-content {
+    position: relative;
+    background: white;
+    width: 90%;
+    max-width: 480px;
+    border-radius: 24px;
+    padding: 2rem;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+    max-height: 80vh;
+    overflow-y: auto;
+
+    /* Scroll */
+    scrollbar-width: thin;
+    scrollbar-color: #ff6a00 rgba(0, 0, 0, 0.05);
+}
+
+.sl-modal-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sl-modal-content::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+}
+
+.sl-modal-content::-webkit-scrollbar-thumb {
+    background-color: #ff6a00;
+    border-radius: 10px;
+    border: 1px solid transparent;
+}
+
+.sl-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 1rem;
+}
+
+.close-x {
+    border: none;
+    background: none;
+    font-size: 2rem;
+    cursor: pointer;
+    color: #999;
+}
+
+.sl-form-group {
+    margin-bottom: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.sl-form-group label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #444;
+}
+
+.sl-form-group input,
+.sl-form-group select,
+.sl-form-group textarea {
+    padding: 0.8rem 1rem;
+    border: 1.5px solid var(--sl-color-border);
+    border-radius: 12px;
+    font-size: 1rem;
+    outline: none;
+    background: #fff;
+}
+
+.sl-form-group input:focus {
+    border-color: var(--sl-color-primary);
+}
+
+.sl-form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+/* Image Tab */
+.sl-image-tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 10px;
+}
+
+.sl-image-tabs button {
+    flex: 1;
+    border: 1px solid var(--sl-color-border);
+    border-radius: 8px;
+    background: #f8f8f8;
+    padding: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.sl-image-tabs button.active {
+    background: white;
+    color: var(--sl-color-primary);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.sl-img-preview img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+/* Footer Buttons - Confirm Modal */
+.sl-confirm-card {
+    position: relative;
+    background: white;
+    padding: 2.5rem 2rem;
+    border-radius: 28px;
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+    animation: modalSlideUp 0.3s ease-out;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+@keyframes modalSlideUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.sl-confirm-icon-wrap {
+    width: 70px;
+    height: 70px;
+    background: #fff5f5;
+    color: #ff4d4d;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    margin: 0 auto 1.5rem;
+    border: 1px solid #ffebeb;
+}
+
+.sl-confirm-card h3 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 0.8rem;
+}
+
+.sl-confirm-card p {
+    font-size: 0.95rem;
+    color: #666;
+    line-height: 1.5;
+}
+
+/* Confirm Buttons */
+.sl-confirm-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 1.8rem;
+    justify-content: center;
+    width: 100%;
+}
+
+.sl-confirm-actions button {
+    flex: 1;
+    height: 48px;
+    border-radius: 14px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    outline: none;
+    text-align: center;
+}
+
+.sl-btn-cancel {
+    background-color: #f1f3f5;
+    color: #495057;
+}
+
+.sl-btn-cancel:hover {
+    background-color: #e2e4e7;
+    color: #212529;
+}
+
+.sl-btn-delete {
+    background-color: #ff4d4d;
+    color: white;
+    box-shadow: 0 4px 12px rgba(255, 77, 77, 0.2);
+}
+
+.sl-btn-delete:hover {
+    background-color: #e63939;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 15px rgba(255, 77, 77, 0.3);
+}
+
+.sl-btn-delete:active {
+    transform: translateY(0);
+}
