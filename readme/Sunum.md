@@ -40,42 +40,54 @@ Her ekip üyesi için aşağıdaki yapı takip edilecektir:
 
 ---
 
-### 3. Ekip Üyeleri Sunum Sırası
-
-#### Ali Tutar
+#### Sena Maral
 **Kişisel Tanıtım:**
-- İsim: Ali Tutar
+- İsim: Sena Maral
+- Rol: Talep (İstek) ve Geri Bildirim Sistemi Sorumlusu
 
 **Gereksinimler:**
-1. **Üye Olma**
-   - API Metodu: `POST /auth/register`
-   - Demo: Kullanıcı kayıt işleminin gösterilmesi
+1. **Özel Yemek Talebi Oluşturma**
+   - API Metodu: `POST /requests`
+   - Demo: Kullanıcının belirli bir yemek için özel talep oluşturmasının gösterilmesi
 
-2. **Profil Görüntüleme**
-   - API Metodu: `GET /users/{userId}`
-   - Demo: Kullanıcı profil bilgilerinin görüntülenmesi
+2. **Bölgesel Talepleri Listeleme**
+   - API Metodu: `GET /requests`
+   - Demo: Satıcıların kendi bölgelerindeki kullanıcı taleplerini görüntülemesinin gösterilmesi
 
-3. **Profil Güncelleme**
-   - API Metodu: `PUT /users/{userId}`
-   - Demo: Profil bilgilerinin güncellenmesi
+3. **Talebe Fiyat Teklifi Güncelleme**
+   - API Metodu: `PUT /requests/{requestId}/offer`
+   - Demo: Satıcının daha önce verdiği fiyat teklifini güncellemesinin gösterilmesi
 
-4. **Hesap Silme**
-   - API Metodu: `DELETE /users/{userId}`
-   - Demo: Hesap silme işleminin gösterilmesi
+4. **Talebi Geri Çekme**
+   - API Metodu: `DELETE /requests/{requestId}`
+   - Demo: Talep sahibi kullanıcının oluşturduğu yemek talebini iptal etmesinin gösterilmesi
+
+5. **Satıcıya Yorum Yapma**
+   - API Metodu: `POST /reviews`
+   - Demo: Kullanıcının sipariş tamamlandıktan sonra satıcı hakkında değerlendirme ve yorum yapmasının gösterilmesi
+
+6. **Yorum ve Şikayetleri Listeleme**
+   - API Metodu: `GET /reviews/{sellerId}`
+   - Demo: Belirli bir satıcıya yapılan tüm kullanıcı yorumlarının ve şikayetlerinin listelenmesinin gösterilmesi
 
 ---
 
-#### Veli Yılmaz
-**Kişisel Tanıtım:**
-- İsim: Veli Yılmaz
-- Rol: [Rol belirtilecek]
+### 6. Ekstra Teknolojiler Gösterimi - Redis (Bireysel Görev - 7. Madde)
+
+> **Redis / Memcached Kanıt Video Linki:** [▶ İzle](https://www.youtube.com/watch?v=eaB8Waafi34)
 
 **Gereksinimler:**
-- [Gereksinim 1]
-- [Gereksinim 2]
-- [Gereksinim 3]
-- [Gereksinim 4]
+- Redis teknolojisinin projede bir gereksinim için entegre edildiğinin ve başarıyla çalıştığının gösterilmesi.
+- *(Not: RabbitMQ/Kafka ve Docker+CI/CD kullanılmamıştır.)*
 
+---
+
+### 7. Genel Final Video Sunumu (Grup Görevi - 7. Madde)
+
+> **Final Video Sunumu Linki:** [▶ İzle](https://www.youtube.com/watch?v=22ZS9VqU1Fg)
+
+**Gereksinimler:**
+- YazMuh şablonunda yer alan kurallara uygun olarak tüm projenin ve gereksinimlerin genel tanıtımının yapılması.
 ---
 
 #### Alara Kökbudak
