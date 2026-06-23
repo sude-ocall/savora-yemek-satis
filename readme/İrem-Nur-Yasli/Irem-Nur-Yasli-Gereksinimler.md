@@ -1,9 +1,10 @@
 ## 🎬 Çalışma Videoları
 
-| # | Başlık | Bağlantı |
-|---|---|---|
-| 1 | Frontend Demosu | |
-| 2 | Postman Demosu | |
+| # | Başlık | Açıklama | Bağlantı |
+|---|---|---|---|
+| 1 | Mobil Frontend Demosu | React Native + Expo ile 6 gereksinimin (üye kaydı, profil görüntüleme, şifre güncelleme, hesap silme, adres tanımlama, satıcı yorumları) telefonda çalışması | [▶ İzle](https://youtube.com/shorts/O2xSCYzmwHI) |
+| 2 | Mobil Backend Demosu | Mobil uygulamadan JWT'li REST API'ye yapılan 6 servis bağlantısının (register, login, profile, password, account, addresses) canlı gösterimi | [▶ İzle](https://youtu.be/uJzC2ts0PK8) |
+| 3 | Docker, Redis & RabbitMQ Demosu | Servislerin Docker konteynerleri olarak ayağa kaldırılması; Redis önbellekleme ve RabbitMQ mesaj kuyruğunun canlı çalışması | [▶ İzle](https://youtu.be/G5v-lcQy7nU) |
 
 ## 🔑 Postman Collecitons
 
