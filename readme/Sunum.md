@@ -4,6 +4,17 @@
 
 > **Video Linki:** [Sunum videosu linki buraya eklenecek](https://example.com)
 
+---
+
+## 📹 Sudegül Öçal - Bireysel Kanıt Videoları
+
+| # | Teknoloji | Video |
+|---|---|---|
+| 1 | Redis & RabbitMQ | [▶ İzle](https://youtu.be/MOw9BcBovcw) |
+| 2 | Docker & CI/CD | [▶ İzle](https://youtu.be/hhNjKddYD9s) |
+
+---
+
 ## Sunum Yapısı
 
 ### 1. Grup Lideri - Açılış Konuşması (1-2 dakika)
