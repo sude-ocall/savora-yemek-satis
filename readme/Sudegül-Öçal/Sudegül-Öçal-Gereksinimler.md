@@ -8,6 +8,8 @@
 | 2 | Postman Demosu | [▶ İzle](https://youtu.be/PXIwzlWdlhw?si=QCBPCSeOlGHgJY1e) |
 | 3 | Mobil Frontend Demosu | [▶ İzle](https://youtube.com/shorts/62DOkjw5iq0?feature=share) |
 | 4 | Mobil Backend Demosu | [▶ İzle](https://youtu.be/MOw9BcBovcw) |
+| 5 | Savora Docker & CI/CD Demo | [▶ İzle](https://youtu.be/hhNjKddYD9s) |
+
 
 ---
 
