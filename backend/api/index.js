@@ -6,16 +6,13 @@ import { connectRedis } from "../src/services/redisService.js";
 
 dotenv.config();
 
-connectDB();
-
 connectRabbitMQ().then(() => {
   startOrderConsumer().catch(() => {});
-}).catch(() => {
-  console.log("⚠️ RabbitMQ olmadan devam ediliyor...");
-});
+}).catch(() => {});
 
-connectRedis().catch(() => {
-  console.log("⚠️ Redis olmadan devam ediliyor...");
-});
+connectRedis().catch(() => {});
 
-export default app;
+export default async function handler(req, res) {
+  await connectDB();
+  return app(req, res);
+}
