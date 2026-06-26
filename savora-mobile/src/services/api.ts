@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
 // Telefon: bilgisayarın yerel IP'si | Android emülatör: 10.0.2.2 | iOS sim: localhost
-const BASE_URL = 'http://192.168.1.185:3000';
+const BASE_URL = 'https://savora-yemek-satis-backend.vercel.app';
 
 const api = axios.create({
   baseURL: BASE_URL,
