@@ -1,8 +1,21 @@
-import connectDB from "../src/config/db.js";
+import dotenv from "dotenv";
 import app from "../src/app.js";
+import connectDB from "../src/config/db.js";
+import { connectRabbitMQ, startOrderConsumer } from "../src/services/rabbitmqService.js";
+import { connectRedis } from "../src/services/redisService.js";
 
-// Serverless: her istekte DB bağlantısını kontrol et
-export default async function handler(req, res) {
-  await connectDB();
-  return app(req, res);
-}
+dotenv.config();
+
+connectDB();
+
+connectRabbitMQ().then(() => {
+  startOrderConsumer().catch(() => {});
+}).catch(() => {
+  console.log("⚠️ RabbitMQ olmadan devam ediliyor...");
+});
+
+connectRedis().catch(() => {
+  console.log("⚠️ Redis olmadan devam ediliyor...");
+});
+
+export default app;
