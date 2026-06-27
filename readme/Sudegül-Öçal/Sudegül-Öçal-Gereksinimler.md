@@ -1,5 +1,25 @@
 # Sudegül Öçal - Yemek ve Menü Yönetimi Gereksinimleri
 
+## 🚀 Production Deployment (Sudegül Öçal tarafından yapıldı)
+
+| Servis | URL |
+|---|---|
+| 🌐 Frontend (Vercel) | [savora-yemek-satis-frontend.vercel.app](https://savora-yemek-satis-frontend.vercel.app) |
+| ⚙️ Backend API (Vercel) | [savora-yemek-satis-backend.vercel.app](https://savora-yemek-satis-backend.vercel.app) |
+| 🗄️ Veritabanı | MongoDB Atlas (cloud) |
+| 📦 Redis | Upstash (cloud, serverless) |
+| 🐇 RabbitMQ | CloudAMQP (cloud) |
+
+## 📱 Android APK
+
+Uygulamayı Android telefonunuza yüklemek için:
+
+[⬇️ APK İndir / QR Tara](https://expo.dev/accounts/sudegl_ocal/projects/savora-mobile/builds/c2011879-85c6-4367-a8da-b6b5aac42272)
+
+> Android kamera uygulamasıyla sayfadaki QR kodu okutun veya linke tıklayıp APK'yı indirin.
+
+---
+
 ## 🎬 Çalışma Videoları
 
 | # | Başlık | Bağlantı |
