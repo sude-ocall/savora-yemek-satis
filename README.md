@@ -1,30 +1,37 @@
 # SAVORA
 Evden gönlünüzce yemek satışı yapabileceğiniz, güvenilir bir platform.
-<<<<<<< HEAD
+
 ![Savora Proje Görseli](savora-arayuz.jpg)
-=======
-![Savora Proje Görseli](readme/savora-arayuz.jpg)
 
->>>>>>> 71dbf88717623236bcd9cfcd35a490756b781061
-## 🍲 Proje Hakkında (Savora)
-Savora, evinde yemek yapan yetenekli aşçılar ile lezzetli ev yemeği özlemi çeken kullanıcıları güvenilir bir ortamda buluşturan yenilikçi bir yemek satış platformudur. Amacımız, evden gönlünüzce yemek satışı yapabileceğiniz ve sipariş verebileceğiniz dijital bir pazar yeri yaratmaktır.
+---
 
-## Proje Bağlantıları
-* **Rest API Adresi:** https://raw.githubusercontent.com/alarakokbudak/savora-yemek-satis/refs/heads/main/SavoraAPI.yaml
-<<<<<<< HEAD
-* **Web Ön Yüz Adresi:**
+## 🚀 Canlı Uygulama (Production)
+
+> Backend deployment, cloud servis entegrasyonu ve Android APK build: **Sudegül Öçal** tarafından yapılmıştır.
+
+| Servis | URL |
+|---|---|
+| 🌐 Web Uygulaması | [savora-yemek-satis-frontend.vercel.app](https://savora-yemek-satis-frontend.vercel.app) |
+| ⚙️ Backend API | [savora-yemek-satis-backend.vercel.app](https://savora-yemek-satis-backend.vercel.app) |
+| 🗄️ Veritabanı | MongoDB Atlas |
+| 📦 Redis Cache | Upstash (serverless) |
+| 🐇 Message Queue | CloudAMQP (RabbitMQ) |
+
+## 📱 Android APK
+
+Android telefonunuza direkt yükleyebilirsiniz:
+
+**[⬇️ APK İndir](https://expo.dev/accounts/sudegl_ocal/projects/savora-mobile/builds/c2011879-85c6-4367-a8da-b6b5aac42272)**
+
+> Sayfadaki QR kodu okutun veya "Install" butonuna basın.
+
+---
+
+## 🍲 Proje Hakkında
+
+Savora, evinde yemek yapan yetenekli aşçılar ile lezzetli ev yemeği özlemi çeken kullanıcıları güvenilir bir ortamda buluşturan yenilikçi bir yemek satış platformudur.
 
 ## 👥 Geliştirici Ekip
-Bu proje, aşağıdaki 4 kişilik geliştirici ekip tarafından tasarlanıp kodlanmaktadır:
-* Alara Kökbudak
-* İrem Nur Yaslı
-* Sena Maral
-* Sudegül Öçal
-=======
-* **Web Ön Yüz Adresi:** https://savora-yemek-satis-frontend.vercel.app/
-
-## 👥 Geliştirici Ekip
-Bu proje, aşağıdaki 4 kişilik geliştirici ekip tarafından tasarlanıp kodlanmaktadır:
 
 | Geliştirici | Gereksinimler | REST API | Web Front-End | Mobil Front-End | Mobil Backend |
 |---|---|---|---|---|---|
@@ -33,38 +40,20 @@ Bu proje, aşağıdaki 4 kişilik geliştirici ekip tarafından tasarlanıp kodl
 | İrem Nur Yaslı | [📄](readme/İrem-Nur-Yasli/Irem-Nur-Yasli-Gereksinimler.md) | [📄](readme/İrem-Nur-Yasli/Irem-Nur-Yasli-Rest-API-Gorevleri.md) | [📄](readme/İrem-Nur-Yasli/Irem-Nur-Yasli-Web-Frontend-Gorevleri.md) | [📄](readme/İrem-Nur-Yasli/Irem-Nur-Yasli-Mobil-Frontend-Gorevleri.md) | [📄](readme/İrem-Nur-Yasli/Irem-Nur-Yasli-Mobil-Backend-Gorevleri.md) |
 | Sena Maral | [📄](readme/Sena-Maral/Sena-Maral-Gereksinimler.md) | [📄](readme/Sena-Maral/Sena-Maral-Rest-API-Gorevleri.md) | [📄](readme/Sena-Maral/Sena-Maral-Web-Frontend-Gorevleri.md) | [📄](readme/Sena-Maral/Sena-Maral-Mobil-Frontend-Gorevleri.md) | [📄](readme/Sena-Maral/Sena-Maral-Mobil-Backend-Gorevleri.md) |
 
->>>>>>> 71dbf88717623236bcd9cfcd35a490756b781061
+## 📌 Temel Özellikler
 
-## 📌 Ana Gereksinimler ve İşlevler
-Sistemimiz, Alıcı ve Satıcı rolleri üzerinden aşağıdaki temel gereksinimleri ve CRUD (Oluşturma, Okuma, Güncelleme, Silme) işlemlerini sağlamaktadır:
-* **Kullanıcı İşlemleri:** Güvenli kayıt olma, giriş yapma ve profil yönetimi.
-* **Menü ve Yemek Yönetimi:** Satıcıların sisteme yeni yemekler eklemesi, porsiyon/fiyat güncellemesi ve yayından kaldırması.
-* **Sipariş Yönetimi:** Alıcıların ürünleri sepete eklemesi, sipariş oluşturması ve sipariş durumunu (hazırlanıyor, yolda vb.) takip etmesi.
-* **Listeleme ve Keşfetme:** Satışta olan aktif yemeklerin kullanıcılar tarafından görüntülenmesi.
+- Kullanıcı & Satıcı kayıt/giriş sistemi
+- Yemek ilanı ekleme, porsiyon ve fiyat yönetimi
+- Sipariş oluşturma ve durum takibi
+- Özel yemek talebi ve teklif sistemi
+- Redis ile cache, RabbitMQ ile mesajlaşma
 
-## 🔗 Temel API Yolları (Endpoints)
-Projenin arka planında iletişim kuracağımız temel API yollarından bazıları şunlardır:
-* `GET /api/yemekler` : Satıştaki tüm aktif yemekleri listeler.
-* `POST /api/yemekler` : Satıcının sisteme yeni bir yemek eklemesini sağlar.
-* `PUT /api/yemekler/{id}` : Satıcının mevcut bir yemeğin bilgilerini güncellemesini sağlar.
-* `DELETE /api/yemekler/{id}` : İlgili yemeği menüden siler.
-* `POST /api/siparisler` : Alıcının yeni bir sipariş oluşturmasını sağlar.
+## 📖 Dokümantasyon
 
-## Dokümantasyon
-Proje dokümantasyonuna aşağıdaki linklerden erişebilirsiniz:
-<<<<<<< HEAD
-1. [Gereksinim Analizi](Gereksinim-Analizi.md)
+1. [Gereksinim Analizi](readme/Gereksinimler.md)
 2. [REST API Tasarımı](API-Tasarimi.md)
-3. [REST API](SavoraAPI.yaml)
+3. [REST API (YAML)](SavoraAPI.yaml)
 4. [Web Front-End](WebFrontEnd.md)
 5. [Mobil Front-End](MobilFrontEnd.md)
 6. [Mobil Backend](MobilBackEnd.md)
-7. [Video Sunum](Sunum.md)
-=======
-1. [Gereksinim Analizi](readme/Gereksinimler.md)
-2. [REST API Tasarımı](readme/API-Tasarimi.md)
-3. [Web Front-End](readme/WebFrontEnd.md)
-4. [Mobil Front-End](readme/MobilFrontEnd.md)
-5. [Mobil Backend](readme/MobilBackEnd.md)
-6. [Video Sunum](readme/Sunum.md)
->>>>>>> 71dbf88717623236bcd9cfcd35a490756b781061
+7. [Video Sunum](readme/Sunum.md)
